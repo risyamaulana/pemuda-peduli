@@ -7,7 +7,6 @@ type TentangKamiEntity struct {
 	IDPPCPTentangKami string     `db:"id_pp_cp_tentang_kami"`
 	ThumbnailImageURL string     `db:"thumbnail_image_url"`
 	Description       string     `db:"description"`
-	Status            string     `db:"status"`
 	CreatedAt         time.Time  `db:"created_at"`
 	CreatedBy         *string    `db:"created_by"`
 	UpdatedAt         *time.Time `db:"updated_at"`

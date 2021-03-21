@@ -139,7 +139,6 @@ func ToPayload(data entity.TentangKamiEntity) (response ReadTentangKami) {
 		IDPPCPTentangKami: data.IDPPCPTentangKami,
 		ThumbnailImageURL: data.ThumbnailImageURL,
 		Description:       data.Description,
-		Status:            data.Status,
 		CreatedAt:         data.CreatedAt,
 		CreatedBy:         data.CreatedBy,
 		UpdatedAt:         data.UpdatedAt,

@@ -5,7 +5,6 @@ import (
 	"log"
 	"pemuda-peduli/src/common/infrastructure/db"
 	"pemuda-peduli/src/common/utility"
-	"pemuda-peduli/src/tentang_kami/common/constants"
 	"pemuda-peduli/src/tentang_kami/domain/entity"
 	"pemuda-peduli/src/tentang_kami/domain/interfaces"
 	"strconv"
@@ -30,9 +29,6 @@ func (c *TentangKamiRepository) Insert(ctx context.Context, data *entity.Tentang
 
 	// Generate UUID
 	data.IDPPCPTentangKami = utility.GetUUID()
-
-	// Set status created
-	data.Status = constants.StatusCreated
 
 	sql := `INSERT INTO pp_cp_tentang_kami `
 	var strField strings.Builder

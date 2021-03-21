@@ -56,8 +56,6 @@ func (s *TentangKamiApp) addRoute(r *router.Router) {
 	r.POST("/tentang-kami/create", middleware.CheckAuthToken(createTentangKami))
 
 	r.PUT("/tentang-kami/{id}", middleware.CheckAuthToken(updateTentangKami))
-	r.PUT("/tentang-kami/publish/{id}", middleware.CheckAuthToken(publishTentangKami))
-	r.PUT("/tentang-kami/hide/{id}", middleware.CheckAuthToken(hideTentangKami))
 
 	r.POST("/tentang-kami/list", middleware.CheckAuthToken(findTentangKamis))
 	r.GET("/tentang-kami/{id}", middleware.CheckAuthToken(getTentangKami))
@@ -113,34 +111,6 @@ func updateTentangKami(ctx *fasthttp.RequestCtx) {
 	data := payload.ToEntity()
 	repo := repository.NewTentangKamiRepository(DB)
 	responseData, err := domain.UpdateTentangKami(ctx, &repo, data, tentangKamiID)
-	if err != nil {
-		ctx.SetStatusCode(fasthttp.StatusUnprocessableEntity)
-		fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
-		log.Println(err)
-		return
-	}
-	response := handler.DefaultResponse(ToPayload(responseData), nil)
-	fmt.Fprintf(ctx, utility.PrettyPrint(response))
-}
-
-func publishTentangKami(ctx *fasthttp.RequestCtx) {
-	tentangKamiID := fmt.Sprintf("%s", ctx.UserValue("id"))
-	repo := repository.NewTentangKamiRepository(DB)
-	responseData, err := domain.PublishTentangKami(ctx, &repo, tentangKamiID)
-	if err != nil {
-		ctx.SetStatusCode(fasthttp.StatusUnprocessableEntity)
-		fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
-		log.Println(err)
-		return
-	}
-	response := handler.DefaultResponse(ToPayload(responseData), nil)
-	fmt.Fprintf(ctx, utility.PrettyPrint(response))
-}
-
-func hideTentangKami(ctx *fasthttp.RequestCtx) {
-	tentangKamiID := fmt.Sprintf("%s", ctx.UserValue("id"))
-	repo := repository.NewTentangKamiRepository(DB)
-	responseData, err := domain.HideTentangKami(ctx, &repo, tentangKamiID)
 	if err != nil {
 		ctx.SetStatusCode(fasthttp.StatusUnprocessableEntity)
 		fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
