@@ -18,6 +18,7 @@ var (
 	corsAllowMethods     = "HEAD,GET,POST,PUT,DELETE,OPTIONS"
 	corsAllowOrigin      = "*"
 	corsAllowCredentials = "true"
+	corsAllow            = "DELETE, GET, OPTIONS, POST, PUT"
 
 	DB *db.ConnectTo
 )
@@ -33,6 +34,7 @@ func Cors(next fasthttp.RequestHandler) fasthttp.RequestHandler {
 		ctx.Response.Header.Set("Access-Control-Allow-Headers", corsAllowHeaders)
 		ctx.Response.Header.Set("Access-Control-Allow-Methods", corsAllowMethods)
 		ctx.Response.Header.Set("Access-Control-Allow-Origin", corsAllowOrigin)
+		ctx.Response.Header.Set("Allow", corsAllow)
 		ctx.Response.Header.Set("Content-Type", "application/json")
 		ctx.Response.Header.Set("Server", "pp-service")
 
@@ -42,18 +44,21 @@ func Cors(next fasthttp.RequestHandler) fasthttp.RequestHandler {
 
 func CheckAuthToken(next fasthttp.RequestHandler) fasthttp.RequestHandler {
 	return fasthttp.RequestHandler(func(ctx *fasthttp.RequestCtx) {
-		token := ctx.Request.Header.Peek("pp-token")
-		if string(token) == "" {
-			ctx.SetStatusCode(fasthttp.StatusUnauthorized)
-			fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, errors.New("Failed auth: Header pp-token is required"))))
-			return
-		}
-		// Check validation token
-		err := tokenDom.Validate(ctx, string(token), DB)
-		if err != nil {
-			ctx.SetStatusCode(fasthttp.StatusUnauthorized)
-			fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
-			return
+		method := ctx.Request.Header.Method()
+		if string(method) != "OPTIONS" {
+			token := ctx.Request.Header.Peek("pp-token")
+			if string(token) == "" {
+				ctx.SetStatusCode(fasthttp.StatusUnauthorized)
+				fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, errors.New("Failed auth: Header pp-token is required"))))
+				return
+			}
+			// Check validation token
+			err := tokenDom.Validate(ctx, string(token), DB)
+			if err != nil {
+				ctx.SetStatusCode(fasthttp.StatusUnauthorized)
+				fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
+				return
+			}
 		}
 		next(ctx)
 	})
