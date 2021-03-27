@@ -12,7 +12,7 @@ type TokenEntity struct {
 	RefreshToken        string     `db:"refresh_token"`
 	RefreshTokenExpired time.Time  `db:"refresh_token_expired"`
 	IsLogin             bool       `db:"is_login"`
-	LoginID             int64      `db:"login_id"`
+	LoginID             string     `db:"login_id"`
 	CreatedAt           time.Time  `db:"created_at"`
 	UpdatedAt           *time.Time `db:"updated_at"`
 }

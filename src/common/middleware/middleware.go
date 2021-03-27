@@ -3,11 +3,17 @@ package middleware
 import (
 	"errors"
 	"fmt"
+
 	"pemuda-peduli/src/common/handler"
 	"pemuda-peduli/src/common/infrastructure/db"
 	"pemuda-peduli/src/common/utility"
 
 	tokenDom "pemuda-peduli/src/token/domain"
+
+	adminUserDom "pemuda-peduli/src/admin_user/domain"
+
+	roleDom "pemuda-peduli/src/role/domain"
+	roleRepo "pemuda-peduli/src/role/infrastructure/repository"
 
 	"github.com/valyala/fasthttp"
 )
@@ -59,6 +65,69 @@ func CheckAuthToken(next fasthttp.RequestHandler) fasthttp.RequestHandler {
 				fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
 				return
 			}
+		}
+		next(ctx)
+	})
+}
+
+func CheckLoginToken(next fasthttp.RequestHandler) fasthttp.RequestHandler {
+	return fasthttp.RequestHandler(func(ctx *fasthttp.RequestCtx) {
+		method := ctx.Request.Header.Method()
+		if string(method) != "OPTIONS" {
+			token := ctx.Request.Header.Peek("pp-token")
+			if string(token) == "" {
+				ctx.SetStatusCode(fasthttp.StatusUnauthorized)
+				fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, errors.New("Failed auth: Header pp-token is required"))))
+				return
+			}
+			// Check validation token
+			err := tokenDom.ValidateLogin(ctx, string(token), DB)
+			if err != nil {
+				ctx.SetStatusCode(fasthttp.StatusUnauthorized)
+				fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
+				return
+			}
+		}
+		next(ctx)
+	})
+}
+
+func CheckAdminToken(next fasthttp.RequestHandler) fasthttp.RequestHandler {
+	return fasthttp.RequestHandler(func(ctx *fasthttp.RequestCtx) {
+		method := ctx.Request.Header.Method()
+		if string(method) != "OPTIONS" {
+			token := ctx.Request.Header.Peek("pp-token")
+			if string(token) == "" {
+				ctx.SetStatusCode(fasthttp.StatusUnauthorized)
+				fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, errors.New("Failed auth: Header pp-token is required"))))
+				return
+			}
+			// Check validation token
+			err := tokenDom.ValidateLogin(ctx, string(token), DB)
+			if err != nil {
+				ctx.SetStatusCode(fasthttp.StatusUnauthorized)
+				fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
+				return
+			}
+
+			// Get User Data
+			userID := ctx.UserValue("user_id").(string)
+			dataUser, err := adminUserDom.GetAdminUser(ctx, DB, userID)
+			if err != nil {
+				ctx.SetStatusCode(fasthttp.StatusUnauthorized)
+				fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
+				return
+			}
+
+			// Get Role Data
+			roleRepository := roleRepo.NewRoleRepository(DB)
+			roleData, err := roleDom.GetRole(ctx, &roleRepository, dataUser.Role)
+			if err != nil {
+				ctx.SetStatusCode(fasthttp.StatusUnauthorized)
+				fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
+				return
+			}
+			ctx.SetUserValue("user_role_level", roleData.RoleLevel)
 		}
 		next(ctx)
 	})

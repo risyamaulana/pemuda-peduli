@@ -1,3 +1,5 @@
 package constants
 
-const ()
+const (
+	SaltCharset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+)

@@ -7,13 +7,16 @@ import (
 	"pemuda-peduli/src/common/infrastructure/web"
 	"pemuda-peduli/src/common/interfaces"
 
+	adminUserApp "pemuda-peduli/src/admin_user/applications"
 	albumApp "pemuda-peduli/src/album/applications"
+	authAdminApp "pemuda-peduli/src/auth/admin/applications"
 	bannerApp "pemuda-peduli/src/banner/applications"
 	beritaApp "pemuda-peduli/src/berita/applications"
 	kontakKamiApp "pemuda-peduli/src/kontak_kami/applications"
 	partnerKamiApp "pemuda-peduli/src/partner_kami/applications"
 	programDonasiApp "pemuda-peduli/src/program_donasi/applications"
 	programKamiApp "pemuda-peduli/src/program_kami/applications"
+	roleApp "pemuda-peduli/src/role/applications"
 	teamApp "pemuda-peduli/src/team/applications"
 	tentangKamiApp "pemuda-peduli/src/tentang_kami/applications"
 	testimoniApp "pemuda-peduli/src/testimoni/applications"
@@ -59,6 +62,9 @@ func initialize(apps map[string]interfaces.IApplication, r *router.Router) {
 
 	// Register applications to run
 	apps["token"] = tokenApp.NewTokenApp()
+	apps["auth-admin"] = authAdminApp.NewAuthAdminApp()
+	apps["role"] = roleApp.NewRoleApp()
+	apps["admin-user"] = adminUserApp.NewAdminUserApp()
 	apps["album"] = albumApp.NewAlbumApp()
 	apps["banner"] = bannerApp.NewBannerApp()
 	apps["berita"] = beritaApp.NewBeritaApp()

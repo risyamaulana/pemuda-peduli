@@ -9,7 +9,7 @@ import (
 )
 
 type CreateKontakKami struct {
-	SKLegalitas string `json:"sk_legalitas" valid:"required"`
+	SKLegalitas string `json:"sk_legalitas" valid:"required,url"`
 	Address     string `json:"address" valid:"required"`
 	ContactName string `json:"contact_name" valid:"required"`
 	Icon        string `json:"icon" valid:"required,url"`
