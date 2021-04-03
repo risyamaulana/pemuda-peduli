@@ -37,12 +37,8 @@ type TentangKamiFilterQuery struct {
 
 type ReadTentangKami struct {
 	IDPPCPTentangKami string     `json:"id"`
-	Title             string     `json:"title"`
-	SubTitle          string     `json:"sub_title"`
-	Tag               string     `json:"tag"`
 	ThumbnailImageURL string     `json:"thumbnail_image_url"`
 	Description       string     `json:"description"`
-	Status            string     `json:"status"`
 	CreatedAt         time.Time  `json:"created_at"`
 	CreatedBy         *string    `json:"created_by"`
 	UpdatedAt         *time.Time `json:"updated_at"`
@@ -98,7 +94,8 @@ func (r CreateTentangKami) ToEntity() (data entity.TentangKamiEntity) {
 	data = entity.TentangKamiEntity{
 		ThumbnailImageURL: r.ThumbnailImageURL,
 		Description:       r.Description,
-		CreatedAt:         time.Now(),
+
+		CreatedAt: time.Now(),
 	}
 	return
 }
