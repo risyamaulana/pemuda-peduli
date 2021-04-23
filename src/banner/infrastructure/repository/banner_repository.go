@@ -101,10 +101,13 @@ func (c *BannerRepository) Find(ctx context.Context, data *entity.BannerQueryEnt
 			if fil.Field == "id" {
 				field = "id_pp_cp_banner"
 			}
-			if field != "is_deleted" {
-				str.WriteString(field + " LIKE '%" + fil.Keyword + "%' AND ")
-			} else {
+			switch field {
+			case "is_deleted":
 				str.WriteString(field + " = " + fil.Keyword + " AND ")
+			case "status":
+				str.WriteString(field + " = '" + fil.Keyword + "' AND ")
+			default:
+				str.WriteString(field + " LIKE '%" + fil.Keyword + "%' AND ")
 			}
 
 		}

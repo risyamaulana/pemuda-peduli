@@ -7,9 +7,11 @@ import (
 	"pemuda-peduli/src/common/infrastructure/web"
 	"pemuda-peduli/src/common/interfaces"
 
+	achievementApp "pemuda-peduli/src/achievement/applications"
 	adminUserApp "pemuda-peduli/src/admin_user/applications"
 	albumApp "pemuda-peduli/src/album/applications"
 	authAdminApp "pemuda-peduli/src/auth/admin/applications"
+	authUserApp "pemuda-peduli/src/auth/user/applications"
 	bannerApp "pemuda-peduli/src/banner/applications"
 	beneficariesApp "pemuda-peduli/src/beneficaries/applications"
 	beritaApp "pemuda-peduli/src/berita/applications"
@@ -23,6 +25,7 @@ import (
 	testimoniApp "pemuda-peduli/src/testimoni/applications"
 	tokenApp "pemuda-peduli/src/token/applications"
 	tujuanKamiApp "pemuda-peduli/src/tujuan_kami/applications"
+	userApp "pemuda-peduli/src/user/applications"
 
 	"github.com/fasthttp/router"
 	"github.com/joho/godotenv"
@@ -64,8 +67,12 @@ func initialize(apps map[string]interfaces.IApplication, r *router.Router) {
 	// Register applications to run
 	apps["token"] = tokenApp.NewTokenApp()
 	apps["auth-admin"] = authAdminApp.NewAuthAdminApp()
+	apps["auth-user"] = authUserApp.NewAuthUserApp()
 	apps["role"] = roleApp.NewRoleApp()
 	apps["admin-user"] = adminUserApp.NewAdminUserApp()
+	apps["user"] = userApp.NewUserApp()
+
+	apps["achievement"] = achievementApp.NewAchievementApp()
 	apps["album"] = albumApp.NewAlbumApp()
 	apps["banner"] = bannerApp.NewBannerApp()
 	apps["beneficaries"] = beneficariesApp.NewBeneficariesApp()

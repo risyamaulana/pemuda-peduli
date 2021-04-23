@@ -102,10 +102,13 @@ func (c *BeneficariesRepository) Find(ctx context.Context, data *entity.Benefica
 			if fil.Field == "id" {
 				field = "id_pp_cp_beneficaries"
 			}
-			if field != "is_deleted" {
-				str.WriteString(field + " LIKE '%" + fil.Keyword + "%' AND ")
-			} else {
+			switch field {
+			case "is_deleted":
 				str.WriteString(field + " = " + fil.Keyword + " AND ")
+			case "status":
+				str.WriteString(field + " = '" + fil.Keyword + "' AND ")
+			default:
+				str.WriteString(field + " LIKE '%" + fil.Keyword + "%' AND ")
 			}
 
 		}

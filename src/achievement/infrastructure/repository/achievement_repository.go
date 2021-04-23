@@ -3,38 +3,38 @@ package repository
 import (
 	"context"
 	"log"
+	"pemuda-peduli/src/achievement/common/constants"
+	"pemuda-peduli/src/achievement/domain/entity"
+	"pemuda-peduli/src/achievement/domain/interfaces"
 	"pemuda-peduli/src/common/infrastructure/db"
 	"pemuda-peduli/src/common/utility"
-	"pemuda-peduli/src/testimoni/common/constants"
-	"pemuda-peduli/src/testimoni/domain/entity"
-	"pemuda-peduli/src/testimoni/domain/interfaces"
 	"strconv"
 	"strings"
 )
 
-// TestimoniRepository
-type TestimoniRepository struct {
+// AchievementRepository
+type AchievementRepository struct {
 	db *db.ConnectTo
-	interfaces.ITestimoniRepository
+	interfaces.IAchievementRepository
 }
 
-// NewTestimoniRepository
-func NewTestimoniRepository(db *db.ConnectTo) TestimoniRepository {
-	return TestimoniRepository{db: db}
+// NewAchievementRepository
+func NewAchievementRepository(db *db.ConnectTo) AchievementRepository {
+	return AchievementRepository{db: db}
 }
 
 // Create data token
-func (c *TestimoniRepository) Insert(ctx context.Context, data *entity.TestimoniEntity) (err error) {
+func (c *AchievementRepository) Insert(ctx context.Context, data *entity.AchievementEntity) (err error) {
 
 	tx := c.db.DBExec.MustBegin()
 
 	// Generate UUID
-	data.IDPPCPTestimoni = utility.GetUUID()
+	data.IDPPCPAchievement = utility.GetUUID()
 
 	// Set status created
 	data.Status = constants.StatusCreated
 
-	sql := `INSERT INTO pp_cp_testimoni `
+	sql := `INSERT INTO pp_cp_achievement `
 	var strField strings.Builder
 	var strValue strings.Builder
 	filedItem := utility.GetNamedStruct(*data)
@@ -48,7 +48,7 @@ func (c *TestimoniRepository) Insert(ctx context.Context, data *entity.Testimoni
 	sql += "(" + strings.TrimSuffix(strField.String(), ",") + ")" + " VALUES(" + strings.TrimSuffix(strValue.String(), ",") + ")"
 	resp, err := tx.NamedExec(sql, data)
 	if err != nil {
-		log.Println("Error insert pp_cp_testimoni:", err)
+		log.Println("Error insert pp_cp_achievement:", err)
 		tx.Rollback()
 		return
 	}
@@ -59,26 +59,26 @@ func (c *TestimoniRepository) Insert(ctx context.Context, data *entity.Testimoni
 }
 
 // Update
-func (c *TestimoniRepository) Update(ctx context.Context, data entity.TestimoniEntity, id string) (response entity.TestimoniEntity, err error) {
+func (c *AchievementRepository) Update(ctx context.Context, data entity.AchievementEntity, id string) (response entity.AchievementEntity, err error) {
 	tx := c.db.DBExec.MustBegin()
 
 	// Update Data delivery order
-	sql := `Update pp_cp_testimoni SET `
+	sql := `Update pp_cp_achievement SET `
 	var str strings.Builder
 	fields := utility.GetNamedStruct(data)
 	for _, field := range fields {
-		if field == "id" || field == "id_pp_cp_testimoni" || field == "created_at" {
+		if field == "id" || field == "id_pp_cp_achievement" || field == "created_at" {
 			continue
 		}
 		str.WriteString(field + "=:" + field + ", ")
 	}
 	queryCondition := strings.TrimSuffix(str.String(), ", ")
 
-	sql += queryCondition + " WHERE id_pp_cp_testimoni = '" + id + "'"
+	sql += queryCondition + " WHERE id_pp_cp_achievement = '" + id + "'"
 	log.Print("QUERY : ", sql)
 	_, err = tx.NamedExec(sql, data)
 	if err != nil {
-		log.Println("Error insert pp_cp_testimoni:", err)
+		log.Println("Error insert pp_cp_achievement:", err)
 		tx.Rollback()
 		return
 	}
@@ -90,16 +90,17 @@ func (c *TestimoniRepository) Update(ctx context.Context, data entity.TestimoniE
 }
 
 // READ
-func (c *TestimoniRepository) Find(ctx context.Context, data *entity.TestimoniQueryEntity) (response []entity.TestimoniEntity, count int, err error) {
+func (c *AchievementRepository) Find(ctx context.Context, data *entity.AchievementQueryEntity) (response []entity.AchievementEntity, count int, err error) {
 
-	sql := `SELECT * FROM pp_cp_testimoni WHERE 1=1 `
+	sql := `SELECT * FROM pp_cp_achievement WHERE 1=1 `
 
 	var str strings.Builder
 	if len(data.Filter) != 0 {
 		for _, fil := range data.Filter {
 			field := fil.Field
+
 			if fil.Field == "id" {
-				field = "id_pp_cp_testimoni"
+				field = "id_pp_cp_achievement"
 			}
 			switch field {
 			case "is_deleted":
@@ -168,8 +169,8 @@ func (c *TestimoniRepository) Find(ctx context.Context, data *entity.TestimoniQu
 	return
 }
 
-func (c *TestimoniRepository) Get(ctx context.Context, id string) (response entity.TestimoniEntity, err error) {
-	if err = c.db.DBRead.Get(&response, "SELECT * FROM pp_cp_testimoni WHERE id_pp_cp_testimoni = $1", id); err != nil {
+func (c *AchievementRepository) Get(ctx context.Context, id string) (response entity.AchievementEntity, err error) {
+	if err = c.db.DBRead.Get(&response, "SELECT * FROM pp_cp_achievement WHERE id_pp_cp_achievement = $1", id); err != nil {
 		return
 	}
 	return

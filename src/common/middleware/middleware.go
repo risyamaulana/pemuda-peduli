@@ -12,6 +12,9 @@ import (
 
 	adminUserDom "pemuda-peduli/src/admin_user/domain"
 
+	userDom "pemuda-peduli/src/user/domain"
+	userRep "pemuda-peduli/src/user/infrastructure/repository"
+
 	roleDom "pemuda-peduli/src/role/domain"
 	roleRepo "pemuda-peduli/src/role/infrastructure/repository"
 
@@ -70,7 +73,7 @@ func CheckAuthToken(next fasthttp.RequestHandler) fasthttp.RequestHandler {
 	})
 }
 
-func CheckLoginToken(next fasthttp.RequestHandler) fasthttp.RequestHandler {
+func CheckLoginAdminToken(next fasthttp.RequestHandler) fasthttp.RequestHandler {
 	return fasthttp.RequestHandler(func(ctx *fasthttp.RequestCtx) {
 		method := ctx.Request.Header.Method()
 		if string(method) != "OPTIONS" {
@@ -81,7 +84,7 @@ func CheckLoginToken(next fasthttp.RequestHandler) fasthttp.RequestHandler {
 				return
 			}
 			// Check validation token
-			err := tokenDom.ValidateLogin(ctx, string(token), DB)
+			err := tokenDom.ValidateAdminLogin(ctx, string(token), DB)
 			if err != nil {
 				ctx.SetStatusCode(fasthttp.StatusUnauthorized)
 				fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
@@ -103,7 +106,7 @@ func CheckAdminToken(next fasthttp.RequestHandler) fasthttp.RequestHandler {
 				return
 			}
 			// Check validation token
-			err := tokenDom.ValidateLogin(ctx, string(token), DB)
+			err := tokenDom.ValidateAdminLogin(ctx, string(token), DB)
 			if err != nil {
 				ctx.SetStatusCode(fasthttp.StatusUnauthorized)
 				fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
@@ -128,6 +131,60 @@ func CheckAdminToken(next fasthttp.RequestHandler) fasthttp.RequestHandler {
 				return
 			}
 			ctx.SetUserValue("user_role_level", roleData.RoleLevel)
+		}
+		next(ctx)
+	})
+}
+
+func CheckLoginuserToken(next fasthttp.RequestHandler) fasthttp.RequestHandler {
+	return fasthttp.RequestHandler(func(ctx *fasthttp.RequestCtx) {
+		method := ctx.Request.Header.Method()
+		if string(method) != "OPTIONS" {
+			token := ctx.Request.Header.Peek("pp-token")
+			if string(token) == "" {
+				ctx.SetStatusCode(fasthttp.StatusUnauthorized)
+				fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, errors.New("Failed auth: Header pp-token is required"))))
+				return
+			}
+			// Check validation token
+			err := tokenDom.ValidateUserLogin(ctx, string(token), DB)
+			if err != nil {
+				ctx.SetStatusCode(fasthttp.StatusUnauthorized)
+				fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
+				return
+			}
+		}
+		next(ctx)
+	})
+}
+
+func CheckUserToken(next fasthttp.RequestHandler) fasthttp.RequestHandler {
+	return fasthttp.RequestHandler(func(ctx *fasthttp.RequestCtx) {
+		method := ctx.Request.Header.Method()
+		if string(method) != "OPTIONS" {
+			token := ctx.Request.Header.Peek("pp-token")
+			if string(token) == "" {
+				ctx.SetStatusCode(fasthttp.StatusUnauthorized)
+				fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, errors.New("Failed auth: Header pp-token is required"))))
+				return
+			}
+			// Check validation token
+			err := tokenDom.ValidateUserLogin(ctx, string(token), DB)
+			if err != nil {
+				ctx.SetStatusCode(fasthttp.StatusUnauthorized)
+				fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
+				return
+			}
+
+			// Get User Data
+			userID := ctx.UserValue("user_id").(string)
+			repo := userRep.NewUserRepository(DB)
+			_, err = userDom.ReadUser(ctx, &repo, userID)
+			if err != nil {
+				ctx.SetStatusCode(fasthttp.StatusUnauthorized)
+				fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
+				return
+			}
 		}
 		next(ctx)
 	})

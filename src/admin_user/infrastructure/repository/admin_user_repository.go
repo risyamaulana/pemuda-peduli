@@ -98,10 +98,11 @@ func (c *AdminUserRepository) Find(ctx context.Context, data *entity.AdminUserQu
 			if fil.Field == "id" {
 				field = "id_user_admin"
 			}
-			if field != "is_deleted" {
-				str.WriteString(field + " LIKE '%" + fil.Keyword + "%' AND ")
-			} else {
+			switch field {
+			case "is_deleted":
 				str.WriteString(field + " = " + fil.Keyword + " AND ")
+			default:
+				str.WriteString(field + " LIKE '%" + fil.Keyword + "%' AND ")
 			}
 
 		}

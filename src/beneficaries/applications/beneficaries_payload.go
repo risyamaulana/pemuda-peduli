@@ -9,16 +9,16 @@ import (
 )
 
 type CreateBeneficaries struct {
-	Title             string `json:"title" valid:"required"`
-	ThumbnailImageURL string `json:"thumbnail_image_url" valid:"url"`
+	Title             string `json:"title"`
+	ThumbnailImageURL string `json:"thumbnail_image_url" valid:"required,url"`
 	DeeplinkRight     string `json:"deeplink_right" valid:"url"`
 	DeeplinkLeft      string `json:"deeplink_left" valid:"url"`
 	Description       string `json:"description"`
 }
 
 type UpdateBeneficaries struct {
-	Title             string `json:"title" valid:"required"`
-	ThumbnailImageURL string `json:"thumbnail_image_url" valid:"url"`
+	Title             string `json:"title"`
+	ThumbnailImageURL string `json:"thumbnail_image_url" valid:"required,url"`
 	DeeplinkRight     string `json:"deeplink_right" valid:"url"`
 	DeeplinkLeft      string `json:"deeplink_left" valid:"url"`
 	Description       string `json:"description"`

@@ -4,19 +4,19 @@ import (
 	"errors"
 	"fmt"
 	"log"
-
 	"pemuda-peduli/src/common/handler"
 	"pemuda-peduli/src/common/infrastructure/db"
 	"pemuda-peduli/src/common/interfaces"
 	"pemuda-peduli/src/common/middleware"
 	"pemuda-peduli/src/common/utility"
 
-	adminApps "pemuda-peduli/src/admin_user/applications"
-	adminUserDom "pemuda-peduli/src/admin_user/domain"
-
 	tokenDom "pemuda-peduli/src/token/domain"
 	tokenMod "pemuda-peduli/src/token/domain/entity"
-	tokenRepo "pemuda-peduli/src/token/infrastructure/repository"
+	tokenRep "pemuda-peduli/src/token/infrastructure/repository"
+
+	userApp "pemuda-peduli/src/user/applications"
+	userDom "pemuda-peduli/src/user/domain"
+	userRep "pemuda-peduli/src/user/infrastructure/repository"
 
 	"github.com/fasthttp/router"
 	"github.com/valyala/fasthttp"
@@ -31,35 +31,35 @@ func init() {
 	DB = db.NewDBConnectionFactory(0)
 }
 
-// AuthAdminApp ...
-type AuthAdminApp struct {
+// AuthUserApp ...
+type AuthUserApp struct {
 	interfaces.IApplication
 }
 
-// NewAuthAdminApp ...
-func NewAuthAdminApp() *AuthAdminApp {
+// NewAuthUserApp ...
+func NewAuthUserApp() *AuthUserApp {
 	// Place where we init infrastructure, repo etc
-	s := AuthAdminApp{}
+	s := AuthUserApp{}
 	return &s
 }
 
 // Initialize will be called when application run
-func (s *AuthAdminApp) Initialize(r *router.Router) {
+func (s *AuthUserApp) Initialize(r *router.Router) {
 	s.addRoute(r)
-	log.Println("AuthAdmin app initialized")
+	log.Println("AuthUser app initialized")
 }
 
 // Destroy will be called when app shutdowns
-func (s *AuthAdminApp) Destroy() {
+func (s *AuthUserApp) Destroy() {
 	// TODO Do clean up resource here
-	log.Println("AuthAdmin app released...")
+	log.Println("AuthUser app released...")
 }
 
 // Route declaration
-func (s *AuthAdminApp) addRoute(r *router.Router) {
-	r.POST("/auth/admin/login", middleware.CheckAuthToken(login))
+func (s *AuthUserApp) addRoute(r *router.Router) {
+	r.POST("/auth/user/login", middleware.CheckAuthToken(login))
 
-	r.POST("/auth/admin/logout", middleware.CheckLoginAdminToken(logout))
+	r.POST("/auth/user/logout", middleware.CheckLoginuserToken(logout))
 }
 
 // ============== Handler for each route start here ============
@@ -77,8 +77,8 @@ func login(ctx *fasthttp.RequestCtx) {
 		fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
 		return
 	}
-
-	data, err := adminUserDom.GetAdminUserByUsername(ctx, DB, payload.Username)
+	repo := userRep.NewUserRepository(DB)
+	data, err := userDom.ReadLoginuser(ctx, &repo, payload.Username)
 	if err != nil {
 		if err != nil {
 			ctx.SetStatusCode(fasthttp.StatusUnprocessableEntity)
@@ -101,17 +101,17 @@ func login(ctx *fasthttp.RequestCtx) {
 		DeviceType: ctx.UserValue("device_type").(string),
 		Token:      ctx.UserValue("token").(string),
 		IsLogin:    true,
-		LoginID:    data.IDPPCPAdminUser,
+		LoginID:    data.IDUser,
 	}
 
-	tokenRepository := tokenRepo.NewTokenRepository(DB)
+	tokenRepository := tokenRep.NewTokenRepository(DB)
 	if err = tokenDom.UpdateToken(ctx, &tokenRepository, &tokenData); err != nil {
 		ctx.SetStatusCode(fasthttp.StatusUnprocessableEntity)
 		fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
 		return
 	}
 
-	response := handler.DefaultResponse(adminApps.ToPayload(data), nil)
+	response := handler.DefaultResponse(userApp.ToPayload(data), nil)
 	fmt.Fprintf(ctx, utility.PrettyPrint(response))
 }
 
@@ -123,7 +123,7 @@ func logout(ctx *fasthttp.RequestCtx) {
 		IsLogin:    false,
 		LoginID:    "",
 	}
-	tokenRepository := tokenRepo.NewTokenRepository(DB)
+	tokenRepository := tokenRep.NewTokenRepository(DB)
 	if err := tokenDom.UpdateToken(ctx, &tokenRepository, &tokenData); err != nil {
 		ctx.SetStatusCode(fasthttp.StatusUnprocessableEntity)
 		fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
