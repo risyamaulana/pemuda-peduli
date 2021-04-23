@@ -12,4 +12,8 @@ type IBeritaRepository interface {
 
 	Find(ctx context.Context, data *entity.BeritaQueryEntity) (company []entity.BeritaEntity, count int, err error)
 	Get(ctx context.Context, id string) (response entity.BeritaEntity, err error)
+
+	InsertDetail(ctx context.Context, data *entity.BeritaDetailEntity) (err error)
+	UpdateDetail(ctx context.Context, data entity.BeritaDetailEntity, id string) (response entity.BeritaDetailEntity, err error)
+	GetDetail(ctx context.Context, id string) (response entity.BeritaDetailEntity, err error)
 }

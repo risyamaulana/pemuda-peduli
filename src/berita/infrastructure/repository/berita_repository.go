@@ -58,6 +58,38 @@ func (c *BeritaRepository) Insert(ctx context.Context, data *entity.BeritaEntity
 	return
 }
 
+func (c *BeritaRepository) InsertDetail(ctx context.Context, data *entity.BeritaDetailEntity) (err error) {
+
+	tx := c.db.DBExec.MustBegin()
+
+	// Generate UUID
+	data.IDPPCPBeritaDetail = utility.GetUUID()
+
+	sql := `INSERT INTO pp_cp_berita_detail `
+	var strField strings.Builder
+	var strValue strings.Builder
+	filedItem := utility.GetNamedStruct(*data)
+	for _, field := range filedItem {
+		if field != "id" {
+			strField.WriteString(field + ",")
+			strValue.WriteString(":" + field + ",")
+		}
+	}
+
+	sql += "(" + strings.TrimSuffix(strField.String(), ",") + ")" + " VALUES(" + strings.TrimSuffix(strValue.String(), ",") + ")"
+	log.Println("SQL DETAIL (BERITA) : ", sql)
+	resp, err := tx.NamedExec(sql, data)
+	if err != nil {
+		log.Println("Error insert pp_cp_berita_detail:", err)
+		tx.Rollback()
+		return
+	}
+
+	tx.Commit()
+	data.ID, _ = resp.LastInsertId()
+	return
+}
+
 // Update
 func (c *BeritaRepository) Update(ctx context.Context, data entity.BeritaEntity, id string) (response entity.BeritaEntity, err error) {
 	tx := c.db.DBExec.MustBegin()
@@ -79,6 +111,36 @@ func (c *BeritaRepository) Update(ctx context.Context, data entity.BeritaEntity,
 	_, err = tx.NamedExec(sql, data)
 	if err != nil {
 		log.Println("Error insert pp_cp_berita:", err)
+		tx.Rollback()
+		return
+	}
+
+	err = tx.Commit()
+	response = data
+
+	return
+}
+
+func (c *BeritaRepository) UpdateDetail(ctx context.Context, data entity.BeritaDetailEntity, id string) (response entity.BeritaDetailEntity, err error) {
+	tx := c.db.DBExec.MustBegin()
+
+	// Update Data delivery order
+	sql := `Update pp_cp_berita_detail SET `
+	var str strings.Builder
+	fields := utility.GetNamedStruct(data)
+	for _, field := range fields {
+		if field == "id" || field == "id_pp_cp_berita_detail" || field == "created_at" {
+			continue
+		}
+		str.WriteString(field + "=:" + field + ", ")
+	}
+	queryCondition := strings.TrimSuffix(str.String(), ", ")
+
+	sql += queryCondition + " WHERE id_pp_cp_berita_detail = '" + id + "'"
+	log.Print("QUERY : ", sql)
+	_, err = tx.NamedExec(sql, data)
+	if err != nil {
+		log.Println("Error insert pp_cp_berita_detail:", err)
 		tx.Rollback()
 		return
 	}
@@ -170,6 +232,13 @@ func (c *BeritaRepository) Find(ctx context.Context, data *entity.BeritaQueryEnt
 
 func (c *BeritaRepository) Get(ctx context.Context, id string) (response entity.BeritaEntity, err error) {
 	if err = c.db.DBRead.Get(&response, "SELECT * FROM pp_cp_berita WHERE id_pp_cp_berita = $1", id); err != nil {
+		return
+	}
+	return
+}
+
+func (c *BeritaRepository) GetDetail(ctx context.Context, id string) (response entity.BeritaDetailEntity, err error) {
+	if err = c.db.DBRead.Get(&response, "SELECT * FROM pp_cp_berita_detail WHERE id_pp_cp_berita = $1", id); err != nil {
 		return
 	}
 	return

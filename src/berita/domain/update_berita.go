@@ -3,16 +3,17 @@ package domain
 import (
 	"context"
 	"errors"
+	"log"
 	"pemuda-peduli/src/berita/common/constants"
 	"pemuda-peduli/src/berita/domain/entity"
 	"pemuda-peduli/src/berita/domain/interfaces"
 	"time"
 )
 
-func UpdateBerita(ctx context.Context, repo interfaces.IBeritaRepository, data entity.BeritaEntity, id string) (response entity.BeritaEntity, err error) {
+func UpdateBerita(ctx context.Context, repo interfaces.IBeritaRepository, data entity.BeritaEntity, dataDetail entity.BeritaDetailEntity, id string) (response entity.BeritaEntity, err error) {
 	currentDate := time.Now()
 	// Check available daata
-	checkData, err := repo.Get(ctx, id)
+	checkData, err := GetBerita(ctx, repo, id)
 	if err != nil {
 		err = errors.New("Data not found")
 		return
@@ -30,7 +31,30 @@ func UpdateBerita(ctx context.Context, repo interfaces.IBeritaRepository, data e
 	checkData.UpdatedAt = &currentDate
 	checkData.IsDeleted = false
 
-	response, err = repo.Update(ctx, checkData, id)
+	_, err = repo.Update(ctx, checkData, id)
+	if err != nil {
+		return
+	}
+
+	if checkData.Detail.IDPPCPBeritaDetail != "" {
+		// Update Data Detail
+		checkData.Detail.Content = dataDetail.Content
+		checkData.Detail.Tag = data.Tag
+		if _, errUpdateDetail := repo.UpdateDetail(ctx, checkData.Detail, checkData.Detail.IDPPCPBeritaDetail); errUpdateDetail != nil {
+			log.Println("Failed update berita detail: ", errUpdateDetail)
+		}
+	} else {
+		// Insert Data Detail
+		// Insert Detail
+		dataDetail.IDPPCPBerita = checkData.IDPPCPBerita
+		dataDetail.Tag = data.Tag
+		if errDetail := repo.InsertDetail(ctx, &dataDetail); errDetail != nil {
+			log.Println("ERR Insert Detail: ", errDetail)
+		}
+	}
+
+	response, _ = GetBerita(ctx, repo, checkData.IDPPCPBerita)
+
 	return
 }
 

@@ -18,5 +18,10 @@ func GetProgramKami(ctx context.Context, repo interfaces.IProgramKamiRepository,
 		err = errors.New("Data not found")
 		return
 	}
+
+	// Get Detail
+	dataDetail, _ := repo.GetDetail(ctx, response.IDPPCPProgramKami)
+
+	response.Detail = dataDetail
 	return
 }

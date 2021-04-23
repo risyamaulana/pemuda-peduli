@@ -18,6 +18,16 @@ type BeritaEntity struct {
 	PublishedAt       *time.Time `db:"published_at"`
 	PublishedBy       *string    `db:"published_by"`
 	IsDeleted         bool       `db:"is_deleted"`
+
+	Detail BeritaDetailEntity
+}
+
+type BeritaDetailEntity struct {
+	ID                 int64  `db:"id"`
+	IDPPCPBerita       string `db:"id_pp_cp_berita"`
+	IDPPCPBeritaDetail string `db:"id_pp_cp_berita_detail"`
+	Content            string `db:"content"`
+	Tag                string `db:"tag"`
 }
 
 type BeritaQueryEntity struct {

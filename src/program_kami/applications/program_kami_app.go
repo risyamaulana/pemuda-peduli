@@ -82,15 +82,16 @@ func createProgramKami(ctx *fasthttp.RequestCtx) {
 		return
 	}
 
-	data := payload.ToEntity()
+	data, dataDetail := payload.ToEntity()
 	repo := repository.NewProgramKamiRepository(DB)
-	if err := domain.CreateProgramKami(ctx, &repo, &data); err != nil {
+	responseData, err := domain.CreateProgramKami(ctx, &repo, &data, &dataDetail)
+	if err != nil {
 		ctx.SetStatusCode(fasthttp.StatusUnprocessableEntity)
 		fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
 		return
 	}
 
-	response := handler.DefaultResponse(ToPayload(data), nil)
+	response := handler.DefaultResponse(ToPayload(responseData, true), nil)
 	fmt.Fprintf(ctx, utility.PrettyPrint(response))
 }
 
@@ -110,16 +111,16 @@ func updateProgramKami(ctx *fasthttp.RequestCtx) {
 		return
 	}
 
-	data := payload.ToEntity()
+	data, dataDetail := payload.ToEntity()
 	repo := repository.NewProgramKamiRepository(DB)
-	responseData, err := domain.UpdateProgramKami(ctx, &repo, data, programKamiID)
+	responseData, err := domain.UpdateProgramKami(ctx, &repo, data, dataDetail, programKamiID)
 	if err != nil {
 		ctx.SetStatusCode(fasthttp.StatusUnprocessableEntity)
 		fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
 		log.Println(err)
 		return
 	}
-	response := handler.DefaultResponse(ToPayload(responseData), nil)
+	response := handler.DefaultResponse(ToPayload(responseData, true), nil)
 	fmt.Fprintf(ctx, utility.PrettyPrint(response))
 }
 
@@ -133,7 +134,7 @@ func publishProgramKami(ctx *fasthttp.RequestCtx) {
 		log.Println(err)
 		return
 	}
-	response := handler.DefaultResponse(ToPayload(responseData), nil)
+	response := handler.DefaultResponse(ToPayload(responseData, false), nil)
 	fmt.Fprintf(ctx, utility.PrettyPrint(response))
 }
 
@@ -147,7 +148,7 @@ func hideProgramKami(ctx *fasthttp.RequestCtx) {
 		log.Println(err)
 		return
 	}
-	response := handler.DefaultResponse(ToPayload(responseData), nil)
+	response := handler.DefaultResponse(ToPayload(responseData, false), nil)
 	fmt.Fprintf(ctx, utility.PrettyPrint(response))
 }
 
@@ -161,7 +162,7 @@ func deleteProgramKami(ctx *fasthttp.RequestCtx) {
 		log.Println(err)
 		return
 	}
-	response := handler.DefaultResponse(ToPayload(responseData), nil)
+	response := handler.DefaultResponse(ToPayload(responseData, false), nil)
 	fmt.Fprintf(ctx, utility.PrettyPrint(response))
 }
 
@@ -200,7 +201,7 @@ func findProgramKamis(ctx *fasthttp.RequestCtx) {
 	// Return data as json
 	response := []ReadProgramKami{}
 	for _, resp := range responseData {
-		response = append(response, ToPayload(resp))
+		response = append(response, ToPayload(resp, false))
 	}
 
 	fmt.Fprintf(ctx, utility.PrettyPrint(handler.PaginationResponse(response, nil, page, limit, int(pageTotal), count)))
@@ -216,6 +217,6 @@ func getProgramKami(ctx *fasthttp.RequestCtx) {
 		log.Println(err)
 		return
 	}
-	response := handler.DefaultResponse(ToPayload(responseData), nil)
+	response := handler.DefaultResponse(ToPayload(responseData, true), nil)
 	fmt.Fprintf(ctx, utility.PrettyPrint(response))
 }

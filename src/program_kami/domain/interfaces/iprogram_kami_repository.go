@@ -12,4 +12,9 @@ type IProgramKamiRepository interface {
 
 	Find(ctx context.Context, data *entity.ProgramKamiQueryEntity) (company []entity.ProgramKamiEntity, count int, err error)
 	Get(ctx context.Context, id string) (response entity.ProgramKamiEntity, err error)
+
+	InsertDetail(ctx context.Context, data *entity.ProgramKamiDetailEntity) (err error)
+	UpdateDetail(ctx context.Context, data entity.ProgramKamiDetailEntity, id string) (response entity.ProgramKamiDetailEntity, err error)
+
+	GetDetail(ctx context.Context, id string) (response entity.ProgramKamiDetailEntity, err error)
 }

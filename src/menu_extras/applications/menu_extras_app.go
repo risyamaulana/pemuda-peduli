@@ -5,13 +5,13 @@ import (
 	"fmt"
 	"log"
 	"math"
-	"pemuda-peduli/src/berita/domain"
-	"pemuda-peduli/src/berita/infrastructure/repository"
 	"pemuda-peduli/src/common/handler"
 	"pemuda-peduli/src/common/infrastructure/db"
 	"pemuda-peduli/src/common/interfaces"
 	"pemuda-peduli/src/common/middleware"
 	"pemuda-peduli/src/common/utility"
+	"pemuda-peduli/src/menu_extras/domain"
+	"pemuda-peduli/src/menu_extras/infrastructure/repository"
 	"strconv"
 
 	"github.com/fasthttp/router"
@@ -27,47 +27,47 @@ func init() {
 	DB = db.NewDBConnectionFactory(0)
 }
 
-// BeritaApp ...
-type BeritaApp struct {
+// MenuExtrasApp ...
+type MenuExtrasApp struct {
 	interfaces.IApplication
 }
 
-// NewBeritaApp ...
-func NewBeritaApp() *BeritaApp {
+// NewMenuExtrasApp ...
+func NewMenuExtrasApp() *MenuExtrasApp {
 	// Place where we init infrastructure, repo etc
-	s := BeritaApp{}
+	s := MenuExtrasApp{}
 	return &s
 }
 
 // Initialize will be called when application run
-func (s *BeritaApp) Initialize(r *router.Router) {
+func (s *MenuExtrasApp) Initialize(r *router.Router) {
 	s.addRoute(r)
-	log.Println("Berita app initialized")
+	log.Println("MenuExtras app initialized")
 }
 
 // Destroy will be called when app shutdowns
-func (s *BeritaApp) Destroy() {
+func (s *MenuExtrasApp) Destroy() {
 	// TODO Do clean up resource here
-	log.Println("Berita app released...")
+	log.Println("MenuExtras app released...")
 }
 
 // Route declaration
-func (s *BeritaApp) addRoute(r *router.Router) {
-	r.POST("/berita/create", middleware.CheckAuthToken(createBerita))
+func (s *MenuExtrasApp) addRoute(r *router.Router) {
+	r.POST("/menu-extras/create", middleware.CheckAuthToken(createMenuExtras))
 
-	r.PUT("/berita/{id}", middleware.CheckAuthToken(updateBerita))
-	r.PUT("/berita/publish/{id}", middleware.CheckAuthToken(publishBerita))
-	r.PUT("/berita/hide/{id}", middleware.CheckAuthToken(hideBerita))
+	r.PUT("/menu-extras/{id}", middleware.CheckAuthToken(updateMenuExtras))
+	r.PUT("/menu-extras/publish/{id}", middleware.CheckAuthToken(publishMenuExtras))
+	r.PUT("/menu-extras/hide/{id}", middleware.CheckAuthToken(hideMenuExtras))
 
-	r.POST("/berita/list", middleware.CheckAuthToken(findBeritas))
-	r.GET("/berita/{id}", middleware.CheckAuthToken(getBerita))
+	r.POST("/menu-extras/list", middleware.CheckAuthToken(findMenuExtrass))
+	r.GET("/menu-extras/{id}", middleware.CheckAuthToken(getMenuExtras))
 
-	r.DELETE("/berita/{id}", middleware.CheckAuthToken(deleteBerita))
+	r.DELETE("/menu-extras/{id}", middleware.CheckAuthToken(deleteMenuExtras))
 }
 
 // ============== Handler for each route start here ============
 
-func createBerita(ctx *fasthttp.RequestCtx) {
+func createMenuExtras(ctx *fasthttp.RequestCtx) {
 	payload, err := GetCreatePayload(ctx.Request.Body())
 	if err != nil {
 		ctx.SetStatusCode(fasthttp.StatusBadRequest)
@@ -82,21 +82,20 @@ func createBerita(ctx *fasthttp.RequestCtx) {
 		return
 	}
 
-	data, detail := payload.ToEntity()
-	repo := repository.NewBeritaRepository(DB)
-	responseData, err := domain.CreateBerita(ctx, &repo, &data, &detail)
-	if err != nil {
+	data := payload.ToEntity()
+	repo := repository.NewMenuExtrasRepository(DB)
+	if err := domain.CreateMenuExtras(ctx, &repo, &data); err != nil {
 		ctx.SetStatusCode(fasthttp.StatusUnprocessableEntity)
 		fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
 		return
 	}
 
-	response := handler.DefaultResponse(ToPayload(responseData, true), nil)
+	response := handler.DefaultResponse(ToPayload(data), nil)
 	fmt.Fprintf(ctx, utility.PrettyPrint(response))
 }
 
-func updateBerita(ctx *fasthttp.RequestCtx) {
-	beritaID := fmt.Sprintf("%s", ctx.UserValue("id"))
+func updateMenuExtras(ctx *fasthttp.RequestCtx) {
+	menuExtrasID := fmt.Sprintf("%s", ctx.UserValue("id"))
 	payload, err := GetCreatePayload(ctx.Request.Body())
 	if err != nil {
 		ctx.SetStatusCode(fasthttp.StatusBadRequest)
@@ -111,62 +110,62 @@ func updateBerita(ctx *fasthttp.RequestCtx) {
 		return
 	}
 
-	data, detail := payload.ToEntity()
-	repo := repository.NewBeritaRepository(DB)
-	responseData, err := domain.UpdateBerita(ctx, &repo, data, detail, beritaID)
+	data := payload.ToEntity()
+	repo := repository.NewMenuExtrasRepository(DB)
+	responseData, err := domain.UpdateMenuExtras(ctx, &repo, data, menuExtrasID)
 	if err != nil {
 		ctx.SetStatusCode(fasthttp.StatusUnprocessableEntity)
 		fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
 		log.Println(err)
 		return
 	}
-	response := handler.DefaultResponse(ToPayload(responseData, true), nil)
+	response := handler.DefaultResponse(ToPayload(responseData), nil)
 	fmt.Fprintf(ctx, utility.PrettyPrint(response))
 }
 
-func publishBerita(ctx *fasthttp.RequestCtx) {
-	beritaID := fmt.Sprintf("%s", ctx.UserValue("id"))
-	repo := repository.NewBeritaRepository(DB)
-	responseData, err := domain.PublishBerita(ctx, &repo, beritaID)
+func publishMenuExtras(ctx *fasthttp.RequestCtx) {
+	menuExtrasID := fmt.Sprintf("%s", ctx.UserValue("id"))
+	repo := repository.NewMenuExtrasRepository(DB)
+	responseData, err := domain.PublishMenuExtras(ctx, &repo, menuExtrasID)
 	if err != nil {
 		ctx.SetStatusCode(fasthttp.StatusUnprocessableEntity)
 		fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
 		log.Println(err)
 		return
 	}
-	response := handler.DefaultResponse(ToPayload(responseData, false), nil)
+	response := handler.DefaultResponse(ToPayload(responseData), nil)
 	fmt.Fprintf(ctx, utility.PrettyPrint(response))
 }
 
-func hideBerita(ctx *fasthttp.RequestCtx) {
-	beritaID := fmt.Sprintf("%s", ctx.UserValue("id"))
-	repo := repository.NewBeritaRepository(DB)
-	responseData, err := domain.HideBerita(ctx, &repo, beritaID)
+func hideMenuExtras(ctx *fasthttp.RequestCtx) {
+	menuExtrasID := fmt.Sprintf("%s", ctx.UserValue("id"))
+	repo := repository.NewMenuExtrasRepository(DB)
+	responseData, err := domain.HideMenuExtras(ctx, &repo, menuExtrasID)
 	if err != nil {
 		ctx.SetStatusCode(fasthttp.StatusUnprocessableEntity)
 		fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
 		log.Println(err)
 		return
 	}
-	response := handler.DefaultResponse(ToPayload(responseData, false), nil)
+	response := handler.DefaultResponse(ToPayload(responseData), nil)
 	fmt.Fprintf(ctx, utility.PrettyPrint(response))
 }
 
-func deleteBerita(ctx *fasthttp.RequestCtx) {
-	beritaID := fmt.Sprintf("%s", ctx.UserValue("id"))
-	repo := repository.NewBeritaRepository(DB)
-	responseData, err := domain.DeleteBerita(ctx, &repo, beritaID)
+func deleteMenuExtras(ctx *fasthttp.RequestCtx) {
+	menuExtrasID := fmt.Sprintf("%s", ctx.UserValue("id"))
+	repo := repository.NewMenuExtrasRepository(DB)
+	responseData, err := domain.DeleteMenuExtras(ctx, &repo, menuExtrasID)
 	if err != nil {
 		ctx.SetStatusCode(fasthttp.StatusUnprocessableEntity)
 		fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
 		log.Println(err)
 		return
 	}
-	response := handler.DefaultResponse(ToPayload(responseData, false), nil)
+	response := handler.DefaultResponse(ToPayload(responseData), nil)
 	fmt.Fprintf(ctx, utility.PrettyPrint(response))
 }
 
-func findBeritas(ctx *fasthttp.RequestCtx) {
+func findMenuExtrass(ctx *fasthttp.RequestCtx) {
 	payload, err := GetQueryPayload(ctx.Request.Body())
 	if err != nil {
 		ctx.SetStatusCode(fasthttp.StatusBadRequest)
@@ -182,9 +181,9 @@ func findBeritas(ctx *fasthttp.RequestCtx) {
 	}
 
 	data := payload.ToEntity()
-	repo := repository.NewBeritaRepository(DB)
+	repo := repository.NewMenuExtrasRepository(DB)
 
-	responseData, count, err := domain.FindBerita(ctx, &repo, &data)
+	responseData, count, err := domain.FindMenuExtras(ctx, &repo, &data)
 
 	// TOTAL PAGE
 	limit, _ := strconv.Atoi(payload.Limit)
@@ -199,24 +198,24 @@ func findBeritas(ctx *fasthttp.RequestCtx) {
 	}
 
 	// Return data as json
-	response := []ReadBerita{}
+	response := []ReadMenuExtras{}
 	for _, resp := range responseData {
-		response = append(response, ToPayload(resp, false))
+		response = append(response, ToPayload(resp))
 	}
 
 	fmt.Fprintf(ctx, utility.PrettyPrint(handler.PaginationResponse(response, nil, page, limit, int(pageTotal), count)))
 }
 
-func getBerita(ctx *fasthttp.RequestCtx) {
-	beritaID := fmt.Sprintf("%s", ctx.UserValue("id"))
-	repo := repository.NewBeritaRepository(DB)
-	responseData, err := domain.GetBerita(ctx, &repo, beritaID)
+func getMenuExtras(ctx *fasthttp.RequestCtx) {
+	menuExtrasID := fmt.Sprintf("%s", ctx.UserValue("id"))
+	repo := repository.NewMenuExtrasRepository(DB)
+	responseData, err := domain.GetMenuExtras(ctx, &repo, menuExtrasID)
 	if err != nil {
 		ctx.SetStatusCode(fasthttp.StatusUnprocessableEntity)
 		fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
 		log.Println(err)
 		return
 	}
-	response := handler.DefaultResponse(ToPayload(responseData, true), nil)
+	response := handler.DefaultResponse(ToPayload(responseData), nil)
 	fmt.Fprintf(ctx, utility.PrettyPrint(response))
 }

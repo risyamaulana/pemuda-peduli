@@ -11,6 +11,7 @@ import (
 type CreateProgramKami struct {
 	Title             string `json:"title" valid:"required"`
 	SubTitle          string `json:"sub_title" valid:"required"`
+	Content           string `json:"content" valid:"required"`
 	Tag               string `json:"tag"`
 	ThumbnailImageURL string `json:"thumbnail_image_url" valid:"url"`
 	Description       string `json:"description"`
@@ -19,6 +20,7 @@ type CreateProgramKami struct {
 type UpdateProgramKami struct {
 	Title             string `json:"title" valid:"required"`
 	SubTitle          string `json:"sub_title" valid:"required"`
+	Content           string `json:"content" valid:"required"`
 	Tag               string `json:"tag"`
 	ThumbnailImageURL string `json:"thumbnail_image_url" valid:"url"`
 	Description       string `json:"description"`
@@ -42,20 +44,25 @@ type ProgramKamiFilterQuery struct {
 }
 
 type ReadProgramKami struct {
-	IDPPCPProgramKami string     `json:"id"`
-	Title             string     `json:"title"`
-	SubTitle          string     `json:"sub_title"`
-	Tag               string     `json:"tag"`
-	ThumbnailImageURL string     `json:"thumbnail_image_url"`
-	Description       string     `json:"description"`
-	Status            string     `json:"status"`
-	CreatedAt         time.Time  `json:"created_at"`
-	CreatedBy         *string    `json:"created_by"`
-	UpdatedAt         *time.Time `json:"updated_at"`
-	UpdatedBy         *string    `json:"updated_by"`
-	PublishedAt       *time.Time `json:"published_at"`
-	PublishedBy       *string    `json:"published_by"`
-	IsDeleted         bool       `json:"is_deleted"`
+	IDPPCPProgramKami string                 `json:"id"`
+	Title             string                 `json:"title"`
+	SubTitle          string                 `json:"sub_title"`
+	Tag               string                 `json:"tag"`
+	ThumbnailImageURL string                 `json:"thumbnail_image_url"`
+	Detail            *ReadProgramKamiDetail `json:"detail,omitempty"`
+	Description       string                 `json:"description"`
+	Status            string                 `json:"status"`
+	CreatedAt         time.Time              `json:"created_at"`
+	CreatedBy         *string                `json:"created_by"`
+	UpdatedAt         *time.Time             `json:"updated_at"`
+	UpdatedBy         *string                `json:"updated_by"`
+	PublishedAt       *time.Time             `json:"published_at"`
+	PublishedBy       *string                `json:"published_by"`
+	IsDeleted         bool                   `json:"is_deleted"`
+}
+
+type ReadProgramKamiDetail struct {
+	Content string `json:"content"`
 }
 
 func GetCreatePayload(body []byte) (payload CreateProgramKami, err error) {
@@ -100,7 +107,7 @@ func (r ProgramKamiQuery) Validate() (err error) {
 	return
 }
 
-func (r CreateProgramKami) ToEntity() (data entity.ProgramKamiEntity) {
+func (r CreateProgramKami) ToEntity() (data entity.ProgramKamiEntity, dataDetail entity.ProgramKamiDetailEntity) {
 	data = entity.ProgramKamiEntity{
 		Title:             r.Title,
 		SubTitle:          r.SubTitle,
@@ -109,16 +116,26 @@ func (r CreateProgramKami) ToEntity() (data entity.ProgramKamiEntity) {
 		Description:       r.Description,
 		CreatedAt:         time.Now(),
 	}
+	dataDetail = entity.ProgramKamiDetailEntity{
+		Content: r.Content,
+		Tag:     r.Tag,
+	}
+
 	return
 }
 
-func (r UpdateProgramKami) ToEntity() (data entity.ProgramKamiEntity) {
+func (r UpdateProgramKami) ToEntity() (data entity.ProgramKamiEntity, dataDetail entity.ProgramKamiDetailEntity) {
 	data = entity.ProgramKamiEntity{
 		Title:             r.Title,
 		SubTitle:          r.SubTitle,
 		Tag:               r.Tag,
 		ThumbnailImageURL: r.ThumbnailImageURL,
 		Description:       r.Description,
+	}
+
+	dataDetail = entity.ProgramKamiDetailEntity{
+		Content: r.Content,
+		Tag:     r.Tag,
 	}
 	return
 }
@@ -146,13 +163,21 @@ func (r ProgramKamiQuery) ToEntity() (data entity.ProgramKamiQueryEntity) {
 	return
 }
 
-func ToPayload(data entity.ProgramKamiEntity) (response ReadProgramKami) {
+func ToPayload(data entity.ProgramKamiEntity, isDetail bool) (response ReadProgramKami) {
+	var detail *ReadProgramKamiDetail
+	if isDetail {
+		detail = &ReadProgramKamiDetail{
+			Content: data.Detail.Content,
+		}
+	}
+
 	response = ReadProgramKami{
 		IDPPCPProgramKami: data.IDPPCPProgramKami,
 		Title:             data.Title,
 		SubTitle:          data.SubTitle,
 		Tag:               data.Tag,
 		ThumbnailImageURL: data.ThumbnailImageURL,
+		Detail:            detail,
 		Description:       data.Description,
 		Status:            data.Status,
 		CreatedAt:         data.CreatedAt,

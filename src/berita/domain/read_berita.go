@@ -18,5 +18,10 @@ func GetBerita(ctx context.Context, repo interfaces.IBeritaRepository, id string
 		err = errors.New("Data not found")
 		return
 	}
+
+	// Get Detail
+	dataDetail, _ := repo.GetDetail(ctx, response.IDPPCPBerita)
+
+	response.Detail = dataDetail
 	return
 }

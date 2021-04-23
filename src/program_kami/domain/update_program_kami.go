@@ -3,13 +3,14 @@ package domain
 import (
 	"context"
 	"errors"
+	"log"
 	"pemuda-peduli/src/program_kami/common/constants"
 	"pemuda-peduli/src/program_kami/domain/entity"
 	"pemuda-peduli/src/program_kami/domain/interfaces"
 	"time"
 )
 
-func UpdateProgramKami(ctx context.Context, repo interfaces.IProgramKamiRepository, data entity.ProgramKamiEntity, id string) (response entity.ProgramKamiEntity, err error) {
+func UpdateProgramKami(ctx context.Context, repo interfaces.IProgramKamiRepository, data entity.ProgramKamiEntity, dataDetail entity.ProgramKamiDetailEntity, id string) (response entity.ProgramKamiEntity, err error) {
 	currentDate := time.Now()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
@@ -31,6 +32,31 @@ func UpdateProgramKami(ctx context.Context, repo interfaces.IProgramKamiReposito
 	checkData.IsDeleted = false
 
 	response, err = repo.Update(ctx, checkData, id)
+
+	_, err = repo.Update(ctx, checkData, id)
+	if err != nil {
+		return
+	}
+
+	if checkData.Detail.IDPPCPProgramKamiDetail != "" {
+		// Update Data Detail
+		checkData.Detail.Content = dataDetail.Content
+		checkData.Detail.Tag = data.Tag
+		if _, errUpdateDetail := repo.UpdateDetail(ctx, checkData.Detail, checkData.Detail.IDPPCPProgramKamiDetail); errUpdateDetail != nil {
+			log.Println("Failed update berita detail: ", errUpdateDetail)
+		}
+	} else {
+		// Insert Data Detail
+		// Insert Detail
+		dataDetail.IDPPCPProgramKami = checkData.IDPPCPProgramKami
+		dataDetail.Tag = data.Tag
+		if errDetail := repo.InsertDetail(ctx, &dataDetail); errDetail != nil {
+			log.Println("ERR Insert Detail: ", errDetail)
+		}
+	}
+
+	response, _ = GetProgramKami(ctx, repo, checkData.IDPPCPProgramKami)
+
 	return
 }
 
