@@ -13,7 +13,7 @@ import (
 func UpdateProgramKami(ctx context.Context, repo interfaces.IProgramKamiRepository, data entity.ProgramKamiEntity, dataDetail entity.ProgramKamiDetailEntity, id string) (response entity.ProgramKamiEntity, err error) {
 	currentDate := time.Now()
 	// Check available daata
-	checkData, err := repo.Get(ctx, id)
+	checkData, err := GetProgramKami(ctx, repo, id)
 	if err != nil {
 		err = errors.New("Data not found")
 		return
