@@ -13,7 +13,9 @@ type CreateBanner struct {
 	SubTitle          string `json:"sub_title" valid:"required"`
 	TitleContent      string `json:"title_content"`
 	ThumbnailImageURL string `json:"thumbnail_image_url" valid:"url"`
+	TitleButtonRight  string `json:"title_button_right"`
 	DeeplinkRight     string `json:"deeplink_right" valid:"url"`
+	TitleButtonLeft   string `json:"title_button_left"`
 	DeeplinkLeft      string `json:"deeplink_left" valid:"url"`
 	Description       string `json:"description"`
 }
@@ -23,7 +25,9 @@ type UpdateBanner struct {
 	SubTitle          string `json:"sub_title" valid:"required"`
 	TitleContent      string `json:"title_content"`
 	ThumbnailImageURL string `json:"thumbnail_image_url" valid:"url"`
+	TitleButtonRight  string `json:"title_button_right"`
 	DeeplinkRight     string `json:"deeplink_right" valid:"url"`
+	TitleButtonLeft   string `json:"title_button_left"`
 	DeeplinkLeft      string `json:"deeplink_left" valid:"url"`
 	Description       string `json:"description"`
 }
@@ -51,7 +55,9 @@ type ReadBanner struct {
 	SubTitle          string     `json:"sub_title"`
 	TitleContent      string     `json:"title_content"`
 	ThumbnailImageURL string     `json:"thumbnail_image_url"`
+	TitleButtonRight  string     `json:"title_button_right"`
 	DeeplinkRight     string     `json:"deeplink_right"`
+	TitleButtonLeft   string     `json:"title_button_left"`
 	DeeplinkLeft      string     `json:"deeplink_left"`
 	Description       string     `json:"description"`
 	Status            string     `json:"status"`
@@ -112,7 +118,9 @@ func (r CreateBanner) ToEntity() (data entity.BannerEntity) {
 		SubTitle:          r.SubTitle,
 		TitleContent:      r.TitleContent,
 		ThumbnailImageURL: r.ThumbnailImageURL,
+		TitleButtonRight:  r.TitleButtonRight,
 		DeeplinkRight:     r.DeeplinkRight,
+		TitleButtonLeft:   r.TitleButtonLeft,
 		DeeplinkLeft:      r.DeeplinkLeft,
 		Description:       r.Description,
 		CreatedAt:         time.Now(),
@@ -126,7 +134,9 @@ func (r UpdateBanner) ToEntity() (data entity.BannerEntity) {
 		SubTitle:          r.SubTitle,
 		TitleContent:      r.TitleContent,
 		ThumbnailImageURL: r.ThumbnailImageURL,
+		TitleButtonRight:  r.TitleButtonRight,
 		DeeplinkRight:     r.DeeplinkRight,
+		TitleButtonLeft:   r.TitleButtonLeft,
 		DeeplinkLeft:      r.DeeplinkLeft,
 		Description:       r.Description,
 	}
@@ -163,7 +173,9 @@ func ToPayload(data entity.BannerEntity) (response ReadBanner) {
 		SubTitle:          data.SubTitle,
 		TitleContent:      data.TitleContent,
 		ThumbnailImageURL: data.ThumbnailImageURL,
+		TitleButtonRight:  data.TitleButtonRight,
 		DeeplinkRight:     data.DeeplinkRight,
+		TitleButtonLeft:   data.TitleButtonLeft,
 		DeeplinkLeft:      data.DeeplinkLeft,
 		Description:       data.Description,
 		Status:            data.Status,

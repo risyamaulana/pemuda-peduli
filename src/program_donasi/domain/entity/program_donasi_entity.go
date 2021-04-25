@@ -11,6 +11,9 @@ type ProgramDonasiEntity struct {
 	ThumbnailImageURL   string     `db:"thumbnail_image_url"`
 	Description         string     `db:"description"`
 	Status              string     `db:"status"`
+	ValidFrom           time.Time  `db:"valid_from"`
+	ValidTo             time.Time  `db:"valid_to"`
+	Target              float64    `db:"target"`
 	CreatedAt           time.Time  `db:"created_at"`
 	CreatedBy           *string    `db:"created_by"`
 	UpdatedAt           *time.Time `db:"updated_at"`

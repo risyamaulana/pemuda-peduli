@@ -9,19 +9,25 @@ import (
 )
 
 type CreateProgramDonasi struct {
-	Title             string `json:"title" valid:"required"`
-	SubTitle          string `json:"sub_title" valid:"required"`
-	Tag               string `json:"tag"`
-	ThumbnailImageURL string `json:"thumbnail_image_url" valid:"url"`
-	Description       string `json:"description"`
+	Title             string    `json:"title" valid:"required"`
+	SubTitle          string    `json:"sub_title" valid:"required"`
+	Tag               string    `json:"tag"`
+	ThumbnailImageURL string    `json:"thumbnail_image_url" valid:"url"`
+	ValidFrom         time.Time `json:"valid_from" valid:"required"`
+	ValidTo           time.Time `json:"valid_to" valid:"required"`
+	Target            float64   `json:"target" valid:"required"`
+	Description       string    `json:"description"`
 }
 
 type UpdateProgramDonasi struct {
-	Title             string `json:"title" valid:"required"`
-	SubTitle          string `json:"sub_title" valid:"required"`
-	Tag               string `json:"tag"`
-	ThumbnailImageURL string `json:"thumbnail_image_url" valid:"url"`
-	Description       string `json:"description"`
+	Title             string    `json:"title" valid:"required"`
+	SubTitle          string    `json:"sub_title" valid:"required"`
+	Tag               string    `json:"tag"`
+	ThumbnailImageURL string    `json:"thumbnail_image_url" valid:"url"`
+	ValidFrom         time.Time `json:"valid_from" valid:"required"`
+	ValidTo           time.Time `json:"valid_to" valid:"required"`
+	Target            float64   `json:"target" valid:"required"`
+	Description       string    `json:"description"`
 }
 
 type ProgramDonasiQuery struct {
@@ -47,6 +53,9 @@ type ReadProgramDonasi struct {
 	SubTitle            string     `json:"sub_title"`
 	Tag                 string     `json:"tag"`
 	ThumbnailImageURL   string     `json:"thumbnail_image_url"`
+	ValidFrom           time.Time  `json:"valid_from"`
+	ValidTo             time.Time  `json:"valid_to"`
+	Target              float64    `json:"target"`
 	Description         string     `json:"description"`
 	Status              string     `json:"status"`
 	CreatedAt           time.Time  `json:"created_at"`
@@ -106,6 +115,9 @@ func (r CreateProgramDonasi) ToEntity() (data entity.ProgramDonasiEntity) {
 		SubTitle:          r.SubTitle,
 		Tag:               r.Tag,
 		ThumbnailImageURL: r.ThumbnailImageURL,
+		ValidFrom:         r.ValidFrom,
+		ValidTo:           r.ValidTo,
+		Target:            r.Target,
 		Description:       r.Description,
 		CreatedAt:         time.Now(),
 	}
@@ -118,6 +130,9 @@ func (r UpdateProgramDonasi) ToEntity() (data entity.ProgramDonasiEntity) {
 		SubTitle:          r.SubTitle,
 		Tag:               r.Tag,
 		ThumbnailImageURL: r.ThumbnailImageURL,
+		ValidFrom:         r.ValidFrom,
+		ValidTo:           r.ValidTo,
+		Target:            r.Target,
 		Description:       r.Description,
 	}
 	return
@@ -153,6 +168,9 @@ func ToPayload(data entity.ProgramDonasiEntity) (response ReadProgramDonasi) {
 		SubTitle:            data.SubTitle,
 		Tag:                 data.Tag,
 		ThumbnailImageURL:   data.ThumbnailImageURL,
+		ValidFrom:           data.ValidFrom,
+		ValidTo:             data.ValidTo,
+		Target:              data.Target,
 		Description:         data.Description,
 		Status:              data.Status,
 		CreatedAt:           data.CreatedAt,

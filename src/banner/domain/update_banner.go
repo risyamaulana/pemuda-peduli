@@ -25,7 +25,9 @@ func UpdateBanner(ctx context.Context, repo interfaces.IBannerRepository, data e
 	checkData.SubTitle = data.SubTitle
 	checkData.TitleContent = data.TitleContent
 	checkData.ThumbnailImageURL = data.ThumbnailImageURL
+	checkData.TitleButtonRight = data.TitleButtonRight
 	checkData.DeeplinkRight = data.DeeplinkRight
+	checkData.TitleButtonLeft = data.TitleButtonLeft
 	checkData.DeeplinkLeft = data.DeeplinkLeft
 	checkData.Description = data.Description
 
