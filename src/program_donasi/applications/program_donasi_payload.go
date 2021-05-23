@@ -15,7 +15,7 @@ type CreateProgramDonasi struct {
 	ThumbnailImageURL string     `json:"thumbnail_image_url" valid:"url"`
 	ValidFrom         *time.Time `json:"valid_from" valid:"required"`
 	ValidTo           *time.Time `json:"valid_to" valid:"required"`
-	Target            float64    `json:"target" valid:"required"`
+	Target            *float64   `json:"target" valid:"required"`
 	Description       string     `json:"description"`
 }
 
@@ -26,7 +26,7 @@ type UpdateProgramDonasi struct {
 	ThumbnailImageURL string     `json:"thumbnail_image_url" valid:"url"`
 	ValidFrom         *time.Time `json:"valid_from" valid:"required"`
 	ValidTo           *time.Time `json:"valid_to" valid:"required"`
-	Target            float64    `json:"target" valid:"required"`
+	Target            *float64   `json:"target" valid:"required"`
 	Description       string     `json:"description"`
 }
 
@@ -55,7 +55,7 @@ type ReadProgramDonasi struct {
 	ThumbnailImageURL   string     `json:"thumbnail_image_url"`
 	ValidFrom           *time.Time `json:"valid_from"`
 	ValidTo             *time.Time `json:"valid_to"`
-	Target              float64    `json:"target"`
+	Target              *float64   `json:"target"`
 	Description         string     `json:"description"`
 	Status              string     `json:"status"`
 	CreatedAt           time.Time  `json:"created_at"`
