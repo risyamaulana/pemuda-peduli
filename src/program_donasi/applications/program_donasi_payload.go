@@ -9,25 +9,25 @@ import (
 )
 
 type CreateProgramDonasi struct {
-	Title             string    `json:"title" valid:"required"`
-	SubTitle          string    `json:"sub_title" valid:"required"`
-	Tag               string    `json:"tag"`
-	ThumbnailImageURL string    `json:"thumbnail_image_url" valid:"url"`
-	ValidFrom         time.Time `json:"valid_from" valid:"required"`
-	ValidTo           time.Time `json:"valid_to" valid:"required"`
-	Target            float64   `json:"target" valid:"required"`
-	Description       string    `json:"description"`
+	Title             string     `json:"title" valid:"required"`
+	SubTitle          string     `json:"sub_title" valid:"required"`
+	Tag               string     `json:"tag"`
+	ThumbnailImageURL string     `json:"thumbnail_image_url" valid:"url"`
+	ValidFrom         *time.Time `json:"valid_from" valid:"required"`
+	ValidTo           *time.Time `json:"valid_to" valid:"required"`
+	Target            float64    `json:"target" valid:"required"`
+	Description       string     `json:"description"`
 }
 
 type UpdateProgramDonasi struct {
-	Title             string    `json:"title" valid:"required"`
-	SubTitle          string    `json:"sub_title" valid:"required"`
-	Tag               string    `json:"tag"`
-	ThumbnailImageURL string    `json:"thumbnail_image_url" valid:"url"`
-	ValidFrom         time.Time `json:"valid_from" valid:"required"`
-	ValidTo           time.Time `json:"valid_to" valid:"required"`
-	Target            float64   `json:"target" valid:"required"`
-	Description       string    `json:"description"`
+	Title             string     `json:"title" valid:"required"`
+	SubTitle          string     `json:"sub_title" valid:"required"`
+	Tag               string     `json:"tag"`
+	ThumbnailImageURL string     `json:"thumbnail_image_url" valid:"url"`
+	ValidFrom         *time.Time `json:"valid_from" valid:"required"`
+	ValidTo           *time.Time `json:"valid_to" valid:"required"`
+	Target            float64    `json:"target" valid:"required"`
+	Description       string     `json:"description"`
 }
 
 type ProgramDonasiQuery struct {
@@ -53,8 +53,8 @@ type ReadProgramDonasi struct {
 	SubTitle            string     `json:"sub_title"`
 	Tag                 string     `json:"tag"`
 	ThumbnailImageURL   string     `json:"thumbnail_image_url"`
-	ValidFrom           time.Time  `json:"valid_from"`
-	ValidTo             time.Time  `json:"valid_to"`
+	ValidFrom           *time.Time `json:"valid_from"`
+	ValidTo             *time.Time `json:"valid_to"`
 	Target              float64    `json:"target"`
 	Description         string     `json:"description"`
 	Status              string     `json:"status"`
