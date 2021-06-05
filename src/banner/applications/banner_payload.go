@@ -9,27 +9,27 @@ import (
 )
 
 type CreateBanner struct {
-	Title             string `json:"title" valid:"required"`
-	SubTitle          string `json:"sub_title" valid:"required"`
-	TitleContent      string `json:"title_content"`
-	ThumbnailImageURL string `json:"thumbnail_image_url" valid:"url"`
-	TitleButtonRight  string `json:"title_button_right"`
-	DeeplinkRight     string `json:"deeplink_right" valid:"url"`
-	TitleButtonLeft   string `json:"title_button_left"`
-	DeeplinkLeft      string `json:"deeplink_left" valid:"url"`
-	Description       string `json:"description"`
+	Title             string  `json:"title" valid:"required"`
+	SubTitle          string  `json:"sub_title" valid:"required"`
+	TitleContent      string  `json:"title_content"`
+	ThumbnailImageURL string  `json:"thumbnail_image_url" valid:"url"`
+	TitleButtonRight  *string `json:"title_button_right"`
+	DeeplinkRight     *string `json:"deeplink_right" valid:"url"`
+	TitleButtonLeft   *string `json:"title_button_left"`
+	DeeplinkLeft      *string `json:"deeplink_left" valid:"url"`
+	Description       *string `json:"description"`
 }
 
 type UpdateBanner struct {
-	Title             string `json:"title" valid:"required"`
-	SubTitle          string `json:"sub_title" valid:"required"`
-	TitleContent      string `json:"title_content"`
-	ThumbnailImageURL string `json:"thumbnail_image_url" valid:"url"`
-	TitleButtonRight  string `json:"title_button_right"`
-	DeeplinkRight     string `json:"deeplink_right" valid:"url"`
-	TitleButtonLeft   string `json:"title_button_left"`
-	DeeplinkLeft      string `json:"deeplink_left" valid:"url"`
-	Description       string `json:"description"`
+	Title             string  `json:"title" valid:"required"`
+	SubTitle          string  `json:"sub_title" valid:"required"`
+	TitleContent      string  `json:"title_content"`
+	ThumbnailImageURL string  `json:"thumbnail_image_url" valid:"url"`
+	TitleButtonRight  *string `json:"title_button_right"`
+	DeeplinkRight     *string `json:"deeplink_right" valid:"url"`
+	TitleButtonLeft   *string `json:"title_button_left"`
+	DeeplinkLeft      *string `json:"deeplink_left" valid:"url"`
+	Description       *string `json:"description"`
 }
 
 type BannerQuery struct {
@@ -55,11 +55,11 @@ type ReadBanner struct {
 	SubTitle          string     `json:"sub_title"`
 	TitleContent      string     `json:"title_content"`
 	ThumbnailImageURL string     `json:"thumbnail_image_url"`
-	TitleButtonRight  string     `json:"title_button_right"`
-	DeeplinkRight     string     `json:"deeplink_right"`
-	TitleButtonLeft   string     `json:"title_button_left"`
-	DeeplinkLeft      string     `json:"deeplink_left"`
-	Description       string     `json:"description"`
+	TitleButtonRight  *string    `json:"title_button_right"`
+	DeeplinkRight     *string    `json:"deeplink_right"`
+	TitleButtonLeft   *string    `json:"title_button_left"`
+	DeeplinkLeft      *string    `json:"deeplink_left"`
+	Description       *string    `json:"description"`
 	Status            string     `json:"status"`
 	CreatedAt         time.Time  `json:"created_at"`
 	CreatedBy         *string    `json:"created_by"`

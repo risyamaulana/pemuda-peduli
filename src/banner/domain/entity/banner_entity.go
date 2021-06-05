@@ -9,11 +9,11 @@ type BannerEntity struct {
 	SubTitle          string     `db:"sub_title"`
 	TitleContent      string     `db:"title_content"`
 	ThumbnailImageURL string     `db:"thumbnail_image_url"`
-	TitleButtonRight  string     `db:"title_button_right"`
-	DeeplinkRight     string     `db:"deeplink_right"`
-	TitleButtonLeft   string     `db:"title_button_left"`
-	DeeplinkLeft      string     `db:"deeplink_left"`
-	Description       string     `db:"description"`
+	TitleButtonRight  *string    `db:"title_button_right"`
+	DeeplinkRight     *string    `db:"deeplink_right"`
+	TitleButtonLeft   *string    `db:"title_button_left"`
+	DeeplinkLeft      *string    `db:"deeplink_left"`
+	Description       *string    `db:"description"`
 	Status            string     `db:"status"`
 	CreatedAt         time.Time  `db:"created_at"`
 	CreatedBy         *string    `db:"created_by"`
