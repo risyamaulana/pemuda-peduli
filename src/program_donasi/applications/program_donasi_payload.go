@@ -90,8 +90,13 @@ func (r CreateProgramDonasi) Validate() (err error) {
 		return
 	}
 
-	if r.ValidFrom.Before(time.Now()) || r.ValidTo.Before(time.Now()) {
+	if r.ValidFrom.Before(time.Now()) {
 		err = errors.New("Failed : valid from smallest than current time")
+		return
+	}
+
+	if r.ValidTo.Before(time.Now()) {
+		err = errors.New("Failed : valid to smallest than current time")
 		return
 	}
 
