@@ -9,12 +9,12 @@ import (
 )
 
 type CreateMenuExtras struct {
-	Title string `json:"title" valid:"required"`
+	Title string `json:"title" valid:"required,alphanum"`
 	Link  string `json:"link" valid:"required,url"`
 }
 
 type UpdateMenuExtras struct {
-	Title string `json:"title" valid:"required"`
+	Title string `json:"title" valid:"required,alphanum"`
 	Link  string `json:"link" valid:"required,url"`
 }
 

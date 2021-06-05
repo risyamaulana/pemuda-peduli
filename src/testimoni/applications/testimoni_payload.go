@@ -9,15 +9,15 @@ import (
 )
 
 type CreateTestimoni struct {
-	Name              string `json:"name" valid:"required"`
-	Role              string `json:"role" valid:"required"`
+	Name              string `json:"name" valid:"required,alphanum"`
+	Role              string `json:"role" valid:"required,alphanum"`
 	ThumbnailPhotoURL string `json:"thumbnail_photo_url" valid:"required,url"`
 	Message           string `json:"message"`
 }
 
 type UpdateTestimoni struct {
-	Name              string `json:"name" valid:"required"`
-	Role              string `json:"role" valid:"required"`
+	Name              string `json:"name" valid:"required,alphanum"`
+	Role              string `json:"role" valid:"required,alphanum"`
 	ThumbnailPhotoURL string `json:"thumbnail_photo_url" valid:"required,url"`
 	Message           string `json:"message"`
 }

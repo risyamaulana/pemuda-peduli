@@ -14,24 +14,24 @@ import (
 )
 
 type CreateAdminUser struct {
-	Username        string `json:"username" valid:"required,minstringlength(5)"`
+	Username        string `json:"username" valid:"required,minstringlength(5),alphanum"`
 	Password        string `json:"password" valid:"required,minstringlength(8),alphanum"`
 	ConfirmPassword string `json:"confirm_password" valid:"required,minstringlength(8),alphanum"`
 	Email           string `json:"email" valid:"required,email"`
-	NamaLengkap     string `json:"nama_lengkap" valid:"required"`
+	NamaLengkap     string `json:"nama_lengkap" valid:"required,alphanum"`
 	Alamat          string `json:"alamat"`
-	Role            string `json:"role" valid:"required"`
+	Role            string `json:"role" valid:"required,alphanum"`
 }
 
 type UpdateAdminUser struct {
 	Username    string `json:"username" valid:"required,minstringlength(5)"`
-	Email       string `json:"email" valid:"required"`
-	NamaLengkap string `json:"nama_lengkap" valid:"required"`
+	Email       string `json:"email" valid:"required,alphanum"`
+	NamaLengkap string `json:"nama_lengkap" valid:"required,alphanum"`
 	Alamat      string `json:"alamat"`
 }
 
 type UsernameAdmin struct {
-	Username string `json:"username" valid:"required,minstringlength(5)"`
+	Username string `json:"username" valid:"required,minstringlength(5),alphanum"`
 }
 
 // TODO: Change password

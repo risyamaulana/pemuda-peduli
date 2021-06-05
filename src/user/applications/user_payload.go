@@ -46,7 +46,7 @@ type RegisterUser struct {
 	PhoneNumber  string `json:"phone_number" valid:"required"`
 	Password     string `json:"password" valid:"required,minstringlength(8),alphanum"`
 	ConfPassword string `json:"conf_password" valid:"required,minstringlength(8),alphanum"`
-	NamaLengkap  string `json:"nama_lengkap" valid:"required"`
+	NamaLengkap  string `json:"nama_lengkap" valid:"required,alphanum"`
 	Alamat       string `json:"alamat"`
 }
 
@@ -96,7 +96,7 @@ func (r RegisterUser) ToEntity() (data entity.UserEntity) {
 
 // ============================ Update User ============================
 type UpdateUser struct {
-	NamaLengkap string `json:"nama_lengkap" valid:"required"`
+	NamaLengkap string `json:"nama_lengkap" valid:"required,alphanum"`
 	Alamat      string `json:"alamat"`
 }
 

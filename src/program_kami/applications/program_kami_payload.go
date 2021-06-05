@@ -9,18 +9,18 @@ import (
 )
 
 type CreateProgramKami struct {
-	Title             string `json:"title" valid:"required"`
-	SubTitle          string `json:"sub_title" valid:"required"`
-	Content           string `json:"content" valid:"required"`
+	Title             string `json:"title" valid:"required,alphanum"`
+	SubTitle          string `json:"sub_title" valid:"required,alphanum"`
+	Content           string `json:"content" valid:"required,alphanum"`
 	Tag               string `json:"tag"`
 	ThumbnailImageURL string `json:"thumbnail_image_url" valid:"url"`
 	Description       string `json:"description"`
 }
 
 type UpdateProgramKami struct {
-	Title             string `json:"title" valid:"required"`
-	SubTitle          string `json:"sub_title" valid:"required"`
-	Content           string `json:"content" valid:"required"`
+	Title             string `json:"title" valid:"required,alphanum"`
+	SubTitle          string `json:"sub_title" valid:"required,alphanum"`
+	Content           string `json:"content" valid:"required,alphanum"`
 	Tag               string `json:"tag"`
 	ThumbnailImageURL string `json:"thumbnail_image_url" valid:"url"`
 	Description       string `json:"description"`

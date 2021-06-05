@@ -9,8 +9,8 @@ import (
 )
 
 type CreateBanner struct {
-	Title             string  `json:"title" valid:"required"`
-	SubTitle          string  `json:"sub_title" valid:"required"`
+	Title             string  `json:"title" valid:"required,alphanum"`
+	SubTitle          string  `json:"sub_title" valid:"required,alphanum"`
 	TitleContent      string  `json:"title_content"`
 	ThumbnailImageURL string  `json:"thumbnail_image_url" valid:"url"`
 	TitleButtonRight  *string `json:"title_button_right"`
@@ -21,8 +21,8 @@ type CreateBanner struct {
 }
 
 type UpdateBanner struct {
-	Title             string  `json:"title" valid:"required"`
-	SubTitle          string  `json:"sub_title" valid:"required"`
+	Title             string  `json:"title" valid:"required,alphanum"`
+	SubTitle          string  `json:"sub_title" valid:"required,alphanum"`
 	TitleContent      string  `json:"title_content"`
 	ThumbnailImageURL string  `json:"thumbnail_image_url" valid:"url"`
 	TitleButtonRight  *string `json:"title_button_right"`

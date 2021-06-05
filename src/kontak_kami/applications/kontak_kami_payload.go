@@ -10,19 +10,19 @@ import (
 
 type CreateKontakKami struct {
 	SKLegalitas string `json:"sk_legalitas" valid:"required,url"`
-	Address     string `json:"address" valid:"required"`
-	ContactName string `json:"contact_name" valid:"required"`
+	Address     string `json:"address" valid:"required,alphanum"`
+	ContactName string `json:"contact_name" valid:"required,alphanum"`
 	Icon        string `json:"icon" valid:"required,url"`
-	ContactLink string `json:"contact_link" valid:"required"`
+	ContactLink string `json:"contact_link" valid:"required,url"`
 	Menu        string `json:"menu"`
 }
 
 type UpdateKontakKami struct {
-	SKLegalitas string `json:"sk_legalitas" valid:"required"`
-	Address     string `json:"address" valid:"required"`
-	ContactName string `json:"contact_name" valid:"required"`
+	SKLegalitas string `json:"sk_legalitas" valid:"required,url"`
+	Address     string `json:"address" valid:"required,alphanum"`
+	ContactName string `json:"contact_name" valid:"required,alphanum"`
 	Icon        string `json:"icon" valid:"required,url"`
-	ContactLink string `json:"contact_link" valid:"required"`
+	ContactLink string `json:"contact_link" valid:"required,url"`
 	Menu        string `json:"menu"`
 }
 
