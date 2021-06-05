@@ -2,6 +2,7 @@ package applications
 
 import (
 	"encoding/json"
+	"errors"
 	"pemuda-peduli/src/program_donasi/domain/entity"
 	"time"
 
@@ -86,6 +87,16 @@ func (r CreateProgramDonasi) Validate() (err error) {
 	// Validate Payload
 	_, err = govalidator.ValidateStruct(r)
 	if err != nil {
+		return
+	}
+
+	if r.ValidFrom.Before(time.Now()) || r.ValidTo.Before(time.Now()) {
+		err = errors.New("Failed : valid from smallest than current time")
+		return
+	}
+
+	if r.ValidFrom.After(*r.ValidTo) {
+		err = errors.New("Failed : valid from bigger than valid to value")
 		return
 	}
 	return
