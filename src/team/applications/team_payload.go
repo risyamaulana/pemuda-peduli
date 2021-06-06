@@ -9,8 +9,8 @@ import (
 )
 
 type CreateTeam struct {
-	Name              string `json:"name" valid:"required,alphanum"`
-	Role              string `json:"role" valid:"required,alphanum"`
+	Name              string `json:"name" valid:"required"`
+	Role              string `json:"role" valid:"required"`
 	ThumbnailPhotoURL string `json:"thumbnail_photo_url" valid:"required,url"`
 	FacebookLink      string `json:"facebook_link" valid:"url"`
 	GoogleLink        string `json:"google_link" valid:"url"`
@@ -19,8 +19,8 @@ type CreateTeam struct {
 }
 
 type UpdateTeam struct {
-	Name              string `json:"name" valid:"required,alphanum"`
-	Role              string `json:"role" valid:"required,alphanum"`
+	Name              string `json:"name" valid:"required"`
+	Role              string `json:"role" valid:"required"`
 	ThumbnailPhotoURL string `json:"thumbnail_photo_url" valid:"required,url"`
 	FacebookLink      string `json:"facebook_link" valid:"url"`
 	GoogleLink        string `json:"google_link" valid:"url"`

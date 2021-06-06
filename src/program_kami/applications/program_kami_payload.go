@@ -9,8 +9,8 @@ import (
 )
 
 type CreateProgramKami struct {
-	Title             string `json:"title" valid:"required,alphanum"`
-	SubTitle          string `json:"sub_title" valid:"required,alphanum"`
+	Title             string `json:"title" valid:"required"`
+	SubTitle          string `json:"sub_title" valid:"required"`
 	Content           string `json:"content" valid:"required"`
 	Tag               string `json:"tag"`
 	ThumbnailImageURL string `json:"thumbnail_image_url" valid:"url"`
@@ -18,8 +18,8 @@ type CreateProgramKami struct {
 }
 
 type UpdateProgramKami struct {
-	Title             string `json:"title" valid:"required,alphanum"`
-	SubTitle          string `json:"sub_title" valid:"required,alphanum"`
+	Title             string `json:"title" valid:"required"`
+	SubTitle          string `json:"sub_title" valid:"required"`
 	Content           string `json:"content" valid:"required"`
 	Tag               string `json:"tag"`
 	ThumbnailImageURL string `json:"thumbnail_image_url" valid:"url"`

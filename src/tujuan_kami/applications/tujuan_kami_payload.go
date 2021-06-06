@@ -9,13 +9,13 @@ import (
 )
 
 type CreateTujuanKami struct {
-	Title       string `json:"title" valid:"required,alphanum"`
+	Title       string `json:"title" valid:"required"`
 	Description string `json:"description"`
 	Icon        string `json:"icon" valid:"required,url"`
 }
 
 type UpdateTujuanKami struct {
-	Title       string `json:"title" valid:"required,alphanum"`
+	Title       string `json:"title" valid:"required"`
 	Description string `json:"description"`
 	Icon        string `json:"icon" valid:"required,url"`
 }

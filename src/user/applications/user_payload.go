@@ -44,9 +44,9 @@ func ToPayload(data entity.UserEntity) (response Readuser) {
 type RegisterUser struct {
 	Email        string `json:"email" valid:"required,email"`
 	PhoneNumber  string `json:"phone_number" valid:"required"`
-	Password     string `json:"password" valid:"required,minstringlength(8),alphanum"`
-	ConfPassword string `json:"conf_password" valid:"required,minstringlength(8),alphanum"`
-	NamaLengkap  string `json:"nama_lengkap" valid:"required,alphanum"`
+	Password     string `json:"password" valid:"required,minstringlength(8)"`
+	ConfPassword string `json:"conf_password" valid:"required,minstringlength(8)"`
+	NamaLengkap  string `json:"nama_lengkap" valid:"required"`
 	Alamat       string `json:"alamat"`
 }
 
@@ -96,7 +96,7 @@ func (r RegisterUser) ToEntity() (data entity.UserEntity) {
 
 // ============================ Update User ============================
 type UpdateUser struct {
-	NamaLengkap string `json:"nama_lengkap" valid:"required,alphanum"`
+	NamaLengkap string `json:"nama_lengkap" valid:"required"`
 	Alamat      string `json:"alamat"`
 }
 
@@ -133,9 +133,9 @@ func (r UpdateUser) ToEntity(ctx context.Context) (data entity.UserEntity) {
 
 // ============================ Change Password ============================
 type ChangePassword struct {
-	OldPassword  string `json:"old_password" valid:"required,minstringlength(8),alphanum"`
-	Password     string `json:"new_password" valid:"required,minstringlength(8),alphanum"`
-	ConfPassword string `json:"confirm_new_password" valid:"required,minstringlength(8),alphanum"`
+	OldPassword  string `json:"old_password" valid:"required,minstringlength(8)"`
+	Password     string `json:"new_password" valid:"required,minstringlength(8)"`
+	ConfPassword string `json:"confirm_new_password" valid:"required,minstringlength(8)"`
 }
 
 func GetChangePasswordPayload(body []byte) (payload ChangePassword, err error) {

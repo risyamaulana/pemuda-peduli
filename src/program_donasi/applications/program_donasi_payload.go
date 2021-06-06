@@ -10,8 +10,8 @@ import (
 )
 
 type CreateProgramDonasi struct {
-	Title             string     `json:"title" valid:"required,alphanum"`
-	SubTitle          string     `json:"sub_title" valid:"required,alphanum"`
+	Title             string     `json:"title" valid:"required"`
+	SubTitle          string     `json:"sub_title" valid:"required"`
 	Tag               string     `json:"tag"`
 	ThumbnailImageURL string     `json:"thumbnail_image_url" valid:"url"`
 	ValidFrom         *time.Time `json:"valid_from" valid:"required"`
@@ -21,8 +21,8 @@ type CreateProgramDonasi struct {
 }
 
 type UpdateProgramDonasi struct {
-	Title             string     `json:"title" valid:"required,alphanum"`
-	SubTitle          string     `json:"sub_title" valid:"required,alphanum"`
+	Title             string     `json:"title" valid:"required"`
+	SubTitle          string     `json:"sub_title" valid:"required"`
 	Tag               string     `json:"tag"`
 	ThumbnailImageURL string     `json:"thumbnail_image_url" valid:"url"`
 	ValidFrom         *time.Time `json:"valid_from" valid:"required"`

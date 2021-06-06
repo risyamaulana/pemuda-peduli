@@ -9,12 +9,12 @@ import (
 )
 
 type CreatePartnerKami struct {
-	Name              string `json:"name" valid:"required,alphanum"`
+	Name              string `json:"name" valid:"required"`
 	ThumbnailImageURL string `json:"thumbnail_image_url" valid:"url"`
 }
 
 type UpdatePartnerKami struct {
-	Name              string `json:"name" valid:"required,alphanum"`
+	Name              string `json:"name" valid:"required"`
 	ThumbnailImageURL string `json:"thumbnail_image_url" valid:"url"`
 }
 

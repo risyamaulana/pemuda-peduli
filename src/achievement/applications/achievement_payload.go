@@ -9,7 +9,7 @@ import (
 )
 
 type CreateAchievement struct {
-	AchievementName  string `json:"achievement_name" valid:"required,alphanum"`
+	AchievementName  string `json:"achievement_name" valid:"required"`
 	AchievementTotal int64  `json:"achievement_total"`
 	Description      string `json:"description"`
 }

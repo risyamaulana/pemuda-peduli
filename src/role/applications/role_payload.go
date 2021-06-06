@@ -9,12 +9,12 @@ import (
 )
 
 type CreateRole struct {
-	RoleType  string `json:"role_type" valid:"required,alphanum"`
+	RoleType  string `json:"role_type" valid:"required"`
 	RoleLevel int    `json:"role_level" valid:"required"`
 }
 
 type UpdateRole struct {
-	RoleType  string `json:"role_type" valid:"required,alphanum"`
+	RoleType  string `json:"role_type" valid:"required"`
 	RoleLevel int    `json:"role_level" valid:"required"`
 }
 
