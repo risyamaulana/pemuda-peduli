@@ -12,6 +12,7 @@ import (
 type CreateProgramDonasi struct {
 	Title             string     `json:"title" valid:"required"`
 	SubTitle          string     `json:"sub_title" valid:"required"`
+	DonasiType        string     `json:"donasi_type" valid:"required"`
 	Tag               string     `json:"tag"`
 	ThumbnailImageURL string     `json:"thumbnail_image_url" valid:"url"`
 	ValidFrom         *time.Time `json:"valid_from" valid:"required"`
@@ -23,6 +24,7 @@ type CreateProgramDonasi struct {
 type UpdateProgramDonasi struct {
 	Title             string     `json:"title" valid:"required"`
 	SubTitle          string     `json:"sub_title" valid:"required"`
+	DonasiType        string     `json:"donasi_type" valid:"required"`
 	Tag               string     `json:"tag"`
 	ThumbnailImageURL string     `json:"thumbnail_image_url" valid:"url"`
 	ValidFrom         *time.Time `json:"valid_from" valid:"required"`
@@ -52,6 +54,7 @@ type ReadProgramDonasi struct {
 	IDPPCPProgramDonasi string     `json:"id"`
 	Title               string     `json:"title"`
 	SubTitle            string     `json:"sub_title"`
+	DonasiType          string     `json:"donasi_type"`
 	Tag                 string     `json:"tag"`
 	ThumbnailImageURL   string     `json:"thumbnail_image_url"`
 	ValidFrom           *time.Time `json:"valid_from"`
@@ -129,6 +132,7 @@ func (r CreateProgramDonasi) ToEntity() (data entity.ProgramDonasiEntity) {
 	data = entity.ProgramDonasiEntity{
 		Title:             r.Title,
 		SubTitle:          r.SubTitle,
+		DonasiType:        &r.DonasiType,
 		Tag:               r.Tag,
 		ThumbnailImageURL: r.ThumbnailImageURL,
 		ValidFrom:         r.ValidFrom,
@@ -144,6 +148,7 @@ func (r UpdateProgramDonasi) ToEntity() (data entity.ProgramDonasiEntity) {
 	data = entity.ProgramDonasiEntity{
 		Title:             r.Title,
 		SubTitle:          r.SubTitle,
+		DonasiType:        &r.DonasiType,
 		Tag:               r.Tag,
 		ThumbnailImageURL: r.ThumbnailImageURL,
 		ValidFrom:         r.ValidFrom,
@@ -182,6 +187,7 @@ func ToPayload(data entity.ProgramDonasiEntity) (response ReadProgramDonasi) {
 		IDPPCPProgramDonasi: data.IDPPCPProgramDonasi,
 		Title:               data.Title,
 		SubTitle:            data.SubTitle,
+		DonasiType:          *data.DonasiType,
 		Tag:                 data.Tag,
 		ThumbnailImageURL:   data.ThumbnailImageURL,
 		ValidFrom:           data.ValidFrom,
