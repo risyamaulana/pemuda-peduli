@@ -7,10 +7,6 @@ type KontakKamiEntity struct {
 	IDPPCPKontakKami string     `db:"id_pp_cp_kontak_kami"`
 	SKLegalitas      string     `db:"sk_legalitas"`
 	Address          string     `db:"address"`
-	ContactName      string     `db:"contact_name"`
-	Icon             string     `db:"icon"`
-	ContactLink      string     `db:"contact_link"`
-	Menu             string     `db:"menu"`
 	Status           string     `db:"status"`
 	CreatedAt        time.Time  `db:"created_at"`
 	CreatedBy        *string    `db:"created_by"`

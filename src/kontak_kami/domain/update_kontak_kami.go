@@ -23,10 +23,6 @@ func UpdateKontakKami(ctx context.Context, repo interfaces.IKontakKamiRepository
 	}
 	checkData.SKLegalitas = data.SKLegalitas
 	checkData.Address = data.Address
-	checkData.ContactName = data.ContactName
-	checkData.Icon = data.Icon
-	checkData.ContactLink = data.ContactLink
-	checkData.Menu = data.Menu
 	checkData.UpdatedAt = &currentDate
 	checkData.IsDeleted = false
 

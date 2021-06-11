@@ -11,19 +11,11 @@ import (
 type CreateKontakKami struct {
 	SKLegalitas string `json:"sk_legalitas" valid:"required,url"`
 	Address     string `json:"address" valid:"required"`
-	ContactName string `json:"contact_name" valid:"required"`
-	Icon        string `json:"icon" valid:"required,url"`
-	ContactLink string `json:"contact_link" valid:"required,url"`
-	Menu        string `json:"menu"`
 }
 
 type UpdateKontakKami struct {
 	SKLegalitas string `json:"sk_legalitas" valid:"required,url"`
 	Address     string `json:"address" valid:"required"`
-	ContactName string `json:"contact_name" valid:"required"`
-	Icon        string `json:"icon" valid:"required,url"`
-	ContactLink string `json:"contact_link" valid:"required,url"`
-	Menu        string `json:"menu"`
 }
 
 type KontakKamiQuery struct {
@@ -47,10 +39,6 @@ type ReadKontakKami struct {
 	IDPPCPKontakKami string     `json:"id"`
 	SKLegalitas      string     `json:"sk_legalitas"`
 	Address          string     `json:"address"`
-	ContactName      string     `json:"contact_name"`
-	Icon             string     `json:"icon"`
-	ContactLink      string     `json:"contact_link"`
-	Menu             string     `json:"menu"`
 	Status           string     `json:"status"`
 	CreatedAt        time.Time  `json:"created_at"`
 	CreatedBy        *string    `json:"created_by"`
@@ -107,11 +95,8 @@ func (r CreateKontakKami) ToEntity() (data entity.KontakKamiEntity) {
 	data = entity.KontakKamiEntity{
 		SKLegalitas: r.SKLegalitas,
 		Address:     r.Address,
-		ContactName: r.ContactName,
-		Icon:        r.Icon,
-		ContactLink: r.ContactLink,
-		Menu:        r.Menu,
-		CreatedAt:   time.Now(),
+
+		CreatedAt: time.Now(),
 	}
 	return
 }
@@ -120,10 +105,6 @@ func (r UpdateKontakKami) ToEntity() (data entity.KontakKamiEntity) {
 	data = entity.KontakKamiEntity{
 		SKLegalitas: r.SKLegalitas,
 		Address:     r.Address,
-		ContactName: r.ContactName,
-		Icon:        r.Icon,
-		ContactLink: r.ContactLink,
-		Menu:        r.Menu,
 	}
 	return
 }
@@ -156,10 +137,6 @@ func ToPayload(data entity.KontakKamiEntity) (response ReadKontakKami) {
 		IDPPCPKontakKami: data.IDPPCPKontakKami,
 		SKLegalitas:      data.SKLegalitas,
 		Address:          data.Address,
-		ContactName:      data.ContactName,
-		Icon:             data.Icon,
-		ContactLink:      data.ContactLink,
-		Menu:             data.Menu,
 		Status:           data.Status,
 		CreatedAt:        data.CreatedAt,
 		CreatedBy:        data.CreatedBy,
