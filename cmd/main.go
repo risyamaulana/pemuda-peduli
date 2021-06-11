@@ -15,6 +15,7 @@ import (
 	bannerApp "pemuda-peduli/src/banner/applications"
 	beneficariesApp "pemuda-peduli/src/beneficaries/applications"
 	beritaApp "pemuda-peduli/src/berita/applications"
+	hubungiKamiApp "pemuda-peduli/src/hubungi_kami/applications"
 	kontakKamiApp "pemuda-peduli/src/kontak_kami/applications"
 	menuExtrasApp "pemuda-peduli/src/menu_extras/applications"
 	partnerKamiApp "pemuda-peduli/src/partner_kami/applications"
@@ -79,6 +80,7 @@ func initialize(apps map[string]interfaces.IApplication, r *router.Router) {
 	apps["beneficaries"] = beneficariesApp.NewBeneficariesApp()
 	apps["berita"] = beritaApp.NewBeritaApp()
 	apps["kontak-kami"] = kontakKamiApp.NewKontakKamiApp()
+	apps["hubungi-kami"] = hubungiKamiApp.NewHubungiKamiApp()
 	apps["partner-kami"] = partnerKamiApp.NewPartnerKamiApp()
 	apps["program-donasi"] = programDonasiApp.NewProgramDonasiApp()
 	apps["program-kami"] = programKamiApp.NewProgramKamiApp()
