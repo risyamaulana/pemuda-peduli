@@ -10,14 +10,14 @@ import (
 
 type CreateHubungiKami struct {
 	Icon  string `json:"icon" valid:"required,url"`
-	link  string `json:"link" valid:"required,url"`
-	title string `json:"title" valid:"required"`
+	Link  string `json:"link" valid:"required,url"`
+	Title string `json:"title" valid:"required"`
 }
 
 type UpdateHubungiKami struct {
 	Icon  string `json:"icon" valid:"required,url"`
-	link  string `json:"link" valid:"required,url"`
-	title string `json:"title" valid:"required"`
+	Link  string `json:"link" valid:"required,url"`
+	Title string `json:"title" valid:"required"`
 }
 
 type HubungiKamiQuery struct {
@@ -97,8 +97,8 @@ func (r HubungiKamiQuery) Validate() (err error) {
 func (r CreateHubungiKami) ToEntity() (data entity.HubungiKamiEntity) {
 	data = entity.HubungiKamiEntity{
 		Icon:      r.Icon,
-		Link:      r.link,
-		Title:     r.title,
+		Link:      r.Link,
+		Title:     r.Title,
 		CreatedAt: time.Now(),
 	}
 	return
@@ -107,8 +107,8 @@ func (r CreateHubungiKami) ToEntity() (data entity.HubungiKamiEntity) {
 func (r UpdateHubungiKami) ToEntity() (data entity.HubungiKamiEntity) {
 	data = entity.HubungiKamiEntity{
 		Icon:  r.Icon,
-		Link:  r.link,
-		Title: r.title,
+		Link:  r.Link,
+		Title: r.Title,
 	}
 	return
 }
