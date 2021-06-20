@@ -9,6 +9,12 @@ import (
 
 func FindBerita(ctx context.Context, repo interfaces.IBeritaRepository, data *entity.BeritaQueryEntity) (response []entity.BeritaEntity, count int, err error) {
 	response, count, err = repo.Find(ctx, data)
+	for i, data := range response {
+		// Get Detail
+		dataDetail, _ := repo.GetDetail(ctx, data.IDPPCPBerita)
+
+		response[i].Detail = dataDetail
+	}
 	return
 }
 
