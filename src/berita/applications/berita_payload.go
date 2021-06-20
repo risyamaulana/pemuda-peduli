@@ -44,26 +44,27 @@ type BeritaFilterQuery struct {
 }
 
 type ReadBerita struct {
-	IDPPCPBerita      string            `json:"id"`
-	Title             string            `json:"title"`
-	SubTitle          string            `json:"sub_title"`
-	Tag               string            `json:"tag"`
-	ThumbnailImageURL string            `json:"thumbnail_image_url"`
-	Detail            *ReadBeritaDetail `json:"detail,omitempty"`
-	Description       string            `json:"description"`
-	Status            string            `json:"status"`
-	CreatedAt         time.Time         `json:"created_at"`
-	CreatedBy         *string           `json:"created_by"`
-	UpdatedAt         *time.Time        `json:"updated_at"`
-	UpdatedBy         *string           `json:"updated_by"`
-	PublishedAt       *time.Time        `json:"published_at"`
-	PublishedBy       *string           `json:"published_by"`
-	IsDeleted         bool              `json:"is_deleted"`
+	IDPPCPBerita      string `json:"id"`
+	Title             string `json:"title"`
+	SubTitle          string `json:"sub_title"`
+	Tag               string `json:"tag"`
+	ThumbnailImageURL string `json:"thumbnail_image_url"`
+	// Detail            *ReadBeritaDetail `json:"detail,omitempty"`
+	Content     string     `json:"content,omitempty"`
+	Description string     `json:"description"`
+	Status      string     `json:"status"`
+	CreatedAt   time.Time  `json:"created_at"`
+	CreatedBy   *string    `json:"created_by"`
+	UpdatedAt   *time.Time `json:"updated_at"`
+	UpdatedBy   *string    `json:"updated_by"`
+	PublishedAt *time.Time `json:"published_at"`
+	PublishedBy *string    `json:"published_by"`
+	IsDeleted   bool       `json:"is_deleted"`
 }
 
-type ReadBeritaDetail struct {
-	Content string `json:"content"`
-}
+// type ReadBeritaDetail struct {
+// 	Content string `json:"content"`
+// }
 
 func GetCreatePayload(body []byte) (payload CreateBerita, err error) {
 	err = json.Unmarshal(body, &payload)
@@ -164,28 +165,29 @@ func (r BeritaQuery) ToEntity() (data entity.BeritaQueryEntity) {
 }
 
 func ToPayload(data entity.BeritaEntity, isDetail bool) (response ReadBerita) {
-	var detail *ReadBeritaDetail
-	if isDetail {
-		detail = &ReadBeritaDetail{
-			Content: data.Detail.Content,
-		}
-	}
+	// var detail *ReadBeritaDetail
+	// if isDetail {
+	// 	detail = &ReadBeritaDetail{
+	// 		Content: data.Detail.Content,
+	// 	}
+	// }
 	response = ReadBerita{
 		IDPPCPBerita:      data.IDPPCPBerita,
 		Title:             data.Title,
 		SubTitle:          data.SubTitle,
 		Tag:               data.Tag,
 		ThumbnailImageURL: data.ThumbnailImageURL,
-		Detail:            detail,
-		Description:       data.Description,
-		Status:            data.Status,
-		CreatedAt:         data.CreatedAt,
-		CreatedBy:         data.CreatedBy,
-		UpdatedAt:         data.UpdatedAt,
-		UpdatedBy:         data.UpdatedBy,
-		PublishedAt:       data.PublishedAt,
-		PublishedBy:       data.PublishedBy,
-		IsDeleted:         data.IsDeleted,
+		Content:           data.Detail.Content,
+		// Detail:            detail,
+		Description: data.Description,
+		Status:      data.Status,
+		CreatedAt:   data.CreatedAt,
+		CreatedBy:   data.CreatedBy,
+		UpdatedAt:   data.UpdatedAt,
+		UpdatedBy:   data.UpdatedBy,
+		PublishedAt: data.PublishedAt,
+		PublishedBy: data.PublishedBy,
+		IsDeleted:   data.IsDeleted,
 	}
 	return
 }
