@@ -9,6 +9,12 @@ import (
 
 func FindProgramKami(ctx context.Context, repo interfaces.IProgramKamiRepository, data *entity.ProgramKamiQueryEntity) (response []entity.ProgramKamiEntity, count int, err error) {
 	response, count, err = repo.Find(ctx, data)
+	for i, data := range response {
+		// Get Detail
+		dataDetail, _ := repo.GetDetail(ctx, data.IDPPCPProgramKami)
+
+		response[i].Detail = dataDetail
+	}
 	return
 }
 
