@@ -9,12 +9,12 @@ import (
 )
 
 type CreateKontakKami struct {
-	SKLegalitas string `json:"sk_legalitas" valid:"required,url"`
+	SKLegalitas string `json:"sk_legalitas" valid:"required"`
 	Address     string `json:"address" valid:"required"`
 }
 
 type UpdateKontakKami struct {
-	SKLegalitas string `json:"sk_legalitas" valid:"required,url"`
+	SKLegalitas string `json:"sk_legalitas" valid:"required"`
 	Address     string `json:"address" valid:"required"`
 }
 
