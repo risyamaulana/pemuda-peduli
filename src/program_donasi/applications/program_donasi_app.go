@@ -82,15 +82,16 @@ func createProgramDonasi(ctx *fasthttp.RequestCtx) {
 		return
 	}
 
-	data := payload.ToEntity()
+	data, dataDetail := payload.ToEntity()
 	repo := repository.NewProgramDonasiRepository(DB)
-	if err := domain.CreateProgramDonasi(ctx, &repo, &data); err != nil {
+	responseData, err := domain.CreateProgramDonasi(ctx, &repo, &data, &dataDetail)
+	if err != nil {
 		ctx.SetStatusCode(fasthttp.StatusUnprocessableEntity)
 		fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
 		return
 	}
 
-	response := handler.DefaultResponse(ToPayload(data), nil)
+	response := handler.DefaultResponse(ToPayload(responseData), nil)
 	fmt.Fprintf(ctx, utility.PrettyPrint(response))
 }
 
@@ -110,9 +111,9 @@ func updateProgramDonasi(ctx *fasthttp.RequestCtx) {
 		return
 	}
 
-	data := payload.ToEntity()
+	data, dataDetail := payload.ToEntity()
 	repo := repository.NewProgramDonasiRepository(DB)
-	responseData, err := domain.UpdateProgramDonasi(ctx, &repo, data, programDonasiID)
+	responseData, err := domain.UpdateProgramDonasi(ctx, &repo, data, dataDetail, programDonasiID)
 	if err != nil {
 		ctx.SetStatusCode(fasthttp.StatusUnprocessableEntity)
 		fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))

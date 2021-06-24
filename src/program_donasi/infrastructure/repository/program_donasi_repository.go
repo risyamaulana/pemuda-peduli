@@ -59,6 +59,37 @@ func (c *ProgramDonasiRepository) Insert(ctx context.Context, data *entity.Progr
 	return
 }
 
+func (c *ProgramDonasiRepository) InsertDetail(ctx context.Context, data *entity.ProgramDonasiDetailEntity) (err error) {
+
+	tx := c.db.DBExec.MustBegin()
+
+	// Generate UUID
+	data.IDPPCPProgramDonasiDetail = utility.GetUUID()
+
+	sql := `INSERT INTO pp_cp_program_donasi_detail `
+	var strField strings.Builder
+	var strValue strings.Builder
+	filedItem := utility.GetNamedStruct(*data)
+	for _, field := range filedItem {
+		if field != "id" {
+			strField.WriteString(field + ",")
+			strValue.WriteString(":" + field + ",")
+		}
+	}
+
+	sql += "(" + strings.TrimSuffix(strField.String(), ",") + ")" + " VALUES(" + strings.TrimSuffix(strValue.String(), ",") + ")"
+	resp, err := tx.NamedExec(sql, data)
+	if err != nil {
+		log.Println("Error insert pp_cp_program_donasi_detail:", err)
+		tx.Rollback()
+		return
+	}
+
+	tx.Commit()
+	data.ID, _ = resp.LastInsertId()
+	return
+}
+
 // Update
 func (c *ProgramDonasiRepository) Update(ctx context.Context, data entity.ProgramDonasiEntity, id string) (response entity.ProgramDonasiEntity, err error) {
 	tx := c.db.DBExec.MustBegin()
@@ -80,6 +111,36 @@ func (c *ProgramDonasiRepository) Update(ctx context.Context, data entity.Progra
 	_, err = tx.NamedExec(sql, data)
 	if err != nil {
 		log.Println("Error insert pp_cp_program_donasi:", err)
+		tx.Rollback()
+		return
+	}
+
+	err = tx.Commit()
+	response = data
+
+	return
+}
+
+func (c *ProgramDonasiRepository) UpdateDetail(ctx context.Context, data entity.ProgramDonasiDetailEntity, id string) (response entity.ProgramDonasiDetailEntity, err error) {
+	tx := c.db.DBExec.MustBegin()
+
+	// Update Data delivery order
+	sql := `Update pp_cp_program_donasi_detail SET `
+	var str strings.Builder
+	fields := utility.GetNamedStruct(data)
+	for _, field := range fields {
+		if field == "id" || field == "pp_cp_program_donasi_detail" || field == "created_at" {
+			continue
+		}
+		str.WriteString(field + "=:" + field + ", ")
+	}
+	queryCondition := strings.TrimSuffix(str.String(), ", ")
+
+	sql += queryCondition + " WHERE pp_cp_program_donasi_detail = '" + id + "'"
+	log.Print("QUERY : ", sql)
+	_, err = tx.NamedExec(sql, data)
+	if err != nil {
+		log.Println("Error insert pp_cp_program_donasi_detail:", err)
 		tx.Rollback()
 		return
 	}
@@ -173,6 +234,13 @@ func (c *ProgramDonasiRepository) Find(ctx context.Context, data *entity.Program
 
 func (c *ProgramDonasiRepository) Get(ctx context.Context, id string) (response entity.ProgramDonasiEntity, err error) {
 	if err = c.db.DBRead.Get(&response, "SELECT * FROM pp_cp_program_donasi WHERE id_pp_cp_program_donasi = $1", id); err != nil {
+		return
+	}
+	return
+}
+
+func (c *ProgramDonasiRepository) GetDetail(ctx context.Context, id string) (response entity.ProgramDonasiDetailEntity, err error) {
+	if err = c.db.DBRead.Get(&response, "SELECT * FROM pp_cp_program_donasi_detail WHERE id_pp_cp_program_kami = $1", id); err != nil {
 		return
 	}
 	return

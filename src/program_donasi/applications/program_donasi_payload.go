@@ -12,6 +12,7 @@ import (
 type CreateProgramDonasi struct {
 	Title             string     `json:"title" valid:"required"`
 	SubTitle          string     `json:"sub_title" valid:"required"`
+	Content           string     `json:"content" valid:"required"`
 	Tag               string     `json:"tag"`
 	ThumbnailImageURL string     `json:"thumbnail_image_url" valid:"url"`
 	ValidFrom         *time.Time `json:"valid_from" valid:"required"`
@@ -23,6 +24,7 @@ type CreateProgramDonasi struct {
 type UpdateProgramDonasi struct {
 	Title             string     `json:"title" valid:"required"`
 	SubTitle          string     `json:"sub_title" valid:"required"`
+	Content           string     `json:"content" valid:"required"`
 	Tag               string     `json:"tag"`
 	ThumbnailImageURL string     `json:"thumbnail_image_url" valid:"url"`
 	ValidFrom         *time.Time `json:"valid_from" valid:"required"`
@@ -52,6 +54,7 @@ type ReadProgramDonasi struct {
 	IDPPCPProgramDonasi string     `json:"id"`
 	Title               string     `json:"title"`
 	SubTitle            string     `json:"sub_title"`
+	Content             string     `json:"content"`
 	Tag                 string     `json:"tag"`
 	ThumbnailImageURL   string     `json:"thumbnail_image_url"`
 	ValidFrom           *time.Time `json:"valid_from"`
@@ -125,7 +128,7 @@ func (r ProgramDonasiQuery) Validate() (err error) {
 	return
 }
 
-func (r CreateProgramDonasi) ToEntity() (data entity.ProgramDonasiEntity) {
+func (r CreateProgramDonasi) ToEntity() (data entity.ProgramDonasiEntity, dataDetail entity.ProgramDonasiDetailEntity) {
 	data = entity.ProgramDonasiEntity{
 		Title:             r.Title,
 		SubTitle:          r.SubTitle,
@@ -137,10 +140,15 @@ func (r CreateProgramDonasi) ToEntity() (data entity.ProgramDonasiEntity) {
 		Description:       r.Description,
 		CreatedAt:         time.Now(),
 	}
+
+	dataDetail = entity.ProgramDonasiDetailEntity{
+		Content: r.Content,
+		Tag:     r.Tag,
+	}
 	return
 }
 
-func (r UpdateProgramDonasi) ToEntity() (data entity.ProgramDonasiEntity) {
+func (r UpdateProgramDonasi) ToEntity() (data entity.ProgramDonasiEntity, dataDetail entity.ProgramDonasiDetailEntity) {
 	data = entity.ProgramDonasiEntity{
 		Title:             r.Title,
 		SubTitle:          r.SubTitle,
@@ -150,6 +158,11 @@ func (r UpdateProgramDonasi) ToEntity() (data entity.ProgramDonasiEntity) {
 		ValidTo:           r.ValidTo,
 		Target:            r.Target,
 		Description:       r.Description,
+	}
+
+	dataDetail = entity.ProgramDonasiDetailEntity{
+		Content: r.Content,
+		Tag:     r.Tag,
 	}
 	return
 }
@@ -182,6 +195,7 @@ func ToPayload(data entity.ProgramDonasiEntity) (response ReadProgramDonasi) {
 		IDPPCPProgramDonasi: data.IDPPCPProgramDonasi,
 		Title:               data.Title,
 		SubTitle:            data.SubTitle,
+		Content:             data.Detail.Content,
 		Tag:                 data.Tag,
 		ThumbnailImageURL:   data.ThumbnailImageURL,
 		ValidFrom:           data.ValidFrom,

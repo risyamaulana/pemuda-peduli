@@ -22,6 +22,16 @@ type ProgramDonasiEntity struct {
 	PublishedAt         *time.Time `db:"published_at"`
 	PublishedBy         *string    `db:"published_by"`
 	IsDeleted           bool       `db:"is_deleted"`
+
+	Detail ProgramDonasiDetailEntity
+}
+
+type ProgramDonasiDetailEntity struct {
+	ID                        int64  `db:"id"`
+	IDPPCPProgramDonasi       string `db:"id_pp_cp_program_donasi"`
+	IDPPCPProgramDonasiDetail string `db:"id_pp_cp_program_donasi_detail"`
+	Content                   string `db:"content"`
+	Tag                       string `db:"tag"`
 }
 
 type ProgramDonasiQueryEntity struct {

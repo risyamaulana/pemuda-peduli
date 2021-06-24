@@ -3,13 +3,14 @@ package domain
 import (
 	"context"
 	"errors"
+	"log"
 	"pemuda-peduli/src/program_donasi/common/constants"
 	"pemuda-peduli/src/program_donasi/domain/entity"
 	"pemuda-peduli/src/program_donasi/domain/interfaces"
 	"time"
 )
 
-func UpdateProgramDonasi(ctx context.Context, repo interfaces.IProgramDonasiRepository, data entity.ProgramDonasiEntity, id string) (response entity.ProgramDonasiEntity, err error) {
+func UpdateProgramDonasi(ctx context.Context, repo interfaces.IProgramDonasiRepository, data entity.ProgramDonasiEntity, dataDetail entity.ProgramDonasiDetailEntity, id string) (response entity.ProgramDonasiEntity, err error) {
 	currentDate := time.Now()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
@@ -30,7 +31,30 @@ func UpdateProgramDonasi(ctx context.Context, repo interfaces.IProgramDonasiRepo
 	checkData.UpdatedAt = &currentDate
 	checkData.IsDeleted = false
 
-	response, err = repo.Update(ctx, checkData, id)
+	_, err = repo.Update(ctx, checkData, id)
+	if err != nil {
+		return
+	}
+
+	if checkData.Detail.IDPPCPProgramDonasiDetail != "" {
+		// Update Data Detail
+		checkData.Detail.Content = dataDetail.Content
+		checkData.Detail.Tag = data.Tag
+		if _, errUpdateDetail := repo.UpdateDetail(ctx, checkData.Detail, checkData.Detail.IDPPCPProgramDonasiDetail); errUpdateDetail != nil {
+			log.Println("Failed update berita detail: ", errUpdateDetail)
+		}
+	} else {
+		// Insert Data Detail
+		// Insert Detail
+		dataDetail.IDPPCPProgramDonasi = checkData.IDPPCPProgramDonasi
+		dataDetail.Tag = data.Tag
+		if errDetail := repo.InsertDetail(ctx, &dataDetail); errDetail != nil {
+			log.Println("ERR Insert Detail: ", errDetail)
+		}
+	}
+
+	response, _ = GetProgramDonasi(ctx, repo, checkData.IDPPCPProgramDonasi)
+
 	return
 }
 
