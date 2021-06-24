@@ -7,7 +7,7 @@ type ProgramDonasiEntity struct {
 	IDPPCPProgramDonasi string     `db:"id_pp_cp_program_donasi"`
 	Title               string     `db:"title"`
 	SubTitle            string     `db:"sub_title"`
-	DonasiType          *string    `db:"donasi_type"`
+	DonasiType          string     `db:"donasi_type"`
 	Tag                 string     `db:"tag"`
 	ThumbnailImageURL   string     `db:"thumbnail_image_url"`
 	Description         string     `db:"description"`

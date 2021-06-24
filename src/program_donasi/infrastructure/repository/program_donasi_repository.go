@@ -32,6 +32,7 @@ func (c *ProgramDonasiRepository) Insert(ctx context.Context, data *entity.Progr
 	data.IDPPCPProgramDonasi = utility.GetUUID()
 
 	// Set status created
+	data.DonasiType = constants.DonasiTypeOneTIme
 	data.Status = constants.StatusCreated
 
 	sql := `INSERT INTO pp_cp_program_donasi `

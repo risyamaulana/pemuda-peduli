@@ -5,6 +5,4 @@ const (
 	StatusDeleted   = "deleted"
 	StatusPublished = "published"
 	StatusHidden    = "hidden"
-
-	DonasiTypeOneTIme = "One Time"
 )
