@@ -9,7 +9,6 @@ type ProgramDonasiRutinEntity struct {
 	KategoriName                string     `db:"kategori_name"`
 	Title                       string     `db:"title"`
 	SubTitle                    string     `db:"sub_title"`
-	DonasiType                  string     `db:"donasi_type"`
 	Tag                         string     `db:"tag"`
 	ThumbnailImageURL           string     `db:"thumbnail_image_url"`
 	Description                 string     `db:"description"`

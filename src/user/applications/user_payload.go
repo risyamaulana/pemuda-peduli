@@ -13,15 +13,16 @@ import (
 )
 
 type Readuser struct {
-	ID          string     `json:"id"` // id user (UUID)
-	Username    string     `json:"username"`
-	Email       string     `json:"email"`
-	NamaLengkap string     `json:"nama_lengkap"`
-	Alamat      string     `json:"alamat"`
-	PhoneNumber string     `json:"phone_number"`
-	IsDeleted   bool       `json:"is_deleted"`
-	CreatedAt   time.Time  `json:"created_at"`
-	UpdatedAt   *time.Time `json:"updated_at"`
+	ID            string     `json:"id"` // id user (UUID)
+	Username      string     `json:"username"`
+	Email         string     `json:"email"`
+	NamaLengkap   string     `json:"nama_lengkap"`
+	NamaPanggilan string     `json:"nama_panggilan"`
+	Alamat        string     `json:"alamat"`
+	PhoneNumber   string     `json:"phone_number"`
+	IsDeleted     bool       `json:"is_deleted"`
+	CreatedAt     time.Time  `json:"created_at"`
+	UpdatedAt     *time.Time `json:"updated_at"`
 }
 
 func ToPayload(data entity.UserEntity) (response Readuser) {
@@ -42,12 +43,13 @@ func ToPayload(data entity.UserEntity) (response Readuser) {
 // ============================ Register ============================
 
 type RegisterUser struct {
-	Email        string `json:"email" valid:"required,email"`
-	PhoneNumber  string `json:"phone_number" valid:"required"`
-	Password     string `json:"password" valid:"required,minstringlength(8)"`
-	ConfPassword string `json:"conf_password" valid:"required,minstringlength(8)"`
-	NamaLengkap  string `json:"nama_lengkap" valid:"required"`
-	Alamat       string `json:"alamat"`
+	Email         string `json:"email" valid:"required,email"`
+	PhoneNumber   string `json:"phone_number" valid:"required"`
+	Password      string `json:"password" valid:"required,minstringlength(8)"`
+	ConfPassword  string `json:"conf_password" valid:"required,minstringlength(8)"`
+	NamaLengkap   string `json:"nama_lengkap" valid:"required"`
+	NamaPanggilan string `json:"nama_panggilan" valid:"required"`
+	Alamat        string `json:"alamat"`
 }
 
 func GetRegisterUserPayload(body []byte) (payload RegisterUser, err error) {
@@ -79,16 +81,17 @@ func (r RegisterUser) ToEntity() (data entity.UserEntity) {
 	phoneNumber := utility.FormatPhoneNumber(r.PhoneNumber)
 
 	data = entity.UserEntity{
-		IDUser:      utility.GetUUID(),
-		Username:    username[0] + "-" + utility.GenerateSalt(5),
-		Salt:        salt,
-		Password:    password,
-		Email:       r.Email,
-		NamaLengkap: r.NamaLengkap,
-		Alamat:      r.Alamat,
-		PhoneNumber: phoneNumber,
-		IsDeleted:   false,
-		CreatedAt:   time.Now(),
+		IDUser:        utility.GetUUID(),
+		Username:      username[0] + "-" + utility.GenerateSalt(5),
+		Salt:          salt,
+		Password:      password,
+		Email:         r.Email,
+		NamaLengkap:   r.NamaLengkap,
+		NamaPanggilan: r.NamaPanggilan,
+		Alamat:        r.Alamat,
+		PhoneNumber:   phoneNumber,
+		IsDeleted:     false,
+		CreatedAt:     time.Now(),
 	}
 
 	return
@@ -96,8 +99,9 @@ func (r RegisterUser) ToEntity() (data entity.UserEntity) {
 
 // ============================ Update User ============================
 type UpdateUser struct {
-	NamaLengkap string `json:"nama_lengkap" valid:"required"`
-	Alamat      string `json:"alamat"`
+	NamaLengkap   string `json:"nama_lengkap" valid:"required"`
+	NamaPanggilan string `json:"nama_panggilan" valid:"required"`
+	Alamat        string `json:"alamat"`
 }
 
 func GetUpdateUserPayload(body []byte) (payload UpdateUser, err error) {
@@ -121,11 +125,12 @@ func (r UpdateUser) ToEntity(ctx context.Context) (data entity.UserEntity) {
 	userID := ctx.Value("user_id").(string)
 
 	data = entity.UserEntity{
-		IDUser:      userID,
-		NamaLengkap: r.NamaLengkap,
-		Alamat:      r.Alamat,
-		IsDeleted:   false,
-		UpdatedAt:   &currentDate,
+		IDUser:        userID,
+		NamaLengkap:   r.NamaLengkap,
+		NamaPanggilan: r.NamaPanggilan,
+		Alamat:        r.Alamat,
+		IsDeleted:     false,
+		UpdatedAt:     &currentDate,
 	}
 
 	return

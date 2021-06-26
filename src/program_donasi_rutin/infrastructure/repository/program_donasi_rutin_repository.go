@@ -32,7 +32,6 @@ func (c *ProgramDonasiRutinRepository) Insert(ctx context.Context, data *entity.
 	data.IDPPCPProgramDonasiRutin = utility.GetUUID()
 
 	// Set status created
-	data.DonasiType = constants.DonasiTypeOneTIme
 	data.Status = constants.StatusCreated
 
 	sql := `INSERT INTO pp_cp_program_donasi_rutin `
@@ -78,6 +77,8 @@ func (c *ProgramDonasiRutinRepository) InsertDetail(ctx context.Context, data *e
 	}
 
 	sql += "(" + strings.TrimSuffix(strField.String(), ",") + ")" + " VALUES(" + strings.TrimSuffix(strValue.String(), ",") + ")"
+
+	log.Println(sql)
 	resp, err := tx.NamedExec(sql, data)
 	if err != nil {
 		log.Println("Error insert pp_cp_program_donasi_rutin_detail:", err)

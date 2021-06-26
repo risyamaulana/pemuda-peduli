@@ -27,19 +27,23 @@ func CreateProgramDonasiRutin(ctx context.Context, db *db.ConnectTo, data *entit
 
 	data.KategoriName = kategoriData.KategoriName
 
-	insertProgramDonasiRutin(ctx, &repo, data, dataDetail)
+	response, err = insertProgramDonasiRutin(ctx, &repo, data, dataDetail)
 
 	return
 }
 
 func insertProgramDonasiRutin(ctx context.Context, repo interfaces.IProgramDonasiRutinRepository, data *entity.ProgramDonasiRutinEntity, dataDetail *entity.ProgramDonasiRutinDetailEntity) (response entity.ProgramDonasiRutinEntity, err error) {
 	err = repo.Insert(ctx, data)
+	if err != nil {
+		return
+	}
 
 	// Insert Detail
 	dataDetail.IDPPCPProgramDonasiRutin = data.IDPPCPProgramDonasiRutin
 	dataDetail.Tag = data.Tag
 	if errDetail := repo.InsertDetail(ctx, dataDetail); errDetail != nil {
 		log.Println("ERR Insert Detail: ", errDetail)
+		return
 	}
 
 	response, _ = GetProgramDonasiRutin(ctx, repo, data.IDPPCPProgramDonasiRutin)
