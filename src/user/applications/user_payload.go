@@ -27,15 +27,16 @@ type Readuser struct {
 
 func ToPayload(data entity.UserEntity) (response Readuser) {
 	response = Readuser{
-		ID:          data.IDUser,
-		Username:    data.Username,
-		Email:       data.Email,
-		NamaLengkap: data.NamaLengkap,
-		Alamat:      data.Alamat,
-		PhoneNumber: data.PhoneNumber,
-		IsDeleted:   data.IsDeleted,
-		CreatedAt:   data.CreatedAt,
-		UpdatedAt:   data.UpdatedAt,
+		ID:            data.IDUser,
+		Username:      data.Username,
+		Email:         data.Email,
+		NamaLengkap:   data.NamaLengkap,
+		NamaPanggilan: data.NamaPanggilan,
+		Alamat:        data.Alamat,
+		PhoneNumber:   data.PhoneNumber,
+		IsDeleted:     data.IsDeleted,
+		CreatedAt:     data.CreatedAt,
+		UpdatedAt:     data.UpdatedAt,
 	}
 	return
 }
