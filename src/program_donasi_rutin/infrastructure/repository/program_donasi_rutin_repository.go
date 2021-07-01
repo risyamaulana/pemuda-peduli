@@ -241,7 +241,7 @@ func (c *ProgramDonasiRutinRepository) Get(ctx context.Context, id string) (resp
 }
 
 func (c *ProgramDonasiRutinRepository) GetDetail(ctx context.Context, id string) (response entity.ProgramDonasiRutinDetailEntity, err error) {
-	if err = c.db.DBRead.Get(&response, "SELECT * FROM pp_cp_program_donasi_rutin_detail WHERE id_pp_cp_program_kami = $1", id); err != nil {
+	if err = c.db.DBRead.Get(&response, "SELECT * FROM pp_cp_program_donasi_rutin_detail WHERE id_pp_cp_program_donasi_rutin = $1", id); err != nil {
 		return
 	}
 	return
