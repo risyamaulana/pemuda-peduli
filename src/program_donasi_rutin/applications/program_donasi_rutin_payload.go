@@ -30,6 +30,7 @@ type UpdateProgramDonasiRutin struct {
 	Benefit           string `json:"benefit"`
 	Tag               string `json:"tag"`
 	ThumbnailImageURL string `json:"thumbnail_image_url" valid:"url"`
+	IsShow            *bool  `json:"is_show" valid:"required"`
 
 	Description string `json:"description"`
 }
@@ -73,6 +74,7 @@ type ReadProgramDonasiRutin struct {
 	PublishedAt                 *time.Time `json:"published_at"`
 	PublishedBy                 *string    `json:"published_by"`
 	IsDeleted                   bool       `json:"is_deleted"`
+	IsShow                      bool       `json:"is_show"`
 }
 
 func GetCreatePayload(body []byte) (payload CreateProgramDonasiRutin, err error) {
@@ -144,6 +146,7 @@ func (r UpdateProgramDonasiRutin) ToEntity() (data entity.ProgramDonasiRutinEnti
 		Tag:                         r.Tag,
 		ThumbnailImageURL:           r.ThumbnailImageURL,
 		Description:                 r.Description,
+		IsShow:                      *r.IsShow,
 	}
 
 	dataDetail = entity.ProgramDonasiRutinDetailEntity{
@@ -197,6 +200,7 @@ func ToPayload(data entity.ProgramDonasiRutinEntity) (response ReadProgramDonasi
 		PublishedAt:                 data.PublishedAt,
 		PublishedBy:                 data.PublishedBy,
 		IsDeleted:                   data.IsDeleted,
+		IsShow:                      data.IsShow,
 	}
 	return
 }

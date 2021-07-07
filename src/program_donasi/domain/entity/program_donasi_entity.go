@@ -22,6 +22,7 @@ type ProgramDonasiEntity struct {
 	PublishedAt         *time.Time `db:"published_at"`
 	PublishedBy         *string    `db:"published_by"`
 	IsDeleted           bool       `db:"is_deleted"`
+	IsShow              bool       `db:"is_show"`
 
 	Detail ProgramDonasiDetailEntity
 }

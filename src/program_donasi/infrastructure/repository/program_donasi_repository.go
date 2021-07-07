@@ -166,6 +166,8 @@ func (c *ProgramDonasiRepository) Find(ctx context.Context, data *entity.Program
 			switch field {
 			case "is_deleted":
 				str.WriteString(field + " = " + fil.Keyword + " AND ")
+			case "is_show":
+				str.WriteString(field + " = " + fil.Keyword + " AND ")
 			case "status":
 				str.WriteString(field + " = '" + fil.Keyword + "' AND ")
 			case "donasi_type":

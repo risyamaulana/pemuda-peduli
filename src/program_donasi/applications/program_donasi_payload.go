@@ -31,6 +31,7 @@ type UpdateProgramDonasi struct {
 	ValidTo           *time.Time `json:"valid_to" valid:"required"`
 	Target            *float64   `json:"target" valid:"required"`
 	Description       string     `json:"description"`
+	IsShow            *bool      `json:"is_show" valid:"required"`
 }
 
 type ProgramDonasiQuery struct {
@@ -69,6 +70,7 @@ type ReadProgramDonasi struct {
 	PublishedAt         *time.Time `json:"published_at"`
 	PublishedBy         *string    `json:"published_by"`
 	IsDeleted           bool       `json:"is_deleted"`
+	IsShow              bool       `json:"is_show"`
 }
 
 func GetCreatePayload(body []byte) (payload CreateProgramDonasi, err error) {
@@ -158,6 +160,7 @@ func (r UpdateProgramDonasi) ToEntity() (data entity.ProgramDonasiEntity, dataDe
 		ValidTo:           r.ValidTo,
 		Target:            r.Target,
 		Description:       r.Description,
+		IsShow:            *r.IsShow,
 	}
 
 	dataDetail = entity.ProgramDonasiDetailEntity{
@@ -210,6 +213,7 @@ func ToPayload(data entity.ProgramDonasiEntity) (response ReadProgramDonasi) {
 		PublishedAt:         data.PublishedAt,
 		PublishedBy:         data.PublishedBy,
 		IsDeleted:           data.IsDeleted,
+		IsShow:              data.IsShow,
 	}
 	return
 }
