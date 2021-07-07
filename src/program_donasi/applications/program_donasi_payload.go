@@ -31,7 +31,7 @@ type UpdateProgramDonasi struct {
 	ValidTo           *time.Time `json:"valid_to" valid:"required"`
 	Target            *float64   `json:"target" valid:"required"`
 	Description       string     `json:"description"`
-	IsShow            *bool      `json:"is_show" valid:"required"`
+	IsShow            *bool      `json:"is_show"`
 }
 
 type ProgramDonasiQuery struct {
@@ -118,6 +118,12 @@ func (r UpdateProgramDonasi) Validate() (err error) {
 	if err != nil {
 		return
 	}
+
+	if r.IsShow == nil {
+		err = errors.New("is_show: non zero value required")
+		return
+	}
+
 	return
 }
 

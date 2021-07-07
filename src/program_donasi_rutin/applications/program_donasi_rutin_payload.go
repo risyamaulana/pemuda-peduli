@@ -2,6 +2,7 @@ package applications
 
 import (
 	"encoding/json"
+	"errors"
 	"log"
 	"pemuda-peduli/src/program_donasi_rutin/domain/entity"
 	"time"
@@ -31,7 +32,7 @@ type UpdateProgramDonasiRutin struct {
 	Benefit           string `json:"benefit"`
 	Tag               string `json:"tag"`
 	ThumbnailImageURL string `json:"thumbnail_image_url" valid:"url"`
-	IsShow            *bool  `json:"is_show" valid:"required"`
+	IsShow            *bool  `json:"is_show"`
 
 	Description string `json:"description"`
 }
@@ -106,6 +107,11 @@ func (r UpdateProgramDonasiRutin) Validate() (err error) {
 	// Validate Payload
 	_, err = govalidator.ValidateStruct(r)
 	if err != nil {
+		return
+	}
+
+	if r.IsShow == nil {
+		err = errors.New("is_show: non zero value required")
 		return
 	}
 	return
