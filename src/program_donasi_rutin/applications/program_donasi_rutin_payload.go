@@ -2,6 +2,7 @@ package applications
 
 import (
 	"encoding/json"
+	"log"
 	"pemuda-peduli/src/program_donasi_rutin/domain/entity"
 	"time"
 
@@ -139,6 +140,7 @@ func (r CreateProgramDonasiRutin) ToEntity() (data entity.ProgramDonasiRutinEnti
 }
 
 func (r UpdateProgramDonasiRutin) ToEntity() (data entity.ProgramDonasiRutinEntity, dataDetail entity.ProgramDonasiRutinDetailEntity) {
+	log.Println("IS SHOW : ", r.IsShow)
 	data = entity.ProgramDonasiRutinEntity{
 		IDPPCPProgramDonasiKategori: r.IDPPCPProgramDonasiKategori,
 		Title:                       r.Title,
@@ -148,6 +150,8 @@ func (r UpdateProgramDonasiRutin) ToEntity() (data entity.ProgramDonasiRutinEnti
 		Description:                 r.Description,
 		IsShow:                      *r.IsShow,
 	}
+
+	log.Println("IS SHOW DATA: ", data.IsShow)
 
 	dataDetail = entity.ProgramDonasiRutinDetailEntity{
 		Content: r.Content,

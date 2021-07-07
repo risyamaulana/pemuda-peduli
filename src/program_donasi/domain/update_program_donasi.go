@@ -30,6 +30,7 @@ func UpdateProgramDonasi(ctx context.Context, repo interfaces.IProgramDonasiRepo
 
 	checkData.UpdatedAt = &currentDate
 	checkData.IsDeleted = false
+	checkData.IsShow = data.IsShow
 
 	_, err = repo.Update(ctx, checkData, id)
 	if err != nil {

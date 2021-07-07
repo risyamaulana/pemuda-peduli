@@ -97,7 +97,7 @@ func createProgramDonasi(ctx *fasthttp.RequestCtx) {
 
 func updateProgramDonasi(ctx *fasthttp.RequestCtx) {
 	programDonasiID := fmt.Sprintf("%s", ctx.UserValue("id"))
-	payload, err := GetCreatePayload(ctx.Request.Body())
+	payload, err := GetUpdatePayload(ctx.Request.Body())
 	if err != nil {
 		ctx.SetStatusCode(fasthttp.StatusBadRequest)
 		fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, errors.New("Bad JSON Payload"))))

@@ -42,6 +42,8 @@ func EditProgramDonasiRutin(ctx context.Context, db *db.ConnectTo, data entity.P
 		data.KategoriName = kategoriData.KategoriName
 	}
 
+	log.Println("IS SHOW DATA DOMAIN : ", data.IsShow)
+
 	response, err = updateProgramDonasiRutin(ctx, &repo, data, dataDetail, id)
 
 	return
@@ -70,6 +72,7 @@ func updateProgramDonasiRutin(ctx context.Context, repo interfaces.IProgramDonas
 
 	checkData.UpdatedAt = &currentDate
 	checkData.IsDeleted = false
+	checkData.IsShow = data.IsShow
 
 	_, err = repo.Update(ctx, checkData, id)
 	if err != nil {
