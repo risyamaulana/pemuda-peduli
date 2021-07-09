@@ -32,7 +32,7 @@ type UpdateProgramDonasiRutin struct {
 	Benefit           string `json:"benefit"`
 	Tag               string `json:"tag"`
 	ThumbnailImageURL string `json:"thumbnail_image_url" valid:"url"`
-	IsShow            bool   `json:"is_show"`
+	IsShow            *bool  `json:"is_show"`
 
 	Description string `json:"description"`
 }
@@ -154,7 +154,7 @@ func (r UpdateProgramDonasiRutin) ToEntity() (data entity.ProgramDonasiRutinEnti
 		Tag:                         r.Tag,
 		ThumbnailImageURL:           r.ThumbnailImageURL,
 		Description:                 r.Description,
-		IsShow:                      r.IsShow,
+		IsShow:                      *r.IsShow,
 	}
 
 	log.Println("IS SHOW DATA: ", data.IsShow)
