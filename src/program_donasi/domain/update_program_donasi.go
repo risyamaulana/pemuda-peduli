@@ -26,6 +26,8 @@ func UpdateProgramDonasi(ctx context.Context, repo interfaces.IProgramDonasiRepo
 	checkData.SubTitle = data.SubTitle
 	checkData.Tag = data.Tag
 	checkData.ThumbnailImageURL = data.ThumbnailImageURL
+	checkData.KitaBisaLink = data.KitaBisaLink
+	checkData.AyoBantuLink = data.AyoBantuLink
 	checkData.Description = data.Description
 
 	checkData.UpdatedAt = &currentDate

@@ -18,6 +18,8 @@ type CreateProgramDonasi struct {
 	ValidFrom         *time.Time `json:"valid_from" valid:"required"`
 	ValidTo           *time.Time `json:"valid_to" valid:"required"`
 	Target            *float64   `json:"target" valid:"required"`
+	KitaBisaLink      *string    `json:"kitabisa_link" valid:"url"`
+	AyoBantuLink      *string    `json:"ayobantu_link" valid:"url"`
 	Description       string     `json:"description"`
 }
 
@@ -30,6 +32,8 @@ type UpdateProgramDonasi struct {
 	ValidFrom         *time.Time `json:"valid_from" valid:"required"`
 	ValidTo           *time.Time `json:"valid_to" valid:"required"`
 	Target            *float64   `json:"target" valid:"required"`
+	KitaBisaLink      *string    `json:"kitabisa_link" valid:"url"`
+	AyoBantuLink      *string    `json:"ayobantu_link" valid:"url"`
 	Description       string     `json:"description"`
 	IsShow            *bool      `json:"is_show"`
 }
@@ -71,6 +75,8 @@ type ReadProgramDonasi struct {
 	PublishedBy         *string    `json:"published_by"`
 	IsDeleted           bool       `json:"is_deleted"`
 	IsShow              bool       `json:"is_show"`
+	KitaBisaLink        *string    `json:"kitabisa_link"`
+	AyoBantuLink        *string    `json:"ayobantu_link"`
 }
 
 func GetCreatePayload(body []byte) (payload CreateProgramDonasi, err error) {
@@ -145,6 +151,8 @@ func (r CreateProgramDonasi) ToEntity() (data entity.ProgramDonasiEntity, dataDe
 		ValidFrom:         r.ValidFrom,
 		ValidTo:           r.ValidTo,
 		Target:            r.Target,
+		KitaBisaLink:      r.KitaBisaLink,
+		AyoBantuLink:      r.AyoBantuLink,
 		Description:       r.Description,
 		CreatedAt:         time.Now(),
 	}
@@ -165,6 +173,8 @@ func (r UpdateProgramDonasi) ToEntity() (data entity.ProgramDonasiEntity, dataDe
 		ValidFrom:         r.ValidFrom,
 		ValidTo:           r.ValidTo,
 		Target:            r.Target,
+		KitaBisaLink:      r.KitaBisaLink,
+		AyoBantuLink:      r.AyoBantuLink,
 		Description:       r.Description,
 		IsShow:            *r.IsShow,
 	}
@@ -210,6 +220,8 @@ func ToPayload(data entity.ProgramDonasiEntity) (response ReadProgramDonasi) {
 		ValidFrom:           data.ValidFrom,
 		ValidTo:             data.ValidTo,
 		Target:              data.Target,
+		KitaBisaLink:        data.KitaBisaLink,
+		AyoBantuLink:        data.AyoBantuLink,
 		Description:         data.Description,
 		Status:              data.Status,
 		CreatedAt:           data.CreatedAt,

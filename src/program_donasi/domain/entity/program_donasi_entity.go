@@ -23,6 +23,8 @@ type ProgramDonasiEntity struct {
 	PublishedBy         *string    `db:"published_by"`
 	IsDeleted           bool       `db:"is_deleted"`
 	IsShow              bool       `db:"is_show"`
+	KitaBisaLink        *string    `db:"kitabisa_link"`
+	AyoBantuLink        *string    `db:"ayobantu_link"`
 
 	Detail ProgramDonasiDetailEntity
 }
