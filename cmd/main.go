@@ -23,6 +23,7 @@ import (
 	programDonasiKategoriApp "pemuda-peduli/src/program_donasi_kategori/applications"
 	programDonasiRutinApp "pemuda-peduli/src/program_donasi_rutin/applications"
 	programKamiApp "pemuda-peduli/src/program_kami/applications"
+	qrisApp "pemuda-peduli/src/qris/applications"
 	roleApp "pemuda-peduli/src/role/applications"
 	teamApp "pemuda-peduli/src/team/applications"
 	tentangKamiApp "pemuda-peduli/src/tentang_kami/applications"
@@ -93,6 +94,7 @@ func initialize(apps map[string]interfaces.IApplication, r *router.Router) {
 	apps["testimoni"] = testimoniApp.NewTestimoniApp()
 	apps["tujuan-kami"] = tujuanKamiApp.NewTujuanKamiApp()
 	apps["menu-extras"] = menuExtrasApp.NewMenuExtrasApp()
+	apps["qris"] = qrisApp.NewQrisApp()
 
 	for _, v := range apps {
 		// log.Printf("Initializing app %s", k)
