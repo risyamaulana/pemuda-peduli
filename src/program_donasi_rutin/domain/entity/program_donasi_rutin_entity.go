@@ -21,6 +21,8 @@ type ProgramDonasiRutinEntity struct {
 	PublishedBy                 *string    `db:"published_by"`
 	IsDeleted                   bool       `db:"is_deleted"`
 	IsShow                      bool       `db:"is_show"`
+	IDPPCPMasterQris            *string    `db:"id_pp_cp_master_qris"`
+	QrisImageURL                *string    `db:"qris_image_url"`
 
 	Detail ProgramDonasiRutinDetailEntity
 }

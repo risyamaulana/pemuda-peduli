@@ -25,6 +25,8 @@ type ProgramDonasiEntity struct {
 	IsShow              bool       `db:"is_show"`
 	KitaBisaLink        *string    `db:"kitabisa_link"`
 	AyoBantuLink        *string    `db:"ayobantu_link"`
+	IDPPCPMasterQris    *string    `db:"id_pp_cp_master_qris"`
+	QrisImageURL        *string    `db:"qris_image_url"`
 
 	Detail ProgramDonasiDetailEntity
 }
