@@ -34,6 +34,10 @@ func UpdateProgramDonasi(ctx context.Context, repo interfaces.IProgramDonasiRepo
 
 	checkData.KitaBisaLink = data.KitaBisaLink
 	checkData.AyoBantuLink = data.AyoBantuLink
+
+	checkData.IDPPCPMasterQris = data.IDPPCPMasterQris
+	checkData.QrisImageURL = data.QrisImageURL
+
 	checkData.Description = data.Description
 
 	checkData.UpdatedAt = &currentDate

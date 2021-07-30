@@ -20,6 +20,8 @@ type CreateProgramDonasi struct {
 	Target            *float64   `json:"target" valid:"required"`
 	KitaBisaLink      *string    `json:"kitabisa_link" valid:"url"`
 	AyoBantuLink      *string    `json:"ayobantu_link" valid:"url"`
+	IDPPCPMasterQris  string     `json:"id_pp_cp_master_qris"`
+	QrisImageURL      string     `json:"qris_image_url"`
 	Description       string     `json:"description"`
 }
 
@@ -34,6 +36,8 @@ type UpdateProgramDonasi struct {
 	Target            *float64   `json:"target" valid:"required"`
 	KitaBisaLink      *string    `json:"kitabisa_link" valid:"url"`
 	AyoBantuLink      *string    `json:"ayobantu_link" valid:"url"`
+	IDPPCPMasterQris  string     `json:"id_pp_cp_master_qris"`
+	QrisImageURL      string     `json:"qris_image_url"`
 	Description       string     `json:"description"`
 	IsShow            *bool      `json:"is_show"`
 }
@@ -77,6 +81,8 @@ type ReadProgramDonasi struct {
 	IsShow              bool       `json:"is_show"`
 	KitaBisaLink        *string    `json:"kitabisa_link"`
 	AyoBantuLink        *string    `json:"ayobantu_link"`
+	IDPPCPMasterQris    *string    `json:"id_pp_cp_master_qris"`
+	QrisImageURL        *string    `json:"qris_image_url"`
 }
 
 func GetCreatePayload(body []byte) (payload CreateProgramDonasi, err error) {
@@ -153,6 +159,8 @@ func (r CreateProgramDonasi) ToEntity() (data entity.ProgramDonasiEntity, dataDe
 		Target:            r.Target,
 		KitaBisaLink:      r.KitaBisaLink,
 		AyoBantuLink:      r.AyoBantuLink,
+		IDPPCPMasterQris:  &r.IDPPCPMasterQris,
+		QrisImageURL:      &r.QrisImageURL,
 		Description:       r.Description,
 		CreatedAt:         time.Now(),
 	}
@@ -176,6 +184,8 @@ func (r UpdateProgramDonasi) ToEntity() (data entity.ProgramDonasiEntity, dataDe
 		KitaBisaLink:      r.KitaBisaLink,
 		AyoBantuLink:      r.AyoBantuLink,
 		Description:       r.Description,
+		IDPPCPMasterQris:  &r.IDPPCPMasterQris,
+		QrisImageURL:      &r.QrisImageURL,
 		IsShow:            *r.IsShow,
 	}
 

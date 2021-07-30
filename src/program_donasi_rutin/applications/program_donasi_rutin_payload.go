@@ -20,6 +20,9 @@ type CreateProgramDonasiRutin struct {
 	Tag               string `json:"tag"`
 	ThumbnailImageURL string `json:"thumbnail_image_url" valid:"url"`
 
+	IDPPCPMasterQris string `json:"id_pp_cp_master_qris"`
+	QrisImageURL     string `json:"qris_image_url"`
+
 	Description string `json:"description"`
 }
 
@@ -33,6 +36,9 @@ type UpdateProgramDonasiRutin struct {
 	Tag               string `json:"tag"`
 	ThumbnailImageURL string `json:"thumbnail_image_url" valid:"url"`
 	IsShow            *bool  `json:"is_show"`
+
+	IDPPCPMasterQris string `json:"id_pp_cp_master_qris"`
+	QrisImageURL     string `json:"qris_image_url"`
 
 	Description string `json:"description"`
 }
@@ -62,6 +68,8 @@ type ReadProgramDonasiRutin struct {
 	SubTitle                    string     `json:"sub_title"`
 	Content                     string     `json:"content"`
 	Benefit                     string     `json:"benefit"`
+	IDPPCPMasterQris            *string    `json:"id_pp_cp_master_qris"`
+	QrisImageURL                *string    `json:"qris_image_url"`
 	Tag                         string     `json:"tag"`
 	ThumbnailImageURL           string     `json:"thumbnail_image_url"`
 	ValidFrom                   *time.Time `json:"valid_from"`
@@ -134,7 +142,10 @@ func (r CreateProgramDonasiRutin) ToEntity() (data entity.ProgramDonasiRutinEnti
 		Tag:                         r.Tag,
 		ThumbnailImageURL:           r.ThumbnailImageURL,
 		Description:                 r.Description,
-		CreatedAt:                   time.Now(),
+
+		IDPPCPMasterQris: &r.IDPPCPMasterQris,
+		QrisImageURL:     &r.QrisImageURL,
+		CreatedAt:        time.Now(),
 	}
 
 	dataDetail = entity.ProgramDonasiRutinDetailEntity{
@@ -154,7 +165,10 @@ func (r UpdateProgramDonasiRutin) ToEntity() (data entity.ProgramDonasiRutinEnti
 		Tag:                         r.Tag,
 		ThumbnailImageURL:           r.ThumbnailImageURL,
 		Description:                 r.Description,
-		IsShow:                      *r.IsShow,
+
+		IDPPCPMasterQris: &r.IDPPCPMasterQris,
+		QrisImageURL:     &r.QrisImageURL,
+		IsShow:           *r.IsShow,
 	}
 
 	log.Println("IS SHOW DATA: ", data.IsShow)
@@ -201,6 +215,8 @@ func ToPayload(data entity.ProgramDonasiRutinEntity) (response ReadProgramDonasi
 		Benefit:                     data.Detail.Benefit,
 		Tag:                         data.Tag,
 		ThumbnailImageURL:           data.ThumbnailImageURL,
+		IDPPCPMasterQris:            data.QrisImageURL,
+		QrisImageURL:                data.QrisImageURL,
 		Description:                 data.Description,
 		Status:                      data.Status,
 		CreatedAt:                   data.CreatedAt,
