@@ -24,7 +24,7 @@ func UpdateProgramDonasi(ctx context.Context, repo interfaces.IProgramDonasiRepo
 	}
 	checkData.Title = data.Title
 	checkData.SubTitle = data.SubTitle
-	checkData.DonasiType = data.DonasiType
+	// checkData.DonasiType = data.DonasiType
 	checkData.Tag = data.Tag
 	checkData.ThumbnailImageURL = data.ThumbnailImageURL
 	checkData.Description = data.Description
