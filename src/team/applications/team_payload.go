@@ -115,7 +115,7 @@ func (r CreateTeam) ToEntity() (data entity.TeamEntity) {
 		GoogleLink:        r.GoogleLink,
 		InstagramLink:     r.InstagramLink,
 		LinkedinLink:      r.LinkedinLink,
-		CreatedAt:         time.Now(),
+		CreatedAt:         time.Now().UTC(),
 	}
 	return
 }

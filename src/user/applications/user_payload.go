@@ -92,7 +92,7 @@ func (r RegisterUser) ToEntity() (data entity.UserEntity) {
 		Alamat:        r.Alamat,
 		PhoneNumber:   phoneNumber,
 		IsDeleted:     false,
-		CreatedAt:     time.Now(),
+		CreatedAt:     time.Now().UTC(),
 	}
 
 	return
@@ -121,7 +121,7 @@ func (r UpdateUser) Validate() (err error) {
 }
 
 func (r UpdateUser) ToEntity(ctx context.Context) (data entity.UserEntity) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 
 	userID := ctx.Value("user_id").(string)
 
@@ -165,7 +165,7 @@ func (r ChangePassword) Validate() (err error) {
 }
 
 func (r ChangePassword) ToEntity(ctx context.Context) (data entity.UserEntity) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 
 	userID := ctx.Value("user_id").(string)
 

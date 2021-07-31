@@ -10,7 +10,7 @@ import (
 )
 
 func UpdateKontakKami(ctx context.Context, repo interfaces.IKontakKamiRepository, data entity.KontakKamiEntity, id string) (response entity.KontakKamiEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {
@@ -31,7 +31,7 @@ func UpdateKontakKami(ctx context.Context, repo interfaces.IKontakKamiRepository
 }
 
 func PublishKontakKami(ctx context.Context, repo interfaces.IKontakKamiRepository, id string) (response entity.KontakKamiEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {
@@ -51,7 +51,7 @@ func PublishKontakKami(ctx context.Context, repo interfaces.IKontakKamiRepositor
 }
 
 func HideKontakKami(ctx context.Context, repo interfaces.IKontakKamiRepository, id string) (response entity.KontakKamiEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {
@@ -73,7 +73,7 @@ func HideKontakKami(ctx context.Context, repo interfaces.IKontakKamiRepository, 
 }
 
 func DeleteKontakKami(ctx context.Context, repo interfaces.IKontakKamiRepository, id string) (response entity.KontakKamiEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {

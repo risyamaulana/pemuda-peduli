@@ -108,12 +108,12 @@ func (r CreateProgramDonasi) Validate() (err error) {
 		return
 	}
 
-	if r.ValidFrom.Before(time.Now()) {
+	if r.ValidFrom.Before(time.Now().UTC()) {
 		err = errors.New("Failed : valid from smallest than current time")
 		return
 	}
 
-	if r.ValidTo.Before(time.Now()) {
+	if r.ValidTo.Before(time.Now().UTC()) {
 		err = errors.New("Failed : valid to smallest than current time")
 		return
 	}
@@ -150,20 +150,22 @@ func (r ProgramDonasiQuery) Validate() (err error) {
 }
 
 func (r CreateProgramDonasi) ToEntity() (data entity.ProgramDonasiEntity, dataDetail entity.ProgramDonasiDetailEntity) {
+	validFrom := r.ValidFrom.UTC()
+	validTo := r.ValidTo.UTC()
 	data = entity.ProgramDonasiEntity{
 		Title:             r.Title,
 		SubTitle:          r.SubTitle,
 		Tag:               r.Tag,
 		ThumbnailImageURL: r.ThumbnailImageURL,
-		ValidFrom:         r.ValidFrom,
-		ValidTo:           r.ValidTo,
+		ValidFrom:         &validFrom,
+		ValidTo:           &validTo,
 		Target:            r.Target,
 		KitaBisaLink:      r.KitaBisaLink,
 		AyoBantuLink:      r.AyoBantuLink,
 		IDPPCPMasterQris:  &r.IDPPCPMasterQris,
 		QrisImageURL:      &r.QrisImageURL,
 		Description:       r.Description,
-		CreatedAt:         time.Now(),
+		CreatedAt:         time.Now().UTC(),
 	}
 
 	dataDetail = entity.ProgramDonasiDetailEntity{
@@ -174,13 +176,15 @@ func (r CreateProgramDonasi) ToEntity() (data entity.ProgramDonasiEntity, dataDe
 }
 
 func (r UpdateProgramDonasi) ToEntity() (data entity.ProgramDonasiEntity, dataDetail entity.ProgramDonasiDetailEntity) {
+	validFrom := r.ValidFrom.UTC()
+	validTo := r.ValidTo.UTC()
 	data = entity.ProgramDonasiEntity{
 		Title:             r.Title,
 		SubTitle:          r.SubTitle,
 		Tag:               r.Tag,
 		ThumbnailImageURL: r.ThumbnailImageURL,
-		ValidFrom:         r.ValidFrom,
-		ValidTo:           r.ValidTo,
+		ValidFrom:         &validFrom,
+		ValidTo:           &validTo,
 		Target:            r.Target,
 		KitaBisaLink:      r.KitaBisaLink,
 		AyoBantuLink:      r.AyoBantuLink,

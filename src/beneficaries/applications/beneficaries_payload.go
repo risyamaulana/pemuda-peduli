@@ -107,7 +107,7 @@ func (r CreateBeneficaries) ToEntity() (data entity.BeneficariesEntity) {
 		DeeplinkRight:     r.DeeplinkRight,
 		DeeplinkLeft:      r.DeeplinkLeft,
 		Description:       r.Description,
-		CreatedAt:         time.Now(),
+		CreatedAt:         time.Now().UTC(),
 	}
 	return
 }

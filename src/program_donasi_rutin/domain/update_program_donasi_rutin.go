@@ -50,7 +50,7 @@ func EditProgramDonasiRutin(ctx context.Context, db *db.ConnectTo, data entity.P
 }
 
 func updateProgramDonasiRutin(ctx context.Context, repo interfaces.IProgramDonasiRutinRepository, data entity.ProgramDonasiRutinEntity, dataDetail entity.ProgramDonasiRutinDetailEntity, id string) (response entity.ProgramDonasiRutinEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {
@@ -105,7 +105,7 @@ func updateProgramDonasiRutin(ctx context.Context, repo interfaces.IProgramDonas
 }
 
 func PublishProgramDonasiRutin(ctx context.Context, repo interfaces.IProgramDonasiRutinRepository, id string) (response entity.ProgramDonasiRutinEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {
@@ -125,7 +125,7 @@ func PublishProgramDonasiRutin(ctx context.Context, repo interfaces.IProgramDona
 }
 
 func HideProgramDonasiRutin(ctx context.Context, repo interfaces.IProgramDonasiRutinRepository, id string) (response entity.ProgramDonasiRutinEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {
@@ -147,7 +147,7 @@ func HideProgramDonasiRutin(ctx context.Context, repo interfaces.IProgramDonasiR
 }
 
 func UpdateDonationCollect(ctx context.Context, repo interfaces.IProgramDonasiRutinRepository, id string, amount float64) (response entity.ProgramDonasiRutinEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {
@@ -163,7 +163,7 @@ func UpdateDonationCollect(ctx context.Context, repo interfaces.IProgramDonasiRu
 }
 
 func DeleteProgramDonasiRutin(ctx context.Context, repo interfaces.IProgramDonasiRutinRepository, id string) (response entity.ProgramDonasiRutinEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {

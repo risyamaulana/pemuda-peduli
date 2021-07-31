@@ -146,7 +146,7 @@ func (r CreateProgramDonasiRutin) ToEntity() (data entity.ProgramDonasiRutinEnti
 
 		IDPPCPMasterQris: &r.IDPPCPMasterQris,
 		QrisImageURL:     &r.QrisImageURL,
-		CreatedAt:        time.Now(),
+		CreatedAt:        time.Now().UTC(),
 	}
 
 	dataDetail = entity.ProgramDonasiRutinDetailEntity{

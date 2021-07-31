@@ -10,7 +10,7 @@ import (
 )
 
 func UpdateTujuanKami(ctx context.Context, repo interfaces.ITujuanKamiRepository, data entity.TujuanKamiEntity, id string) (response entity.TujuanKamiEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {
@@ -33,7 +33,7 @@ func UpdateTujuanKami(ctx context.Context, repo interfaces.ITujuanKamiRepository
 }
 
 func PublishTujuanKami(ctx context.Context, repo interfaces.ITujuanKamiRepository, id string) (response entity.TujuanKamiEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {
@@ -53,7 +53,7 @@ func PublishTujuanKami(ctx context.Context, repo interfaces.ITujuanKamiRepositor
 }
 
 func HideTujuanKami(ctx context.Context, repo interfaces.ITujuanKamiRepository, id string) (response entity.TujuanKamiEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {
@@ -75,7 +75,7 @@ func HideTujuanKami(ctx context.Context, repo interfaces.ITujuanKamiRepository, 
 }
 
 func DeleteTujuanKami(ctx context.Context, repo interfaces.ITujuanKamiRepository, id string) (response entity.TujuanKamiEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {

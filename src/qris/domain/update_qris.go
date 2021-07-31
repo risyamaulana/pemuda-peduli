@@ -10,7 +10,7 @@ import (
 )
 
 func UpdateQris(ctx context.Context, repo interfaces.IQrisRepository, data entity.QrisEntity, id string) (response entity.QrisEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {
@@ -32,7 +32,7 @@ func UpdateQris(ctx context.Context, repo interfaces.IQrisRepository, data entit
 }
 
 func DeleteQris(ctx context.Context, repo interfaces.IQrisRepository, id string) (response entity.QrisEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {

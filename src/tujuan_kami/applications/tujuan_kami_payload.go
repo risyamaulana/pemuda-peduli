@@ -99,7 +99,7 @@ func (r CreateTujuanKami) ToEntity() (data entity.TujuanKamiEntity) {
 		Title:       r.Title,
 		Description: r.Description,
 		Icon:        r.Icon,
-		CreatedAt:   time.Now(),
+		CreatedAt:   time.Now().UTC(),
 	}
 	return
 }

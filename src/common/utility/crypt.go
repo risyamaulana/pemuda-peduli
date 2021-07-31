@@ -20,7 +20,7 @@ func GeneratePass(salt, password string) string {
 func GenerateSalt(length int) string {
 	const charset = constants.SaltCharset
 
-	seededRand := rand.New(rand.NewSource(time.Now().UnixNano()))
+	seededRand := rand.New(rand.NewSource(time.Now().UTC().UnixNano()))
 
 	b := make([]byte, length)
 	for i := range b {

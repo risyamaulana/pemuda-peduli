@@ -9,7 +9,7 @@ import (
 )
 
 func UpdateTentangKami(ctx context.Context, repo interfaces.ITentangKamiRepository, data entity.TentangKamiEntity, id string) (response entity.TentangKamiEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {
@@ -32,7 +32,7 @@ func UpdateTentangKami(ctx context.Context, repo interfaces.ITentangKamiReposito
 }
 
 func DeleteTentangKami(ctx context.Context, repo interfaces.ITentangKamiRepository, id string) (response entity.TentangKamiEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {

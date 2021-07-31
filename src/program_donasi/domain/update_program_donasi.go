@@ -11,7 +11,7 @@ import (
 )
 
 func UpdateProgramDonasi(ctx context.Context, repo interfaces.IProgramDonasiRepository, data entity.ProgramDonasiEntity, dataDetail entity.ProgramDonasiDetailEntity, id string) (response entity.ProgramDonasiEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {
@@ -72,7 +72,7 @@ func UpdateProgramDonasi(ctx context.Context, repo interfaces.IProgramDonasiRepo
 }
 
 func PublishProgramDonasi(ctx context.Context, repo interfaces.IProgramDonasiRepository, id string) (response entity.ProgramDonasiEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {
@@ -92,7 +92,7 @@ func PublishProgramDonasi(ctx context.Context, repo interfaces.IProgramDonasiRep
 }
 
 func HideProgramDonasi(ctx context.Context, repo interfaces.IProgramDonasiRepository, id string) (response entity.ProgramDonasiEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {
@@ -114,7 +114,7 @@ func HideProgramDonasi(ctx context.Context, repo interfaces.IProgramDonasiReposi
 }
 
 func UpdateDonationCollect(ctx context.Context, repo interfaces.IProgramDonasiRepository, id string, amount float64) (response entity.ProgramDonasiEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {
@@ -130,7 +130,7 @@ func UpdateDonationCollect(ctx context.Context, repo interfaces.IProgramDonasiRe
 }
 
 func DeleteProgramDonasi(ctx context.Context, repo interfaces.IProgramDonasiRepository, id string) (response entity.ProgramDonasiEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {

@@ -99,7 +99,7 @@ func (r CreateHubungiKami) ToEntity() (data entity.HubungiKamiEntity) {
 		Icon:      r.Icon,
 		Link:      r.Link,
 		Title:     r.Title,
-		CreatedAt: time.Now(),
+		CreatedAt: time.Now().UTC(),
 	}
 	return
 }

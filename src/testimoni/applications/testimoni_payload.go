@@ -103,7 +103,7 @@ func (r CreateTestimoni) ToEntity() (data entity.TestimoniEntity) {
 		Role:              r.Role,
 		ThumbnailPhotoURL: r.ThumbnailPhotoURL,
 		Message:           r.Message,
-		CreatedAt:         time.Now(),
+		CreatedAt:         time.Now().UTC(),
 	}
 	return
 }

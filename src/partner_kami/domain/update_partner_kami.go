@@ -10,7 +10,7 @@ import (
 )
 
 func UpdatePartnerKami(ctx context.Context, repo interfaces.IPartnerKamiRepository, data entity.PartnerKamiEntity, id string) (response entity.PartnerKamiEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {
@@ -32,7 +32,7 @@ func UpdatePartnerKami(ctx context.Context, repo interfaces.IPartnerKamiReposito
 }
 
 func PublishPartnerKami(ctx context.Context, repo interfaces.IPartnerKamiRepository, id string) (response entity.PartnerKamiEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {
@@ -52,7 +52,7 @@ func PublishPartnerKami(ctx context.Context, repo interfaces.IPartnerKamiReposit
 }
 
 func HidePartnerKami(ctx context.Context, repo interfaces.IPartnerKamiRepository, id string) (response entity.PartnerKamiEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {
@@ -74,7 +74,7 @@ func HidePartnerKami(ctx context.Context, repo interfaces.IPartnerKamiRepository
 }
 
 func DeletePartnerKami(ctx context.Context, repo interfaces.IPartnerKamiRepository, id string) (response entity.PartnerKamiEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {

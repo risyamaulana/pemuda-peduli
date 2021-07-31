@@ -10,7 +10,7 @@ import (
 )
 
 func UpdateBanner(ctx context.Context, repo interfaces.IBannerRepository, data entity.BannerEntity, id string) (response entity.BannerEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {
@@ -39,7 +39,7 @@ func UpdateBanner(ctx context.Context, repo interfaces.IBannerRepository, data e
 }
 
 func PublishBanner(ctx context.Context, repo interfaces.IBannerRepository, id string) (response entity.BannerEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {
@@ -59,7 +59,7 @@ func PublishBanner(ctx context.Context, repo interfaces.IBannerRepository, id st
 }
 
 func HideBanner(ctx context.Context, repo interfaces.IBannerRepository, id string) (response entity.BannerEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {
@@ -81,7 +81,7 @@ func HideBanner(ctx context.Context, repo interfaces.IBannerRepository, id strin
 }
 
 func DeleteBanner(ctx context.Context, repo interfaces.IBannerRepository, id string) (response entity.BannerEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {

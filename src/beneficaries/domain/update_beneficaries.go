@@ -10,7 +10,7 @@ import (
 )
 
 func UpdateBeneficaries(ctx context.Context, repo interfaces.IBeneficariesRepository, data entity.BeneficariesEntity, id string) (response entity.BeneficariesEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {
@@ -35,7 +35,7 @@ func UpdateBeneficaries(ctx context.Context, repo interfaces.IBeneficariesReposi
 }
 
 func PublishBeneficaries(ctx context.Context, repo interfaces.IBeneficariesRepository, id string) (response entity.BeneficariesEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {
@@ -55,7 +55,7 @@ func PublishBeneficaries(ctx context.Context, repo interfaces.IBeneficariesRepos
 }
 
 func HideBeneficaries(ctx context.Context, repo interfaces.IBeneficariesRepository, id string) (response entity.BeneficariesEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {
@@ -77,7 +77,7 @@ func HideBeneficaries(ctx context.Context, repo interfaces.IBeneficariesReposito
 }
 
 func DeleteBeneficaries(ctx context.Context, repo interfaces.IBeneficariesRepository, id string) (response entity.BeneficariesEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {

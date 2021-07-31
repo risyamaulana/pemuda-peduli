@@ -10,7 +10,7 @@ import (
 )
 
 func UpdateTeam(ctx context.Context, repo interfaces.ITeamRepository, data entity.TeamEntity, id string) (response entity.TeamEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {
@@ -37,7 +37,7 @@ func UpdateTeam(ctx context.Context, repo interfaces.ITeamRepository, data entit
 }
 
 func PublishTeam(ctx context.Context, repo interfaces.ITeamRepository, id string) (response entity.TeamEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {
@@ -57,7 +57,7 @@ func PublishTeam(ctx context.Context, repo interfaces.ITeamRepository, id string
 }
 
 func HideTeam(ctx context.Context, repo interfaces.ITeamRepository, id string) (response entity.TeamEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {
@@ -79,7 +79,7 @@ func HideTeam(ctx context.Context, repo interfaces.ITeamRepository, id string) (
 }
 
 func DeleteTeam(ctx context.Context, repo interfaces.ITeamRepository, id string) (response entity.TeamEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {

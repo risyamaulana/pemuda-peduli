@@ -95,7 +95,7 @@ func (r CreateTentangKami) ToEntity() (data entity.TentangKamiEntity) {
 		ThumbnailImageURL: r.ThumbnailImageURL,
 		Description:       r.Description,
 
-		CreatedAt: time.Now(),
+		CreatedAt: time.Now().UTC(),
 	}
 	return
 }

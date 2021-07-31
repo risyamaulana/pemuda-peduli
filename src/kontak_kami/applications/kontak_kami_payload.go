@@ -96,7 +96,7 @@ func (r CreateKontakKami) ToEntity() (data entity.KontakKamiEntity) {
 		SKLegalitas: r.SKLegalitas,
 		Address:     r.Address,
 
-		CreatedAt: time.Now(),
+		CreatedAt: time.Now().UTC(),
 	}
 	return
 }

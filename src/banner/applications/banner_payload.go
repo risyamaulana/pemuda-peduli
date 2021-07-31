@@ -123,7 +123,7 @@ func (r CreateBanner) ToEntity() (data entity.BannerEntity) {
 		TitleButtonLeft:   r.TitleButtonLeft,
 		DeeplinkLeft:      r.DeeplinkLeft,
 		Description:       r.Description,
-		CreatedAt:         time.Now(),
+		CreatedAt:         time.Now().UTC(),
 	}
 	return
 }

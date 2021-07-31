@@ -58,7 +58,7 @@ func (r TokenPayload) ToEntity() (data entity.TokenEntity) {
 		Name:       r.Name,
 		DeviceID:   r.DeviceID,
 		DeviceType: r.DeviceType,
-		CreatedAt:  time.Now(),
+		CreatedAt:  time.Now().UTC(),
 	}
 	return
 }

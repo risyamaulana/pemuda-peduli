@@ -10,7 +10,7 @@ import (
 )
 
 func UpdateMenuExtras(ctx context.Context, repo interfaces.IMenuExtrasRepository, data entity.MenuExtrasEntity, id string) (response entity.MenuExtrasEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {
@@ -32,7 +32,7 @@ func UpdateMenuExtras(ctx context.Context, repo interfaces.IMenuExtrasRepository
 }
 
 func PublishMenuExtras(ctx context.Context, repo interfaces.IMenuExtrasRepository, id string) (response entity.MenuExtrasEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {
@@ -52,7 +52,7 @@ func PublishMenuExtras(ctx context.Context, repo interfaces.IMenuExtrasRepositor
 }
 
 func HideMenuExtras(ctx context.Context, repo interfaces.IMenuExtrasRepository, id string) (response entity.MenuExtrasEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {
@@ -74,7 +74,7 @@ func HideMenuExtras(ctx context.Context, repo interfaces.IMenuExtrasRepository, 
 }
 
 func DeleteMenuExtras(ctx context.Context, repo interfaces.IMenuExtrasRepository, id string) (response entity.MenuExtrasEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {

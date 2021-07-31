@@ -95,7 +95,7 @@ func (r CreatePartnerKami) ToEntity() (data entity.PartnerKamiEntity) {
 	data = entity.PartnerKamiEntity{
 		Name:              r.Name,
 		ThumbnailImageURL: r.ThumbnailImageURL,
-		CreatedAt:         time.Now(),
+		CreatedAt:         time.Now().UTC(),
 	}
 	return
 }

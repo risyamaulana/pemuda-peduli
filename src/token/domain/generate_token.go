@@ -18,7 +18,7 @@ func GenerateToken(ctx context.Context, data *entity.TokenEntity) (err error) {
 
 	// Set claims
 	// This is the information which frontend can use
-	expiredToken := time.Now().Add(time.Hour * 1)
+	expiredToken := time.Now().UTC().Add(time.Hour * 1)
 	// The backend can also decode the token and get admin etc.
 	claims := token.Claims.(jwt.MapClaims)
 	claims["name"] = data.Name
@@ -28,7 +28,7 @@ func GenerateToken(ctx context.Context, data *entity.TokenEntity) (err error) {
 	claims["exp"] = expiredToken.Unix()
 
 	// Generate encoded token and send it as response.
-	expiredRefreshToken := time.Now().Add(time.Hour * 24)
+	expiredRefreshToken := time.Now().UTC().Add(time.Hour * 24)
 	// The signing string should be secret (a generated UUID works too)
 	t, err := token.SignedString([]byte(ctx.Value("TOKEN_SECRET_KEY").(string)))
 	if err != nil {
@@ -75,7 +75,7 @@ func RefreshToken(ctx context.Context, refreshToken string) (response entity.Tok
 				data.Name = claims["name"].(string)
 				data.DeviceID = claims["device_id"].(string)
 				data.DeviceType = claims["device_type"].(string)
-				data.CreatedAt = time.Now()
+				data.CreatedAt = time.Now().UTC()
 
 				if err = GenerateToken(ctx, &data); err != nil {
 					return

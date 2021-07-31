@@ -99,7 +99,7 @@ func (r CreateAchievement) ToEntity() (data entity.AchievementEntity) {
 		AchievementName:  r.AchievementName,
 		AchievementTotal: r.AchievementTotal,
 		Description:      r.Description,
-		CreatedAt:        time.Now(),
+		CreatedAt:        time.Now().UTC(),
 	}
 	return
 }

@@ -10,7 +10,7 @@ import (
 )
 
 func UpdateAlbum(ctx context.Context, repo interfaces.IAlbumRepository, data entity.AlbumEntity, id string) (response entity.AlbumEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {
@@ -34,7 +34,7 @@ func UpdateAlbum(ctx context.Context, repo interfaces.IAlbumRepository, data ent
 }
 
 func PublishAlbum(ctx context.Context, repo interfaces.IAlbumRepository, id string) (response entity.AlbumEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {
@@ -54,7 +54,7 @@ func PublishAlbum(ctx context.Context, repo interfaces.IAlbumRepository, id stri
 }
 
 func HideAlbum(ctx context.Context, repo interfaces.IAlbumRepository, id string) (response entity.AlbumEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {
@@ -76,7 +76,7 @@ func HideAlbum(ctx context.Context, repo interfaces.IAlbumRepository, id string)
 }
 
 func DeleteAlbum(ctx context.Context, repo interfaces.IAlbumRepository, id string) (response entity.AlbumEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {

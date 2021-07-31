@@ -95,7 +95,7 @@ func (r CreateMenuExtras) ToEntity() (data entity.MenuExtrasEntity) {
 	data = entity.MenuExtrasEntity{
 		Title:     r.Title,
 		Link:      r.Link,
-		CreatedAt: time.Now(),
+		CreatedAt: time.Now().UTC(),
 	}
 	return
 }

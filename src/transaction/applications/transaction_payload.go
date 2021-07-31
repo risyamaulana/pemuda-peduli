@@ -122,7 +122,7 @@ func (r CreateTransaction) ToEntity() (data entity.TransactionEntity) {
 		Amount:                   r.Amount,
 		PaymentMethod:            r.PaymentMethod,
 		Status:                   constants.StatusUnpaid,
-		CreatedAt:                time.Now(),
+		CreatedAt:                time.Now().UTC(),
 	}
 	return
 }

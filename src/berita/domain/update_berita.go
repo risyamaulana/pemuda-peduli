@@ -11,7 +11,7 @@ import (
 )
 
 func UpdateBerita(ctx context.Context, repo interfaces.IBeritaRepository, data entity.BeritaEntity, dataDetail entity.BeritaDetailEntity, id string) (response entity.BeritaEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := GetBerita(ctx, repo, id)
 	if err != nil {
@@ -59,7 +59,7 @@ func UpdateBerita(ctx context.Context, repo interfaces.IBeritaRepository, data e
 }
 
 func PublishBerita(ctx context.Context, repo interfaces.IBeritaRepository, id string) (response entity.BeritaEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {
@@ -79,7 +79,7 @@ func PublishBerita(ctx context.Context, repo interfaces.IBeritaRepository, id st
 }
 
 func HideBerita(ctx context.Context, repo interfaces.IBeritaRepository, id string) (response entity.BeritaEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {
@@ -101,7 +101,7 @@ func HideBerita(ctx context.Context, repo interfaces.IBeritaRepository, id strin
 }
 
 func DeleteBerita(ctx context.Context, repo interfaces.IBeritaRepository, id string) (response entity.BeritaEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {

@@ -10,7 +10,7 @@ import (
 )
 
 func UpdateAchievement(ctx context.Context, repo interfaces.IAchievementRepository, data entity.AchievementEntity, id string) (response entity.AchievementEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {
@@ -33,7 +33,7 @@ func UpdateAchievement(ctx context.Context, repo interfaces.IAchievementReposito
 }
 
 func PublishAchievement(ctx context.Context, repo interfaces.IAchievementRepository, id string) (response entity.AchievementEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {
@@ -53,7 +53,7 @@ func PublishAchievement(ctx context.Context, repo interfaces.IAchievementReposit
 }
 
 func HideAchievement(ctx context.Context, repo interfaces.IAchievementRepository, id string) (response entity.AchievementEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {
@@ -75,7 +75,7 @@ func HideAchievement(ctx context.Context, repo interfaces.IAchievementRepository
 }
 
 func DeleteAchievement(ctx context.Context, repo interfaces.IAchievementRepository, id string) (response entity.AchievementEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {

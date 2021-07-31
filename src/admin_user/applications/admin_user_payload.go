@@ -211,7 +211,7 @@ func (r CreateAdminUser) ToEntity() (data entity.AdminUserEntity) {
 		NamaLengkap: r.NamaLengkap,
 		Alamat:      r.Alamat,
 		Role:        r.Role,
-		CreatedAt:   time.Now(),
+		CreatedAt:   time.Now().UTC(),
 	}
 	return
 }

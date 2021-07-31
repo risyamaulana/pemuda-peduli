@@ -10,7 +10,7 @@ import (
 )
 
 func UpdateHubungiKami(ctx context.Context, repo interfaces.IHubungiKamiRepository, data entity.HubungiKamiEntity, id string) (response entity.HubungiKamiEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {
@@ -33,7 +33,7 @@ func UpdateHubungiKami(ctx context.Context, repo interfaces.IHubungiKamiReposito
 }
 
 func PublishHubungiKami(ctx context.Context, repo interfaces.IHubungiKamiRepository, id string) (response entity.HubungiKamiEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {
@@ -53,7 +53,7 @@ func PublishHubungiKami(ctx context.Context, repo interfaces.IHubungiKamiReposit
 }
 
 func HideHubungiKami(ctx context.Context, repo interfaces.IHubungiKamiRepository, id string) (response entity.HubungiKamiEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {
@@ -75,7 +75,7 @@ func HideHubungiKami(ctx context.Context, repo interfaces.IHubungiKamiRepository
 }
 
 func DeleteHubungiKami(ctx context.Context, repo interfaces.IHubungiKamiRepository, id string) (response entity.HubungiKamiEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {

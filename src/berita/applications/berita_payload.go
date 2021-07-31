@@ -115,7 +115,7 @@ func (r CreateBerita) ToEntity() (data entity.BeritaEntity, dataDetail entity.Be
 		Tag:               r.Tag,
 		ThumbnailImageURL: r.ThumbnailImageURL,
 		Description:       r.Description,
-		CreatedAt:         time.Now(),
+		CreatedAt:         time.Now().UTC(),
 	}
 
 	dataDetail = entity.BeritaDetailEntity{

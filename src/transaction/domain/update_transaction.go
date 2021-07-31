@@ -23,7 +23,7 @@ import (
 )
 
 func UploadPaymentReceipt(ctx context.Context, db *db.ConnectTo, transactionID string, imagePaymentURL string) (response entity.TransactionEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Repo
 	repo := repository.NewTransactionRepository(db)
 
@@ -49,7 +49,7 @@ func UploadPaymentReceipt(ctx context.Context, db *db.ConnectTo, transactionID s
 }
 
 func AppliedPayment(ctx context.Context, db *db.ConnectTo, transactionID string) (response entity.TransactionEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Repo
 	repo := repository.NewTransactionRepository(db)
 	donasiRepo := donasiRep.NewProgramDonasiRepository(db)
@@ -96,7 +96,7 @@ func AppliedPayment(ctx context.Context, db *db.ConnectTo, transactionID string)
 }
 
 func DeclinePayment(ctx context.Context, db *db.ConnectTo, transactionID string) (response entity.TransactionEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Repo
 	repo := repository.NewTransactionRepository(db)
 
@@ -123,7 +123,7 @@ func DeclinePayment(ctx context.Context, db *db.ConnectTo, transactionID string)
 }
 
 func CancelPayment(ctx context.Context, db *db.ConnectTo, transactionID string) (response entity.TransactionEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Repo
 	repo := repository.NewTransactionRepository(db)
 

@@ -10,7 +10,7 @@ import (
 )
 
 func UpdateTestimoni(ctx context.Context, repo interfaces.ITestimoniRepository, data entity.TestimoniEntity, id string) (response entity.TestimoniEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {
@@ -34,7 +34,7 @@ func UpdateTestimoni(ctx context.Context, repo interfaces.ITestimoniRepository, 
 }
 
 func PublishTestimoni(ctx context.Context, repo interfaces.ITestimoniRepository, id string) (response entity.TestimoniEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {
@@ -54,7 +54,7 @@ func PublishTestimoni(ctx context.Context, repo interfaces.ITestimoniRepository,
 }
 
 func HideTestimoni(ctx context.Context, repo interfaces.ITestimoniRepository, id string) (response entity.TestimoniEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {
@@ -76,7 +76,7 @@ func HideTestimoni(ctx context.Context, repo interfaces.ITestimoniRepository, id
 }
 
 func DeleteTestimoni(ctx context.Context, repo interfaces.ITestimoniRepository, id string) (response entity.TestimoniEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {

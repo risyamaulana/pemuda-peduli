@@ -11,7 +11,7 @@ import (
 )
 
 func UpdateProgramKami(ctx context.Context, repo interfaces.IProgramKamiRepository, data entity.ProgramKamiEntity, dataDetail entity.ProgramKamiDetailEntity, id string) (response entity.ProgramKamiEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := GetProgramKami(ctx, repo, id)
 	if err != nil {
@@ -61,7 +61,7 @@ func UpdateProgramKami(ctx context.Context, repo interfaces.IProgramKamiReposito
 }
 
 func PublishProgramKami(ctx context.Context, repo interfaces.IProgramKamiRepository, id string) (response entity.ProgramKamiEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {
@@ -81,7 +81,7 @@ func PublishProgramKami(ctx context.Context, repo interfaces.IProgramKamiReposit
 }
 
 func HideProgramKami(ctx context.Context, repo interfaces.IProgramKamiRepository, id string) (response entity.ProgramKamiEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {
@@ -103,7 +103,7 @@ func HideProgramKami(ctx context.Context, repo interfaces.IProgramKamiRepository
 }
 
 func DeleteProgramKami(ctx context.Context, repo interfaces.IProgramKamiRepository, id string) (response entity.ProgramKamiEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {

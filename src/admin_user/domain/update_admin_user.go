@@ -14,7 +14,7 @@ import (
 )
 
 func UpdateAdminUser(ctx context.Context, repo interfaces.IAdminUserRepository, data entity.AdminUserEntity, id string) (response entity.AdminUserEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available data
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {
@@ -39,7 +39,7 @@ func UpdateAdminUser(ctx context.Context, repo interfaces.IAdminUserRepository, 
 }
 
 func UpdatePassword(ctx context.Context, repo interfaces.IAdminUserRepository, data entity.AdminUserEntity, id string) (err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {
@@ -62,7 +62,7 @@ func UpdatePassword(ctx context.Context, repo interfaces.IAdminUserRepository, d
 }
 
 func ResetPassword(ctx context.Context, db *db.ConnectTo, id string) (newPassword string, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 
 	repo := repository.NewAdminUserRepository(db)
 	// Check available data
@@ -108,7 +108,7 @@ func ResetPassword(ctx context.Context, db *db.ConnectTo, id string) (newPasswor
 //TODO: Change role
 
 func ChangeRole(ctx context.Context, db *db.ConnectTo, id string, role string) (response entity.AdminUserEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	repo := repository.NewAdminUserRepository(db)
 	checkData, err := repo.Get(ctx, id)
@@ -147,7 +147,7 @@ func ChangeRole(ctx context.Context, db *db.ConnectTo, id string, role string) (
 }
 
 func DeleteAdminUser(ctx context.Context, repo interfaces.IAdminUserRepository, id string) (response entity.AdminUserEntity, err error) {
-	currentDate := time.Now()
+	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {

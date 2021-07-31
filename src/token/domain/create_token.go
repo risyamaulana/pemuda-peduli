@@ -8,7 +8,7 @@ import (
 )
 
 func CreateOrUpdateToken(ctx context.Context, repo interfaces.ITokenRepository, data *entity.TokenEntity) (err error) {
-	currentTime := time.Now()
+	currentTime := time.Now().UTC()
 
 	// Check Available device data
 	checkData, err := repo.CheckDevice(data.DeviceID, data.DeviceType)

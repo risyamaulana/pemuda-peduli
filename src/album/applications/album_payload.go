@@ -103,7 +103,7 @@ func (r CreateAlbum) ToEntity() (data entity.AlbumEntity) {
 		SubTitle:          r.SubTitle,
 		Tag:               r.Tag,
 		ThumbnailImageURL: r.ThumbnailImageURL,
-		CreatedAt:         time.Now(),
+		CreatedAt:         time.Now().UTC(),
 	}
 	return
 }

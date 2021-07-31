@@ -115,7 +115,7 @@ func (r CreateProgramKami) ToEntity() (data entity.ProgramKamiEntity, dataDetail
 		Tag:               r.Tag,
 		ThumbnailImageURL: r.ThumbnailImageURL,
 		Description:       r.Description,
-		CreatedAt:         time.Now(),
+		CreatedAt:         time.Now().UTC(),
 	}
 	dataDetail = entity.ProgramKamiDetailEntity{
 		Content: r.Content,
