@@ -14,8 +14,8 @@ import (
 
 type CreateTransaction struct {
 	IsRutin                  bool    `json:"is_rutin"`
-	IDPPCPProgramDonasi      *string `json:"id_pp_cp_program_donasi"`
-	IDPPCPProgramDonasiRutin *string `json:"id_pp_cp_program_donasi_rutin"`
+	IDPPCPProgramDonasi      string  `json:"id_pp_cp_program_donasi"`
+	IDPPCPProgramDonasiRutin string  `json:"id_pp_cp_program_donasi_rutin"`
 	Amount                   float64 `json:"amount" valid:"required"`
 	PaymentMethod            string  `json:"payment_method" valid:"required"`
 }
