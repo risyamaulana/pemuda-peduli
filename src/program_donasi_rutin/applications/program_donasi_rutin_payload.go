@@ -215,7 +215,7 @@ func ToPayload(data entity.ProgramDonasiRutinEntity) (response ReadProgramDonasi
 		Benefit:                     data.Detail.Benefit,
 		Tag:                         data.Tag,
 		ThumbnailImageURL:           data.ThumbnailImageURL,
-		IDPPCPMasterQris:            data.QrisImageURL,
+		IDPPCPMasterQris:            data.IDPPCPMasterQris,
 		QrisImageURL:                data.QrisImageURL,
 		Description:                 data.Description,
 		Status:                      data.Status,

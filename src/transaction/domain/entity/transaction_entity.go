@@ -5,6 +5,7 @@ import "time"
 type TransactionEntity struct {
 	ID                       int64      `db:"id"`
 	IDPPTransaction          string     `db:"id_pp_transaction"`
+	UserID                   string     `db:"user_id"`
 	Username                 string     `db:"username"`
 	Email                    string     `db:"email"`
 	NamaLengkap              string     `db:"nama_lengkap"`
@@ -24,17 +25,19 @@ type TransactionEntity struct {
 	CreatedBy                *string    `db:"created_by"`
 }
 
-type ProgramDonasiQueryEntity struct {
+type TransactionQueryEntity struct {
 	Limit         string `db:"limit"`
 	Offset        string `db:"offset"`
-	Filter        []ProgramDonasiFilterQueryEntity
+	Filter        []TransactionFilterQueryEntity
 	Order         string `db:"order"`
 	Sort          string `db:"sort"`
 	CreatedAtFrom string `db:"created_at_from"`
 	CreatedAtTo   string `db:"created_at_to"`
+	PaidAtFrom    string `db:"paid_at_from"`
+	PaidAtTo      string `db:"paid_at_to"`
 }
 
-type ProgramDonasiFilterQueryEntity struct {
+type TransactionFilterQueryEntity struct {
 	Field   string
 	Keyword string
 }
