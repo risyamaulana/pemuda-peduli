@@ -113,6 +113,22 @@ func HideProgramDonasi(ctx context.Context, repo interfaces.IProgramDonasiReposi
 	return
 }
 
+func UpdateDonationCollect(ctx context.Context, repo interfaces.IProgramDonasiRepository, id string, amount float64) (response entity.ProgramDonasiEntity, err error) {
+	currentDate := time.Now()
+	// Check available daata
+	checkData, err := repo.Get(ctx, id)
+	if err != nil {
+		err = errors.New("Data not found")
+		return
+	}
+
+	checkData.DonationCollect = checkData.DonationCollect + amount
+	checkData.UpdatedAt = &currentDate
+
+	response, err = repo.Update(ctx, checkData, id)
+	return
+}
+
 func DeleteProgramDonasi(ctx context.Context, repo interfaces.IProgramDonasiRepository, id string) (response entity.ProgramDonasiEntity, err error) {
 	currentDate := time.Now()
 	// Check available daata

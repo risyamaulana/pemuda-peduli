@@ -75,6 +75,7 @@ type ReadProgramDonasiRutin struct {
 	ValidFrom                   *time.Time `json:"valid_from"`
 	ValidTo                     *time.Time `json:"valid_to"`
 	Target                      *float64   `json:"target"`
+	DonationCollect             float64    `json:"donation_collect"`
 	Description                 string     `json:"description"`
 	Status                      string     `json:"status"`
 	CreatedAt                   time.Time  `json:"created_at"`
@@ -216,6 +217,7 @@ func ToPayload(data entity.ProgramDonasiRutinEntity) (response ReadProgramDonasi
 		Tag:                         data.Tag,
 		ThumbnailImageURL:           data.ThumbnailImageURL,
 		IDPPCPMasterQris:            data.IDPPCPMasterQris,
+		DonationCollect:             data.DonationCollect,
 		QrisImageURL:                data.QrisImageURL,
 		Description:                 data.Description,
 		Status:                      data.Status,

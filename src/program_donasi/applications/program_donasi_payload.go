@@ -69,6 +69,7 @@ type ReadProgramDonasi struct {
 	ValidFrom           *time.Time `json:"valid_from"`
 	ValidTo             *time.Time `json:"valid_to"`
 	Target              *float64   `json:"target"`
+	DonationCollect     float64    `json:"donation_collect"`
 	Description         string     `json:"description"`
 	Status              string     `json:"status"`
 	CreatedAt           time.Time  `json:"created_at"`
@@ -230,6 +231,7 @@ func ToPayload(data entity.ProgramDonasiEntity) (response ReadProgramDonasi) {
 		ValidFrom:           data.ValidFrom,
 		ValidTo:             data.ValidTo,
 		Target:              data.Target,
+		DonationCollect:     data.DonationCollect,
 		KitaBisaLink:        data.KitaBisaLink,
 		AyoBantuLink:        data.AyoBantuLink,
 		IDPPCPMasterQris:    data.IDPPCPMasterQris,

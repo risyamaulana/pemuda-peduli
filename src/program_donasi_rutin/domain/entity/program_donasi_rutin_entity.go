@@ -11,6 +11,7 @@ type ProgramDonasiRutinEntity struct {
 	SubTitle                    string     `db:"sub_title"`
 	Tag                         string     `db:"tag"`
 	ThumbnailImageURL           string     `db:"thumbnail_image_url"`
+	DonationCollect             float64    `db:"donation_collect"`
 	Description                 string     `db:"description"`
 	Status                      string     `db:"status"`
 	CreatedAt                   time.Time  `db:"created_at"`

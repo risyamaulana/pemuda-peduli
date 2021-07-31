@@ -78,7 +78,7 @@ func (c *TransactionRepository) Update(ctx context.Context, data entity.Transact
 	log.Print("QUERY : ", sql)
 	_, err = tx.NamedExec(sql, data)
 	if err != nil {
-		log.Println("Error insert pp_transaction:", err)
+		log.Println("Error update pp_transaction:", err)
 		tx.Rollback()
 		return
 	}
@@ -190,7 +190,7 @@ func (c *TransactionRepository) FindMyTransaction(ctx context.Context, data *ent
 		sql += "AND (" + queryCondition + ") "
 	}
 
-	// ctx.UserValue("user_id").(string)
+	sql += "AND user_id = '" + ctx.Value("user_id").(string) + "' "
 
 	// Created at
 	if data.CreatedAtFrom != "" {

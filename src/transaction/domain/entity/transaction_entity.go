@@ -16,13 +16,14 @@ type TransactionEntity struct {
 	DonasiTitle              string     `db:"donasi_title"`
 	Amount                   float64    `db:"amount"`
 	PaymentMethod            string     `db:"payment_method"` // enum : qris & transfer manual
+	QRPaymentURL             *string    `db:"qr_payment_url"`
 	ImagePaymentURL          string     `db:"image_payment_url"`
 	PaidAt                   *time.Time `db:"paid_at"`
 	ApprovedAt               *time.Time `db:"approved_at"`
 	ApprovedBy               string     `db:"approved_by"`
-	Status                   string     `db:"status"` // Unpaid, Paid, Need Approval
+	Status                   string     `db:"status"` // Unpaid, Paid, Need Approval, Decline
 	CreatedAt                time.Time  `db:"created_at"`
-	CreatedBy                *string    `db:"created_by"`
+	UpdatedAt                *time.Time `db:"updated_at"`
 }
 
 type TransactionQueryEntity struct {

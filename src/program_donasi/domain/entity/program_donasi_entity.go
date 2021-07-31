@@ -15,6 +15,7 @@ type ProgramDonasiEntity struct {
 	ValidFrom           *time.Time `db:"valid_from"`
 	ValidTo             *time.Time `db:"valid_to"`
 	Target              *float64   `db:"target"`
+	DonationCollect     float64    `db:"donation_collect"`
 	CreatedAt           time.Time  `db:"created_at"`
 	CreatedBy           *string    `db:"created_by"`
 	UpdatedAt           *time.Time `db:"updated_at"`
