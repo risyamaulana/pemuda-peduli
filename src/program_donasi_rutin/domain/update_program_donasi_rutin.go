@@ -70,6 +70,9 @@ func updateProgramDonasiRutin(ctx context.Context, repo interfaces.IProgramDonas
 	checkData.IDPPCPProgramDonasiKategori = data.IDPPCPProgramDonasiKategori
 	checkData.KategoriName = data.KategoriName
 
+	checkData.IDPPCPMasterQris = data.IDPPCPMasterQris
+	checkData.QrisImageURL = data.QrisImageURL
+
 	checkData.UpdatedAt = &currentDate
 	checkData.IsDeleted = false
 	checkData.IsShow = data.IsShow
