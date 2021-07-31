@@ -232,6 +232,8 @@ func ToPayload(data entity.ProgramDonasiEntity) (response ReadProgramDonasi) {
 		Target:              data.Target,
 		KitaBisaLink:        data.KitaBisaLink,
 		AyoBantuLink:        data.AyoBantuLink,
+		IDPPCPMasterQris:    data.IDPPCPMasterQris,
+		QrisImageURL:        data.QrisImageURL,
 		Description:         data.Description,
 		Status:              data.Status,
 		CreatedAt:           data.CreatedAt,
