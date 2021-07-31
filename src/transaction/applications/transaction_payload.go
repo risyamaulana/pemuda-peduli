@@ -33,6 +33,8 @@ type TransactionQuery struct {
 	Sort          string                   `json:"sort"`
 	CreatedAtFrom string                   `json:"created_at_from"`
 	CreatedAtTo   string                   `json:"created_at_to"`
+	PaidAtFrom    string                   `json:"paid_at_from"`
+	PaidAtTo      string                   `json:"paid_at_to"`
 }
 
 type TransactionFilterQuery struct {
@@ -142,6 +144,8 @@ func (r TransactionQuery) ToEntity() (data entity.TransactionQueryEntity) {
 		Sort:          r.Sort,
 		CreatedAtFrom: r.CreatedAtFrom,
 		CreatedAtTo:   r.CreatedAtTo,
+		PaidAtFrom:    r.PaidAtFrom,
+		PaidAtTo:      r.PaidAtTo,
 	}
 	return
 }
