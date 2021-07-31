@@ -50,8 +50,8 @@ type ReadTransaction struct {
 	NamaLengkap              string     `json:"nama_lengkap"`
 	NamaPanggilan            string     `json:"nama_panggilan"`
 	IsRutin                  bool       `json:"is_rutin"`
-	IDPPCPProgramDonasi      *string    `json:"id_pp_cp_program_donasi"`
-	IDPPCPProgramDonasiRutin *string    `json:"id_pp_cp_program_donasi_rutin"`
+	IDPPCPProgramDonasi      string     `json:"id_pp_cp_program_donasi"`
+	IDPPCPProgramDonasiRutin string     `json:"id_pp_cp_program_donasi_rutin"`
 	DonasiTitle              string     `json:"donasi_title"`
 	Amount                   float64    `json:"amount"`
 	PaymentMethod            string     `json:"payment_method"` // enum : qris & transfer manual
@@ -116,11 +116,11 @@ func (r TransactionQuery) Validate() (err error) {
 func (r CreateTransaction) ToEntity() (data entity.TransactionEntity) {
 	data = entity.TransactionEntity{
 		IDPPTransaction:          utility.GetUUID(),
-		IsRutin:                  data.IsRutin,
-		IDPPCPProgramDonasi:      data.IDPPCPProgramDonasi,
-		IDPPCPProgramDonasiRutin: data.IDPPCPProgramDonasiRutin,
-		Amount:                   data.Amount,
-		PaymentMethod:            data.PaymentMethod,
+		IsRutin:                  r.IsRutin,
+		IDPPCPProgramDonasi:      r.IDPPCPProgramDonasi,
+		IDPPCPProgramDonasiRutin: r.IDPPCPProgramDonasiRutin,
+		Amount:                   r.Amount,
+		PaymentMethod:            r.PaymentMethod,
 		Status:                   constants.StatusUnpaid,
 		CreatedAt:                time.Now(),
 	}

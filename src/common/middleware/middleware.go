@@ -109,7 +109,7 @@ func CheckAdminToken(next fasthttp.RequestHandler) fasthttp.RequestHandler {
 			err := tokenDom.ValidateAdminLogin(ctx, string(token), DB)
 			if err != nil {
 				ctx.SetStatusCode(fasthttp.StatusUnauthorized)
-				fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
+				fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, errors.New("Failed, user is unauthorized"))))
 				return
 			}
 
@@ -118,7 +118,7 @@ func CheckAdminToken(next fasthttp.RequestHandler) fasthttp.RequestHandler {
 			dataUser, err := adminUserDom.GetAdminUser(ctx, DB, userID)
 			if err != nil {
 				ctx.SetStatusCode(fasthttp.StatusUnauthorized)
-				fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
+				fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, errors.New("Failed, user is unauthorized"))))
 				return
 			}
 
@@ -172,7 +172,7 @@ func CheckUserToken(next fasthttp.RequestHandler) fasthttp.RequestHandler {
 			err := tokenDom.ValidateUserLogin(ctx, string(token), DB)
 			if err != nil {
 				ctx.SetStatusCode(fasthttp.StatusUnauthorized)
-				fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
+				fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, errors.New("Failed, user is unauthorized"))))
 				return
 			}
 
@@ -182,7 +182,7 @@ func CheckUserToken(next fasthttp.RequestHandler) fasthttp.RequestHandler {
 			_, err = userDom.ReadUser(ctx, &repo, userID)
 			if err != nil {
 				ctx.SetStatusCode(fasthttp.StatusUnauthorized)
-				fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
+				fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, errors.New("Failed, user is unauthorized"))))
 				return
 			}
 		}

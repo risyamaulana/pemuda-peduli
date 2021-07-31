@@ -70,14 +70,14 @@ func AppliedPayment(ctx context.Context, db *db.ConnectTo, transactionID string)
 
 	// Collect cash
 	if data.IsRutin {
-		idDonasiRutin := *data.IDPPCPProgramDonasiRutin
+		idDonasiRutin := data.IDPPCPProgramDonasiRutin
 		_, errCollect := donasiRutinDom.UpdateDonationCollect(ctx, &donasiRutinRepo, idDonasiRutin, data.Amount)
 		if errCollect != nil {
 			err = errors.New("Failed Applied payment, donation id not found")
 			return
 		}
 	} else {
-		idDonasi := *data.IDPPCPProgramDonasi
+		idDonasi := data.IDPPCPProgramDonasi
 		_, errCollect := donasiDom.UpdateDonationCollect(ctx, &donasiRepo, idDonasi, data.Amount)
 		if errCollect != nil {
 			err = errors.New("Failed Applied payment, donation id not found")

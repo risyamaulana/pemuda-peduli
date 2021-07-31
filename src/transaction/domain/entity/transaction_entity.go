@@ -11,8 +11,8 @@ type TransactionEntity struct {
 	NamaLengkap              string     `db:"nama_lengkap"`
 	NamaPanggilan            string     `db:"nama_panggilan"`
 	IsRutin                  bool       `db:"is_rutin"`
-	IDPPCPProgramDonasi      *string    `db:"id_pp_cp_program_donasi"`
-	IDPPCPProgramDonasiRutin *string    `db:"id_pp_cp_program_donasi_rutin"`
+	IDPPCPProgramDonasi      string     `db:"id_pp_cp_program_donasi"`
+	IDPPCPProgramDonasiRutin string     `db:"id_pp_cp_program_donasi_rutin"`
 	DonasiTitle              string     `db:"donasi_title"`
 	Amount                   float64    `db:"amount"`
 	PaymentMethod            string     `db:"payment_method"` // enum : qris & transfer manual

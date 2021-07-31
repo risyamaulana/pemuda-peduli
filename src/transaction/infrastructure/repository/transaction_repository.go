@@ -5,7 +5,6 @@ import (
 	"log"
 	"pemuda-peduli/src/common/infrastructure/db"
 	"pemuda-peduli/src/common/utility"
-	"pemuda-peduli/src/qris/common/constants"
 	"pemuda-peduli/src/transaction/domain/entity"
 	"pemuda-peduli/src/transaction/domain/interfaces"
 	"strconv"
@@ -30,9 +29,6 @@ func (c *TransactionRepository) Insert(ctx context.Context, data *entity.Transac
 
 	// Generate UUID
 	data.IDPPTransaction = utility.GetUUID()
-
-	// Set status created
-	data.Status = constants.StatusCreated
 
 	sql := `INSERT INTO pp_transaction `
 	var strField strings.Builder

@@ -3,6 +3,7 @@ package domain
 import (
 	"context"
 	"errors"
+	"log"
 	"pemuda-peduli/src/common/infrastructure/db"
 
 	"pemuda-peduli/src/transaction/common/constants"
@@ -43,7 +44,7 @@ func CreateTransaction(ctx context.Context, db *db.ConnectTo, data *entity.Trans
 	// Check Data Donasi
 	if data.IsRutin {
 		// Check data donasi rutin
-		donasiRutinData, errDonasiRutin := donasiRutinDom.GetProgramDonasiRutin(ctx, &donasiRutinRepo, *data.IDPPCPProgramDonasiRutin)
+		donasiRutinData, errDonasiRutin := donasiRutinDom.GetProgramDonasiRutin(ctx, &donasiRutinRepo, data.IDPPCPProgramDonasiRutin)
 		if errDonasiRutin != nil {
 			err = errors.New("Failed, donasi not found")
 			return
@@ -60,7 +61,8 @@ func CreateTransaction(ctx context.Context, db *db.ConnectTo, data *entity.Trans
 		}
 	} else {
 		// Check data donasi one time
-		donasiData, errDonasi := donasiDom.GetProgramDonasi(ctx, &donasiRepo, *data.IDPPCPProgramDonasi)
+		log.Println("ID : ", data.IDPPCPProgramDonasi)
+		donasiData, errDonasi := donasiDom.GetProgramDonasi(ctx, &donasiRepo, data.IDPPCPProgramDonasi)
 		if errDonasi != nil {
 			err = errors.New("Failed, donasi not found")
 			return
