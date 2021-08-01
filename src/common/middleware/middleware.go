@@ -172,7 +172,7 @@ func CheckUserToken(next fasthttp.RequestHandler) fasthttp.RequestHandler {
 			err := tokenDom.ValidateUserLogin(ctx, string(token), DB)
 			if err != nil {
 				ctx.SetStatusCode(fasthttp.StatusUnauthorized)
-				fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, errors.New("Failed, user is unauthorized"))))
+				fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
 				return
 			}
 
@@ -182,7 +182,7 @@ func CheckUserToken(next fasthttp.RequestHandler) fasthttp.RequestHandler {
 			_, err = userDom.ReadUser(ctx, &repo, userID)
 			if err != nil {
 				ctx.SetStatusCode(fasthttp.StatusUnauthorized)
-				fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, errors.New("Failed, user is unauthorized"))))
+				fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, errors.New("Failed, user is unauthorized, user not found"))))
 				return
 			}
 		}
