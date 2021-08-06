@@ -129,18 +129,18 @@ func (c *ProgramDonasiRepository) UpdateDetail(ctx context.Context, data entity.
 	var str strings.Builder
 	fields := utility.GetNamedStruct(data)
 	for _, field := range fields {
-		if field == "id" || field == "pp_cp_program_donasi_detail" || field == "created_at" {
+		if field == "id" || field == "id_pp_cp_program_donasi_detail" || field == "created_at" {
 			continue
 		}
 		str.WriteString(field + "=:" + field + ", ")
 	}
 	queryCondition := strings.TrimSuffix(str.String(), ", ")
 
-	sql += queryCondition + " WHERE pp_cp_program_donasi_detail = '" + id + "'"
+	sql += queryCondition + " WHERE id_pp_cp_program_donasi_detail = '" + id + "'"
 	log.Print("QUERY : ", sql)
 	_, err = tx.NamedExec(sql, data)
 	if err != nil {
-		log.Println("Error insert pp_cp_program_donasi_detail:", err)
+		log.Println("Error update pp_cp_program_donasi_detail:", err)
 		tx.Rollback()
 		return
 	}
@@ -242,7 +242,7 @@ func (c *ProgramDonasiRepository) Get(ctx context.Context, id string) (response 
 }
 
 func (c *ProgramDonasiRepository) GetDetail(ctx context.Context, id string) (response entity.ProgramDonasiDetailEntity, err error) {
-	if err = c.db.DBRead.Get(&response, "SELECT * FROM pp_cp_program_donasi_detail WHERE id_pp_cp_program_kami = $1", id); err != nil {
+	if err = c.db.DBRead.Get(&response, "SELECT * FROM pp_cp_program_donasi_detail WHERE id_pp_cp_program_donasi = $1", id); err != nil {
 		return
 	}
 	return

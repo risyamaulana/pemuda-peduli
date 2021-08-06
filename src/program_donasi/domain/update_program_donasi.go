@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"log"
+	"pemuda-peduli/src/common/utility"
 	"pemuda-peduli/src/program_donasi/common/constants"
 	"pemuda-peduli/src/program_donasi/domain/entity"
 	"pemuda-peduli/src/program_donasi/domain/interfaces"
@@ -12,18 +13,21 @@ import (
 
 func UpdateProgramDonasi(ctx context.Context, repo interfaces.IProgramDonasiRepository, data entity.ProgramDonasiEntity, dataDetail entity.ProgramDonasiDetailEntity, id string) (response entity.ProgramDonasiEntity, err error) {
 	currentDate := time.Now().UTC()
+
 	// Check available daata
-	checkData, err := repo.Get(ctx, id)
+	checkData, err := GetProgramDonasi(ctx, repo, id)
 	if err != nil {
 		err = errors.New("Data not found")
 		return
 	}
+
 	if checkData.IsDeleted {
 		err = errors.New("Can't update this data")
 		return
 	}
 	checkData.Title = data.Title
 	checkData.SubTitle = data.SubTitle
+
 	// checkData.DonasiType = data.DonasiType
 	checkData.Tag = data.Tag
 	checkData.ThumbnailImageURL = data.ThumbnailImageURL
@@ -49,6 +53,7 @@ func UpdateProgramDonasi(ctx context.Context, repo interfaces.IProgramDonasiRepo
 		return
 	}
 
+	log.Println("DATA DETAIL UPDATE : ", utility.PrettyPrint(checkData.Detail))
 	if checkData.Detail.IDPPCPProgramDonasiDetail != "" {
 		// Update Data Detail
 		checkData.Detail.Content = dataDetail.Content

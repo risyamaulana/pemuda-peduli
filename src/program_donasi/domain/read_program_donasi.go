@@ -3,6 +3,8 @@ package domain
 import (
 	"context"
 	"errors"
+	"log"
+	"pemuda-peduli/src/common/utility"
 	"pemuda-peduli/src/program_donasi/domain/entity"
 	"pemuda-peduli/src/program_donasi/domain/interfaces"
 )
@@ -26,8 +28,13 @@ func GetProgramDonasi(ctx context.Context, repo interfaces.IProgramDonasiReposit
 	}
 
 	// Get Detail
-	dataDetail, _ := repo.GetDetail(ctx, response.IDPPCPProgramDonasi)
+	dataDetail, errDetail := repo.GetDetail(ctx, response.IDPPCPProgramDonasi)
+	if errDetail != nil {
+		log.Println("ERR GET DETAIL : ", err)
+	}
 
 	response.Detail = dataDetail
+
+	log.Println(utility.PrettyPrint(response.Detail))
 	return
 }
