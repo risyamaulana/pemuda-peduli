@@ -82,8 +82,8 @@ func createProgramDonasiRutin(ctx *fasthttp.RequestCtx) {
 		return
 	}
 
-	data, dataDetail := payload.ToEntity()
-	responseData, err := domain.CreateProgramDonasiRutin(ctx, DB, &data, &dataDetail)
+	data := payload.ToEntity()
+	responseData, err := domain.CreateProgramDonasiRutin(ctx, DB, &data)
 	if err != nil {
 		ctx.SetStatusCode(fasthttp.StatusUnprocessableEntity)
 		fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
@@ -110,8 +110,8 @@ func updateProgramDonasiRutin(ctx *fasthttp.RequestCtx) {
 		return
 	}
 
-	data, dataDetail := payload.ToEntity()
-	responseData, err := domain.EditProgramDonasiRutin(ctx, DB, data, dataDetail, programDonasiID)
+	data := payload.ToEntity()
+	responseData, err := domain.EditProgramDonasiRutin(ctx, DB, data, programDonasiID)
 	if err != nil {
 		ctx.SetStatusCode(fasthttp.StatusUnprocessableEntity)
 		fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))

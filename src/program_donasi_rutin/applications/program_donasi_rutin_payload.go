@@ -3,7 +3,6 @@ package applications
 import (
 	"encoding/json"
 	"errors"
-	"log"
 	"pemuda-peduli/src/program_donasi_rutin/domain/entity"
 	"time"
 
@@ -135,11 +134,12 @@ func (r ProgramDonasiRutinQuery) Validate() (err error) {
 	return
 }
 
-func (r CreateProgramDonasiRutin) ToEntity() (data entity.ProgramDonasiRutinEntity, dataDetail entity.ProgramDonasiRutinDetailEntity) {
+func (r CreateProgramDonasiRutin) ToEntity() (data entity.ProgramDonasiRutinEntity) {
 	data = entity.ProgramDonasiRutinEntity{
 		IDPPCPProgramDonasiKategori: r.IDPPCPProgramDonasiKategori,
 		Title:                       r.Title,
 		SubTitle:                    r.SubTitle,
+		Content:                     r.Content,
 		Tag:                         r.Tag,
 		ThumbnailImageURL:           r.ThumbnailImageURL,
 		Description:                 r.Description,
@@ -148,36 +148,21 @@ func (r CreateProgramDonasiRutin) ToEntity() (data entity.ProgramDonasiRutinEnti
 		QrisImageURL:     &r.QrisImageURL,
 		CreatedAt:        time.Now().UTC(),
 	}
-
-	dataDetail = entity.ProgramDonasiRutinDetailEntity{
-		Content: r.Content,
-		Benefit: r.Benefit,
-		Tag:     r.Tag,
-	}
 	return
 }
 
-func (r UpdateProgramDonasiRutin) ToEntity() (data entity.ProgramDonasiRutinEntity, dataDetail entity.ProgramDonasiRutinDetailEntity) {
-	log.Println("IS SHOW : ", r.IsShow)
+func (r UpdateProgramDonasiRutin) ToEntity() (data entity.ProgramDonasiRutinEntity) {
 	data = entity.ProgramDonasiRutinEntity{
 		IDPPCPProgramDonasiKategori: r.IDPPCPProgramDonasiKategori,
 		Title:                       r.Title,
 		SubTitle:                    r.SubTitle,
+		Content:                     r.Content,
 		Tag:                         r.Tag,
 		ThumbnailImageURL:           r.ThumbnailImageURL,
 		Description:                 r.Description,
-
-		IDPPCPMasterQris: &r.IDPPCPMasterQris,
-		QrisImageURL:     &r.QrisImageURL,
-		IsShow:           *r.IsShow,
-	}
-
-	log.Println("IS SHOW DATA: ", data.IsShow)
-
-	dataDetail = entity.ProgramDonasiRutinDetailEntity{
-		Content: r.Content,
-		Benefit: r.Benefit,
-		Tag:     r.Tag,
+		IDPPCPMasterQris:            &r.IDPPCPMasterQris,
+		QrisImageURL:                &r.QrisImageURL,
+		IsShow:                      *r.IsShow,
 	}
 	return
 }
@@ -212,8 +197,7 @@ func ToPayload(data entity.ProgramDonasiRutinEntity) (response ReadProgramDonasi
 		KategoriName:                data.KategoriName,
 		Title:                       data.Title,
 		SubTitle:                    data.SubTitle,
-		Content:                     data.Detail.Content,
-		Benefit:                     data.Detail.Benefit,
+		Content:                     data.Content,
 		Tag:                         data.Tag,
 		ThumbnailImageURL:           data.ThumbnailImageURL,
 		IDPPCPMasterQris:            data.IDPPCPMasterQris,

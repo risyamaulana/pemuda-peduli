@@ -16,7 +16,7 @@ import (
 	kategoriRep "pemuda-peduli/src/program_donasi_kategori/infrastructure/repository"
 )
 
-func EditProgramDonasiRutin(ctx context.Context, db *db.ConnectTo, data entity.ProgramDonasiRutinEntity, dataDetail entity.ProgramDonasiRutinDetailEntity, id string) (response entity.ProgramDonasiRutinEntity, err error) {
+func EditProgramDonasiRutin(ctx context.Context, db *db.ConnectTo, data entity.ProgramDonasiRutinEntity, id string) (response entity.ProgramDonasiRutinEntity, err error) {
 	repo := repository.NewProgramDonasiRutinRepository(db)
 	kategoriRepo := kategoriRep.NewProgramDonasiKategoriRepository(db)
 
@@ -44,12 +44,12 @@ func EditProgramDonasiRutin(ctx context.Context, db *db.ConnectTo, data entity.P
 
 	log.Println("IS SHOW DATA DOMAIN : ", data.IsShow)
 
-	response, err = updateProgramDonasiRutin(ctx, &repo, data, dataDetail, id)
+	response, err = updateProgramDonasiRutin(ctx, &repo, data, id)
 
 	return
 }
 
-func updateProgramDonasiRutin(ctx context.Context, repo interfaces.IProgramDonasiRutinRepository, data entity.ProgramDonasiRutinEntity, dataDetail entity.ProgramDonasiRutinDetailEntity, id string) (response entity.ProgramDonasiRutinEntity, err error) {
+func updateProgramDonasiRutin(ctx context.Context, repo interfaces.IProgramDonasiRutinRepository, data entity.ProgramDonasiRutinEntity, id string) (response entity.ProgramDonasiRutinEntity, err error) {
 	currentDate := time.Now().UTC()
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
@@ -80,23 +80,6 @@ func updateProgramDonasiRutin(ctx context.Context, repo interfaces.IProgramDonas
 	_, err = repo.Update(ctx, checkData, id)
 	if err != nil {
 		return
-	}
-
-	if checkData.Detail.IDPPCPProgramDonasiRutinDetail != "" {
-		// Update Data Detail
-		checkData.Detail.Content = dataDetail.Content
-		checkData.Detail.Tag = data.Tag
-		if _, errUpdateDetail := repo.UpdateDetail(ctx, checkData.Detail, checkData.Detail.IDPPCPProgramDonasiRutinDetail); errUpdateDetail != nil {
-			log.Println("Failed update berita detail: ", errUpdateDetail)
-		}
-	} else {
-		// Insert Data Detail
-		// Insert Detail
-		dataDetail.IDPPCPProgramDonasiRutin = checkData.IDPPCPProgramDonasiRutin
-		dataDetail.Tag = data.Tag
-		if errDetail := repo.InsertDetail(ctx, &dataDetail); errDetail != nil {
-			log.Println("ERR Insert Detail: ", errDetail)
-		}
 	}
 
 	response, _ = GetProgramDonasiRutin(ctx, repo, checkData.IDPPCPProgramDonasiRutin)
