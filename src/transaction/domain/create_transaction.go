@@ -5,7 +5,6 @@ import (
 	"errors"
 	"log"
 	"pemuda-peduli/src/common/infrastructure/db"
-
 	"pemuda-peduli/src/transaction/common/constants"
 	"pemuda-peduli/src/transaction/domain/entity"
 	"pemuda-peduli/src/transaction/domain/interfaces"
@@ -15,7 +14,6 @@ import (
 	donasiRutinRep "pemuda-peduli/src/program_donasi_rutin/infrastructure/repository"
 
 	donasiDom "pemuda-peduli/src/program_donasi/domain"
-	donasiRep "pemuda-peduli/src/program_donasi/infrastructure/repository"
 
 	userDom "pemuda-peduli/src/user/domain"
 	userRep "pemuda-peduli/src/user/infrastructure/repository"
@@ -26,7 +24,6 @@ func CreateTransaction(ctx context.Context, db *db.ConnectTo, data *entity.Trans
 	repo := repository.NewTransactionRepository(db)
 	userRepo := userRep.NewUserRepository(db)
 	donasiRutinRepo := donasiRutinRep.NewProgramDonasiRutinRepository(db)
-	donasiRepo := donasiRep.NewProgramDonasiRepository(db)
 
 	// Check user
 	userData, err := userDom.ReadUser(ctx, &userRepo, ctx.Value("user_id").(string))
@@ -62,7 +59,7 @@ func CreateTransaction(ctx context.Context, db *db.ConnectTo, data *entity.Trans
 	} else {
 		// Check data donasi one time
 		log.Println("ID : ", data.IDPPCPProgramDonasi)
-		donasiData, errDonasi := donasiDom.GetProgramDonasi(ctx, &donasiRepo, data.IDPPCPProgramDonasi)
+		donasiData, errDonasi := donasiDom.GetProgramDonasi(ctx, db, data.IDPPCPProgramDonasi)
 		if errDonasi != nil {
 			err = errors.New("Failed, donasi not found")
 			return

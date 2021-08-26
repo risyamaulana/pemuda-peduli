@@ -18,9 +18,7 @@ import (
 	"github.com/valyala/fasthttp"
 )
 
-var (
-	DB *db.ConnectTo
-)
+var DB *db.ConnectTo
 
 // db init hardcoded temporary for testing
 func init() {
@@ -83,8 +81,7 @@ func createProgramDonasi(ctx *fasthttp.RequestCtx) {
 	}
 
 	data, dataDetail := payload.ToEntity()
-	repo := repository.NewProgramDonasiRepository(DB)
-	responseData, err := domain.CreateProgramDonasi(ctx, &repo, &data, &dataDetail)
+	responseData, err := domain.CreateProgramDonasi(ctx, DB, &data, &dataDetail)
 	if err != nil {
 		ctx.SetStatusCode(fasthttp.StatusUnprocessableEntity)
 		fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
@@ -112,8 +109,7 @@ func updateProgramDonasi(ctx *fasthttp.RequestCtx) {
 	}
 
 	data, dataDetail := payload.ToEntity()
-	repo := repository.NewProgramDonasiRepository(DB)
-	responseData, err := domain.UpdateProgramDonasi(ctx, &repo, data, dataDetail, programDonasiID)
+	responseData, err := domain.UpdateProgramDonasi(ctx, DB, data, dataDetail, programDonasiID)
 	if err != nil {
 		ctx.SetStatusCode(fasthttp.StatusUnprocessableEntity)
 		fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
@@ -182,9 +178,8 @@ func findProgramDonasis(ctx *fasthttp.RequestCtx) {
 	}
 
 	data := payload.ToEntity()
-	repo := repository.NewProgramDonasiRepository(DB)
 
-	responseData, count, err := domain.FindProgramDonasi(ctx, &repo, &data)
+	responseData, count, err := domain.FindProgramDonasi(ctx, DB, &data)
 
 	// TOTAL PAGE
 	limit, _ := strconv.Atoi(payload.Limit)
@@ -209,8 +204,7 @@ func findProgramDonasis(ctx *fasthttp.RequestCtx) {
 
 func getProgramDonasi(ctx *fasthttp.RequestCtx) {
 	programDonasiID := fmt.Sprintf("%s", ctx.UserValue("id"))
-	repo := repository.NewProgramDonasiRepository(DB)
-	responseData, err := domain.GetProgramDonasi(ctx, &repo, programDonasiID)
+	responseData, err := domain.GetProgramDonasi(ctx, DB, programDonasiID)
 	if err != nil {
 		ctx.SetStatusCode(fasthttp.StatusUnprocessableEntity)
 		fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))

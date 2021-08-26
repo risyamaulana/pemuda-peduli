@@ -4,21 +4,37 @@ import (
 	"context"
 	"errors"
 	"log"
+	"pemuda-peduli/src/common/infrastructure/db"
 	"pemuda-peduli/src/common/utility"
 	"pemuda-peduli/src/program_donasi/common/constants"
 	"pemuda-peduli/src/program_donasi/domain/entity"
 	"pemuda-peduli/src/program_donasi/domain/interfaces"
+	"pemuda-peduli/src/program_donasi/infrastructure/repository"
 	"time"
+
+	penggalangDanaDom "pemuda-peduli/src/penggalang_dana/domain"
 )
 
-func UpdateProgramDonasi(ctx context.Context, repo interfaces.IProgramDonasiRepository, data entity.ProgramDonasiEntity, dataDetail entity.ProgramDonasiDetailEntity, id string) (response entity.ProgramDonasiEntity, err error) {
+func UpdateProgramDonasi(ctx context.Context, db *db.ConnectTo, data entity.ProgramDonasiEntity, dataDetail entity.ProgramDonasiDetailEntity, id string) (response entity.ProgramDonasiEntity, err error) {
+	// Repo
+	repo := repository.NewProgramDonasiRepository(db)
+
 	currentDate := time.Now().UTC()
 
-	// Check available daata
-	checkData, err := GetProgramDonasi(ctx, repo, id)
+	// Check available data
+	checkData, err := GetProgramDonasi(ctx, db, id)
 	if err != nil {
 		err = errors.New("Data not found")
 		return
+	}
+
+	// Check Penggalang dana
+	if data.IDPPCPPenggalangDana != "" {
+		checkPenggalangDana, errCheckPenggalangDana := penggalangDanaDom.GetPenggalangDana(ctx, db, data.IDPPCPPenggalangDana)
+		if errCheckPenggalangDana != nil {
+			err = errors.New("Failed, penggalang dana not found")
+		}
+		data.PenggalangDana = checkPenggalangDana
 	}
 
 	if checkData.IsDeleted {
@@ -35,6 +51,7 @@ func UpdateProgramDonasi(ctx context.Context, repo interfaces.IProgramDonasiRepo
 	checkData.ValidFrom = data.ValidFrom
 	checkData.ValidTo = data.ValidTo
 	checkData.Target = data.Target
+	checkData.IDPPCPPenggalangDana = data.IDPPCPPenggalangDana
 
 	checkData.KitaBisaLink = data.KitaBisaLink
 	checkData.AyoBantuLink = data.AyoBantuLink
@@ -71,7 +88,7 @@ func UpdateProgramDonasi(ctx context.Context, repo interfaces.IProgramDonasiRepo
 		}
 	}
 
-	response, _ = GetProgramDonasi(ctx, repo, checkData.IDPPCPProgramDonasi)
+	response, _ = GetProgramDonasi(ctx, db, checkData.IDPPCPProgramDonasi)
 
 	return
 }

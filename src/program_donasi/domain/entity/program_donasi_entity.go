@@ -1,35 +1,40 @@
 package entity
 
-import "time"
+import (
+	"pemuda-peduli/src/penggalang_dana/domain/entity"
+	"time"
+)
 
 type ProgramDonasiEntity struct {
-	ID                  int64      `db:"id"`
-	IDPPCPProgramDonasi string     `db:"id_pp_cp_program_donasi"`
-	Title               string     `db:"title"`
-	SubTitle            string     `db:"sub_title"`
-	DonasiType          string     `db:"donasi_type"`
-	Tag                 string     `db:"tag"`
-	ThumbnailImageURL   string     `db:"thumbnail_image_url"`
-	Description         string     `db:"description"`
-	Status              string     `db:"status"`
-	ValidFrom           *time.Time `db:"valid_from"`
-	ValidTo             *time.Time `db:"valid_to"`
-	Target              *float64   `db:"target"`
-	DonationCollect     float64    `db:"donation_collect"`
-	CreatedAt           time.Time  `db:"created_at"`
-	CreatedBy           *string    `db:"created_by"`
-	UpdatedAt           *time.Time `db:"updated_at"`
-	UpdatedBy           *string    `db:"updated_by"`
-	PublishedAt         *time.Time `db:"published_at"`
-	PublishedBy         *string    `db:"published_by"`
-	IsDeleted           bool       `db:"is_deleted"`
-	IsShow              bool       `db:"is_show"`
-	KitaBisaLink        *string    `db:"kitabisa_link"`
-	AyoBantuLink        *string    `db:"ayobantu_link"`
-	IDPPCPMasterQris    *string    `db:"id_pp_cp_master_qris"`
-	QrisImageURL        *string    `db:"qris_image_url"`
+	ID                   int64      `db:"id"`
+	IDPPCPProgramDonasi  string     `db:"id_pp_cp_program_donasi"`
+	Title                string     `db:"title"`
+	SubTitle             string     `db:"sub_title"`
+	DonasiType           string     `db:"donasi_type"`
+	Tag                  string     `db:"tag"`
+	ThumbnailImageURL    string     `db:"thumbnail_image_url"`
+	Description          string     `db:"description"`
+	IDPPCPPenggalangDana string     `db:"id_pp_cp_penggalang_dana"`
+	Status               string     `db:"status"`
+	ValidFrom            *time.Time `db:"valid_from"`
+	ValidTo              *time.Time `db:"valid_to"`
+	Target               *float64   `db:"target"`
+	DonationCollect      float64    `db:"donation_collect"`
+	CreatedAt            time.Time  `db:"created_at"`
+	CreatedBy            *string    `db:"created_by"`
+	UpdatedAt            *time.Time `db:"updated_at"`
+	UpdatedBy            *string    `db:"updated_by"`
+	PublishedAt          *time.Time `db:"published_at"`
+	PublishedBy          *string    `db:"published_by"`
+	IsDeleted            bool       `db:"is_deleted"`
+	IsShow               bool       `db:"is_show"`
+	KitaBisaLink         *string    `db:"kitabisa_link"`
+	AyoBantuLink         *string    `db:"ayobantu_link"`
+	IDPPCPMasterQris     *string    `db:"id_pp_cp_master_qris"`
+	QrisImageURL         *string    `db:"qris_image_url"`
 
-	Detail ProgramDonasiDetailEntity
+	Detail         ProgramDonasiDetailEntity
+	PenggalangDana entity.PenggalangDanaEntity
 }
 
 type ProgramDonasiDetailEntity struct {
