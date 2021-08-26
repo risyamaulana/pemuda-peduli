@@ -27,6 +27,20 @@ type ProgramDonasiRutinEntity struct {
 	QrisImageURL                *string    `db:"qris_image_url"`
 }
 
+type ProgramDonasiRutinPaketEntity struct {
+	ID                            int64      `db:"id"`
+	IDPPCPProgramDonasiRutinPaket string     `db:"id_pp_cp_program_donasi_rutin_paket"`
+	IDPPCPProgramDonasiRutin      string     `db:"id_pp_cp_program_donasi_rutin"`
+	PaketName                     string     `db:"paket_name"`
+	Nominal                       float64    `db:"nominal"`
+	PaketImageURL                 string     `db:"paket_image_url"`
+	CreatedAt                     time.Time  `db:"created_at"`
+	CreatedBy                     *string    `db:"created_by"`
+	UpdatedAt                     *time.Time `db:"updated_at"`
+	UpdatedBy                     *string    `db:"updated_by"`
+	IsDeleted                     bool       `db:"is_deleted"`
+}
+
 type ProgramDonasiRutinQueryEntity struct {
 	Limit         string `db:"limit"`
 	Offset        string `db:"offset"`

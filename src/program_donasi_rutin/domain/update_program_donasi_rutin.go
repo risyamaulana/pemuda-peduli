@@ -5,7 +5,6 @@ import (
 	"errors"
 	"log"
 	"pemuda-peduli/src/common/infrastructure/db"
-
 	"pemuda-peduli/src/program_donasi_rutin/common/constants"
 	"pemuda-peduli/src/program_donasi_rutin/domain/entity"
 	"pemuda-peduli/src/program_donasi_rutin/domain/interfaces"
@@ -64,6 +63,7 @@ func updateProgramDonasiRutin(ctx context.Context, repo interfaces.IProgramDonas
 	checkData.Title = data.Title
 	checkData.SubTitle = data.SubTitle
 	checkData.Tag = data.Tag
+	checkData.Content = data.Content
 	checkData.ThumbnailImageURL = data.ThumbnailImageURL
 	checkData.Description = data.Description
 

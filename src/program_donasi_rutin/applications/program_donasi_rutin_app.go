@@ -18,9 +18,7 @@ import (
 	"github.com/valyala/fasthttp"
 )
 
-var (
-	DB *db.ConnectTo
-)
+var DB *db.ConnectTo
 
 // db init hardcoded temporary for testing
 func init() {
@@ -63,6 +61,12 @@ func (s *ProgramDonasiRutinApp) addRoute(r *router.Router) {
 	r.GET("/program-donasi-rutin/{id}", middleware.CheckAuthToken(getProgramDonasiRutin))
 
 	r.DELETE("/program-donasi-rutin/{id}", middleware.CheckAuthToken(deleteProgramDonasiRutin))
+
+	r.POST("/program-donasi-rutin/paket/create/{id}", middleware.CheckAuthToken(createProgramDonasiRutinPaket))
+	r.PUT("/program-donasi-rutin/paket/{id}", middleware.CheckAuthToken(updateProgramDonasiRutinPaket))
+	r.DELETE("/program-donasi-rutin/paket/{id}", middleware.CheckAuthToken(deleteProgramDonasiRutinPaket))
+	r.POST("/program-donasi-rutin/paket/list", middleware.CheckAuthToken(findProgramDonasiRutinPaket))
+	r.GET("/program-donasi-rutin/paket/{id}", middleware.CheckAuthToken(getProgramDonasiRutinPaket))
 }
 
 // ============== Handler for each route start here ============
@@ -94,6 +98,33 @@ func createProgramDonasiRutin(ctx *fasthttp.RequestCtx) {
 	fmt.Fprintf(ctx, utility.PrettyPrint(response))
 }
 
+func createProgramDonasiRutinPaket(ctx *fasthttp.RequestCtx) {
+	payload, err := GetCreatePaketPayload(ctx.Request.Body())
+	if err != nil {
+		ctx.SetStatusCode(fasthttp.StatusBadRequest)
+		fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, errors.New("Bad JSON Payload"))))
+		log.Println("Error Bad Request JSON Payload:", err)
+		return
+	}
+
+	if err := payload.Validate(); err != nil {
+		ctx.SetStatusCode(fasthttp.StatusBadRequest)
+		fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
+		return
+	}
+
+	data := payload.ToEntity(ctx)
+	err = domain.CreateProgramDonasiRutinPaket(ctx, DB, &data)
+	if err != nil {
+		ctx.SetStatusCode(fasthttp.StatusUnprocessableEntity)
+		fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
+		return
+	}
+
+	response := handler.DefaultResponse(ToPayloadPaket(data), nil)
+	fmt.Fprintf(ctx, utility.PrettyPrint(response))
+}
+
 func updateProgramDonasiRutin(ctx *fasthttp.RequestCtx) {
 	programDonasiID := fmt.Sprintf("%s", ctx.UserValue("id"))
 	payload, err := GetUpdatePayload(ctx.Request.Body())
@@ -119,6 +150,34 @@ func updateProgramDonasiRutin(ctx *fasthttp.RequestCtx) {
 		return
 	}
 	response := handler.DefaultResponse(ToPayload(responseData), nil)
+	fmt.Fprintf(ctx, utility.PrettyPrint(response))
+}
+
+func updateProgramDonasiRutinPaket(ctx *fasthttp.RequestCtx) {
+	paketID := fmt.Sprintf("%s", ctx.UserValue("id"))
+	payload, err := GetUpdatePaketPayload(ctx.Request.Body())
+	if err != nil {
+		ctx.SetStatusCode(fasthttp.StatusBadRequest)
+		fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, errors.New("Bad JSON Payload"))))
+		log.Println("Error Bad Request JSON Payload:", err)
+		return
+	}
+
+	if err := payload.Validate(); err != nil {
+		ctx.SetStatusCode(fasthttp.StatusBadRequest)
+		fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
+		return
+	}
+
+	data := payload.ToEntity()
+	responseData, err := domain.EditProgramDonasiRutinPaket(ctx, DB, data, paketID)
+	if err != nil {
+		ctx.SetStatusCode(fasthttp.StatusUnprocessableEntity)
+		fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
+		log.Println(err)
+		return
+	}
+	response := handler.DefaultResponse(ToPayloadPaket(responseData), nil)
 	fmt.Fprintf(ctx, utility.PrettyPrint(response))
 }
 
@@ -164,6 +223,19 @@ func deleteProgramDonasiRutin(ctx *fasthttp.RequestCtx) {
 	fmt.Fprintf(ctx, utility.PrettyPrint(response))
 }
 
+func deleteProgramDonasiRutinPaket(ctx *fasthttp.RequestCtx) {
+	paketID := fmt.Sprintf("%s", ctx.UserValue("id"))
+	responseData, err := domain.DeleteProgramDonasiRutinPaket(ctx, DB, paketID)
+	if err != nil {
+		ctx.SetStatusCode(fasthttp.StatusUnprocessableEntity)
+		fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
+		log.Println(err)
+		return
+	}
+	response := handler.DefaultResponse(ToPayloadPaket(responseData), nil)
+	fmt.Fprintf(ctx, utility.PrettyPrint(response))
+}
+
 func findProgramDonasiRutins(ctx *fasthttp.RequestCtx) {
 	payload, err := GetQueryPayload(ctx.Request.Body())
 	if err != nil {
@@ -205,6 +277,45 @@ func findProgramDonasiRutins(ctx *fasthttp.RequestCtx) {
 	fmt.Fprintf(ctx, utility.PrettyPrint(handler.PaginationResponse(response, nil, page, limit, int(pageTotal), count)))
 }
 
+func findProgramDonasiRutinPaket(ctx *fasthttp.RequestCtx) {
+	payload, err := GetQueryPayload(ctx.Request.Body())
+	if err != nil {
+		ctx.SetStatusCode(fasthttp.StatusBadRequest)
+		fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, errors.New("Bad JSON Payload"))))
+		log.Println("Error Bad Request JSON Payload:", err)
+		return
+	}
+
+	if err := payload.Validate(); err != nil {
+		ctx.SetStatusCode(fasthttp.StatusBadRequest)
+		fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
+		return
+	}
+
+	data := payload.ToEntity()
+	responseData, count, err := domain.FindProgramDonasiRutinPaket(ctx, DB, &data)
+
+	// TOTAL PAGE
+	limit, _ := strconv.Atoi(payload.Limit)
+	page, _ := strconv.Atoi(payload.Offset)
+	pageTotal := math.Ceil(float64(count) / float64(limit))
+
+	if err != nil {
+		ctx.SetStatusCode(fasthttp.StatusUnprocessableEntity)
+		fmt.Fprintf(ctx, utility.PrettyPrint(handler.PaginationResponse(nil, err, page, limit, int(pageTotal), count)))
+		log.Println(err)
+		return
+	}
+
+	// Return data as json
+	response := []ReadProgramDonasiRutinPaket{}
+	for _, resp := range responseData {
+		response = append(response, ToPayloadPaket(resp))
+	}
+
+	fmt.Fprintf(ctx, utility.PrettyPrint(handler.PaginationResponse(response, nil, page, limit, int(pageTotal), count)))
+}
+
 func getProgramDonasiRutin(ctx *fasthttp.RequestCtx) {
 	programDonasiID := fmt.Sprintf("%s", ctx.UserValue("id"))
 	repo := repository.NewProgramDonasiRutinRepository(DB)
@@ -216,5 +327,18 @@ func getProgramDonasiRutin(ctx *fasthttp.RequestCtx) {
 		return
 	}
 	response := handler.DefaultResponse(ToPayload(responseData), nil)
+	fmt.Fprintf(ctx, utility.PrettyPrint(response))
+}
+
+func getProgramDonasiRutinPaket(ctx *fasthttp.RequestCtx) {
+	programDonasiID := fmt.Sprintf("%s", ctx.UserValue("id"))
+	responseData, err := domain.GetProgramDonasiRutinPaket(ctx, DB, programDonasiID)
+	if err != nil {
+		ctx.SetStatusCode(fasthttp.StatusUnprocessableEntity)
+		fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
+		log.Println(err)
+		return
+	}
+	response := handler.DefaultResponse(ToPayloadPaket(responseData), nil)
 	fmt.Fprintf(ctx, utility.PrettyPrint(response))
 }

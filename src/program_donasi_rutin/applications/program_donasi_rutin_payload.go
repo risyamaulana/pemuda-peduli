@@ -1,6 +1,7 @@
 package applications
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"pemuda-peduli/src/program_donasi_rutin/domain/entity"
@@ -25,6 +26,12 @@ type CreateProgramDonasiRutin struct {
 	Description string `json:"description"`
 }
 
+type CreateProgramDonasiRutinPaket struct {
+	PaketName     string  `json:"paket_name" valid:"required"`
+	Nominal       float64 `json:"nominal" valid:"required"`
+	PaketImageURL string  `json:"paket_image_url" valid:"url"`
+}
+
 type UpdateProgramDonasiRutin struct {
 	IDPPCPProgramDonasiKategori string `json:"id_kategori" valid:"required"`
 
@@ -40,6 +47,12 @@ type UpdateProgramDonasiRutin struct {
 	QrisImageURL     string `json:"qris_image_url"`
 
 	Description string `json:"description"`
+}
+
+type UpdateProgramDonasiRutinPaket struct {
+	PaketName     string  `json:"paket_name" valid:"required"`
+	Nominal       float64 `json:"nominal" valid:"required"`
+	PaketImageURL string  `json:"paket_image_url" valid:"url"`
 }
 
 type ProgramDonasiRutinQuery struct {
@@ -87,12 +100,33 @@ type ReadProgramDonasiRutin struct {
 	IsShow                      bool       `json:"is_show"`
 }
 
+type ReadProgramDonasiRutinPaket struct {
+	IDPPCPProgramDonasiRutinPaket string     `db:"id"`
+	IDPPCPProgramDonasiRutin      string     `db:"id_pp_cp_program_donasi_rutin"`
+	PaketName                     string     `db:"paket_name"`
+	Nominal                       float64    `db:"nominal"`
+	PaketImageURL                 string     `db:"paket_image_url"`
+	CreatedAt                     time.Time  `db:"created_at"`
+	UpdatedAt                     *time.Time `db:"updated_at"`
+	IsDeleted                     bool       `db:"is_deleted"`
+}
+
 func GetCreatePayload(body []byte) (payload CreateProgramDonasiRutin, err error) {
 	err = json.Unmarshal(body, &payload)
 	return
 }
 
+func GetCreatePaketPayload(body []byte) (payload CreateProgramDonasiRutinPaket, err error) {
+	err = json.Unmarshal(body, &payload)
+	return
+}
+
 func GetUpdatePayload(body []byte) (payload UpdateProgramDonasiRutin, err error) {
+	err = json.Unmarshal(body, &payload)
+	return
+}
+
+func GetUpdatePaketPayload(body []byte) (payload UpdateProgramDonasiRutinPaket, err error) {
 	err = json.Unmarshal(body, &payload)
 	return
 }
@@ -103,6 +137,15 @@ func GetQueryPayload(body []byte) (payload ProgramDonasiRutinQuery, err error) {
 }
 
 func (r CreateProgramDonasiRutin) Validate() (err error) {
+	// Validate Payload
+	_, err = govalidator.ValidateStruct(r)
+	if err != nil {
+		return
+	}
+	return
+}
+
+func (r CreateProgramDonasiRutinPaket) Validate() (err error) {
 	// Validate Payload
 	_, err = govalidator.ValidateStruct(r)
 	if err != nil {
@@ -151,6 +194,18 @@ func (r CreateProgramDonasiRutin) ToEntity() (data entity.ProgramDonasiRutinEnti
 	return
 }
 
+func (r CreateProgramDonasiRutinPaket) ToEntity(ctx context.Context) (data entity.ProgramDonasiRutinPaketEntity) {
+	data = entity.ProgramDonasiRutinPaketEntity{
+		IDPPCPProgramDonasiRutin: ctx.Value("id").(string),
+		PaketName:                r.PaketName,
+		Nominal:                  r.Nominal,
+		PaketImageURL:            r.PaketImageURL,
+		CreatedAt:                time.Now().UTC(),
+		IsDeleted:                false,
+	}
+	return
+}
+
 func (r UpdateProgramDonasiRutin) ToEntity() (data entity.ProgramDonasiRutinEntity) {
 	data = entity.ProgramDonasiRutinEntity{
 		IDPPCPProgramDonasiKategori: r.IDPPCPProgramDonasiKategori,
@@ -163,6 +218,18 @@ func (r UpdateProgramDonasiRutin) ToEntity() (data entity.ProgramDonasiRutinEnti
 		IDPPCPMasterQris:            &r.IDPPCPMasterQris,
 		QrisImageURL:                &r.QrisImageURL,
 		IsShow:                      *r.IsShow,
+	}
+	return
+}
+
+func (r UpdateProgramDonasiRutinPaket) ToEntity() (data entity.ProgramDonasiRutinPaketEntity) {
+	currentTime := time.Now().UTC()
+	data = entity.ProgramDonasiRutinPaketEntity{
+		PaketName:     r.PaketName,
+		Nominal:       r.Nominal,
+		PaketImageURL: r.PaketImageURL,
+		UpdatedAt:     &currentTime,
+		IsDeleted:     false,
 	}
 	return
 }
@@ -214,5 +281,20 @@ func ToPayload(data entity.ProgramDonasiRutinEntity) (response ReadProgramDonasi
 		IsDeleted:                   data.IsDeleted,
 		IsShow:                      data.IsShow,
 	}
+	return
+}
+
+func ToPayloadPaket(data entity.ProgramDonasiRutinPaketEntity) (response ReadProgramDonasiRutinPaket) {
+	response = ReadProgramDonasiRutinPaket{
+		IDPPCPProgramDonasiRutinPaket: data.IDPPCPProgramDonasiRutinPaket,
+		IDPPCPProgramDonasiRutin:      data.IDPPCPProgramDonasiRutin,
+		PaketName:                     data.PaketName,
+		Nominal:                       data.Nominal,
+		PaketImageURL:                 data.PaketImageURL,
+		CreatedAt:                     data.CreatedAt,
+		UpdatedAt:                     data.UpdatedAt,
+		IsDeleted:                     data.IsDeleted,
+	}
+
 	return
 }
