@@ -15,7 +15,7 @@ func EditProgramDonasiRutinPaket(ctx context.Context, db *db.ConnectTo, data ent
 	repo := repository.NewProgramDonasiRutinRepository(db)
 
 	// Check available daata
-	_, errCheckData := repo.GetPaket(ctx, id)
+	checkData, errCheckData := repo.GetPaket(ctx, id)
 	if errCheckData != nil {
 		err = errors.New("Data not found")
 		return
@@ -27,6 +27,11 @@ func EditProgramDonasiRutinPaket(ctx context.Context, db *db.ConnectTo, data ent
 		err = errors.New("Failed, data donasi not found")
 		return
 	}
+
+	data.ID = checkData.ID
+	data.IDPPCPProgramDonasiRutin = checkData.IDPPCPProgramDonasiRutin
+	data.CreatedAt = checkData.CreatedAt
+	data.CreatedBy = checkData.CreatedBy
 
 	resp, err = updateProgramDonasiRutinPaket(ctx, &repo, data, id)
 	return

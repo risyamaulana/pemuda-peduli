@@ -2,7 +2,6 @@ package main
 
 import (
 	"log"
-
 	"pemuda-peduli/src/common/infrastructure"
 	"pemuda-peduli/src/common/infrastructure/web"
 	"pemuda-peduli/src/common/interfaces"
@@ -19,6 +18,7 @@ import (
 	kontakKamiApp "pemuda-peduli/src/kontak_kami/applications"
 	menuExtrasApp "pemuda-peduli/src/menu_extras/applications"
 	partnerKamiApp "pemuda-peduli/src/partner_kami/applications"
+	penggalangDanaApp "pemuda-peduli/src/penggalang_dana/applications"
 	programDonasiApp "pemuda-peduli/src/program_donasi/applications"
 	programDonasiKategoriApp "pemuda-peduli/src/program_donasi_kategori/applications"
 	programDonasiRutinApp "pemuda-peduli/src/program_donasi_rutin/applications"
@@ -40,7 +40,7 @@ import (
 // App entry point
 func main() {
 	// App and Routing Initialization
-	var apps = map[string]interfaces.IApplication{}
+	apps := map[string]interfaces.IApplication{}
 	router := web.NewRouter()
 	initialize(apps, router)
 
@@ -63,7 +63,6 @@ func main() {
 
 // Setup application modules
 func initialize(apps map[string]interfaces.IApplication, r *router.Router) {
-
 	// env Load
 	err := godotenv.Load(".sample.env")
 	if err != nil {
@@ -97,6 +96,8 @@ func initialize(apps map[string]interfaces.IApplication, r *router.Router) {
 	apps["menu-extras"] = menuExtrasApp.NewMenuExtrasApp()
 	apps["qris"] = qrisApp.NewQrisApp()
 	apps["transaction"] = transactionApp.NewTransactionApp()
+
+	apps["penggalang_dana"] = penggalangDanaApp.NewPenggalangDanaApp()
 
 	for _, v := range apps {
 		// log.Printf("Initializing app %s", k)

@@ -168,6 +168,16 @@ func (r UpdateProgramDonasiRutin) Validate() (err error) {
 	return
 }
 
+func (r UpdateProgramDonasiRutinPaket) Validate() (err error) {
+	// Validate Payload
+	_, err = govalidator.ValidateStruct(r)
+	if err != nil {
+		return
+	}
+
+	return
+}
+
 func (r ProgramDonasiRutinQuery) Validate() (err error) {
 	// Validate Payload
 	_, err = govalidator.ValidateStruct(r)
