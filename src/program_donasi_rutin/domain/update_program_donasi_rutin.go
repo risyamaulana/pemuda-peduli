@@ -9,6 +9,7 @@ import (
 	"pemuda-peduli/src/program_donasi_rutin/domain/entity"
 	"pemuda-peduli/src/program_donasi_rutin/domain/interfaces"
 	"pemuda-peduli/src/program_donasi_rutin/infrastructure/repository"
+	"strings"
 	"time"
 
 	kategoriDom "pemuda-peduli/src/program_donasi_kategori/domain"
@@ -41,6 +42,11 @@ func EditProgramDonasiRutin(ctx context.Context, db *db.ConnectTo, data entity.P
 		data.KategoriName = kategoriData.KategoriName
 	}
 
+	// Check SEO URL
+	if data.SEOURL == "" {
+		data.SEOURL = strings.ToLower(strings.ReplaceAll(data.Title, " ", "-"))
+	}
+
 	log.Println("IS SHOW DATA DOMAIN : ", data.IsShow)
 
 	response, err = updateProgramDonasiRutin(ctx, &repo, data, id)
@@ -66,6 +72,7 @@ func updateProgramDonasiRutin(ctx context.Context, repo interfaces.IProgramDonas
 	checkData.Content = data.Content
 	checkData.ThumbnailImageURL = data.ThumbnailImageURL
 	checkData.Description = data.Description
+	checkData.SEOURL = data.SEOURL
 
 	checkData.IDPPCPProgramDonasiKategori = data.IDPPCPProgramDonasiKategori
 	checkData.KategoriName = data.KategoriName

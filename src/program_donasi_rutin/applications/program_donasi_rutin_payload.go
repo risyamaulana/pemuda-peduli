@@ -19,6 +19,7 @@ type CreateProgramDonasiRutin struct {
 	Benefit           string `json:"benefit"`
 	Tag               string `json:"tag"`
 	ThumbnailImageURL string `json:"thumbnail_image_url" valid:"url"`
+	SEOURL            string `json:"seo_url"`
 
 	IDPPCPMasterQris string `json:"id_pp_cp_master_qris"`
 	QrisImageURL     string `json:"qris_image_url"`
@@ -42,6 +43,7 @@ type UpdateProgramDonasiRutin struct {
 	Tag               string `json:"tag"`
 	ThumbnailImageURL string `json:"thumbnail_image_url" valid:"url"`
 	IsShow            *bool  `json:"is_show"`
+	SEOURL            string `json:"seo_url"`
 
 	IDPPCPMasterQris string `json:"id_pp_cp_master_qris"`
 	QrisImageURL     string `json:"qris_image_url"`
@@ -89,6 +91,7 @@ type ReadProgramDonasiRutin struct {
 	Target                      *float64   `json:"target"`
 	DonationCollect             float64    `json:"donation_collect"`
 	Description                 string     `json:"description"`
+	SEOURL                      string     `json:"seo_url"`
 	Status                      string     `json:"status"`
 	CreatedAt                   time.Time  `json:"created_at"`
 	CreatedBy                   *string    `json:"created_by"`
@@ -196,6 +199,7 @@ func (r CreateProgramDonasiRutin) ToEntity() (data entity.ProgramDonasiRutinEnti
 		Tag:                         r.Tag,
 		ThumbnailImageURL:           r.ThumbnailImageURL,
 		Description:                 r.Description,
+		SEOURL:                      r.SEOURL,
 
 		IDPPCPMasterQris: &r.IDPPCPMasterQris,
 		QrisImageURL:     &r.QrisImageURL,
@@ -227,6 +231,7 @@ func (r UpdateProgramDonasiRutin) ToEntity() (data entity.ProgramDonasiRutinEnti
 		Description:                 r.Description,
 		IDPPCPMasterQris:            &r.IDPPCPMasterQris,
 		QrisImageURL:                &r.QrisImageURL,
+		SEOURL:                      r.SEOURL,
 		IsShow:                      *r.IsShow,
 	}
 	return
@@ -281,6 +286,7 @@ func ToPayload(data entity.ProgramDonasiRutinEntity) (response ReadProgramDonasi
 		DonationCollect:             data.DonationCollect,
 		QrisImageURL:                data.QrisImageURL,
 		Description:                 data.Description,
+		SEOURL:                      data.SEOURL,
 		Status:                      data.Status,
 		CreatedAt:                   data.CreatedAt,
 		CreatedBy:                   data.CreatedBy,

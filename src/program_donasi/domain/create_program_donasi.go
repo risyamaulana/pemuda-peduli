@@ -7,6 +7,7 @@ import (
 	"pemuda-peduli/src/common/infrastructure/db"
 	"pemuda-peduli/src/program_donasi/domain/entity"
 	"pemuda-peduli/src/program_donasi/infrastructure/repository"
+	"strings"
 
 	penggalangDanaDom "pemuda-peduli/src/penggalang_dana/domain"
 )
@@ -22,6 +23,11 @@ func CreateProgramDonasi(ctx context.Context, db *db.ConnectTo, data *entity.Pro
 			err = errors.New("Failed, penggalang dana not found")
 		}
 		data.PenggalangDana = checkPenggalangDana
+	}
+
+	// Check SEO URL
+	if data.SEOURL == "" {
+		data.SEOURL = strings.ToLower(strings.ReplaceAll(data.Title, " ", "-"))
 	}
 
 	err = repo.Insert(ctx, data)

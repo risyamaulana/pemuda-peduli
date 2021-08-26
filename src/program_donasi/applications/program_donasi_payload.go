@@ -18,6 +18,7 @@ type CreateProgramDonasi struct {
 	Tag                  string     `json:"tag"`
 	ThumbnailImageURL    string     `json:"thumbnail_image_url" valid:"url"`
 	IDPPCPPenggalangDana string     `json:"id_pp_cp_penggalang_dana"`
+	SEOURL               string     `json:"seo_url"`
 	ValidFrom            *time.Time `json:"valid_from" valid:"required"`
 	ValidTo              *time.Time `json:"valid_to" valid:"required"`
 	Target               *float64   `json:"target" valid:"required"`
@@ -34,6 +35,7 @@ type UpdateProgramDonasi struct {
 	Content              string     `json:"content" valid:"required"`
 	Tag                  string     `json:"tag"`
 	IDPPCPPenggalangDana string     `json:"id_pp_cp_penggalang_dana"`
+	SEOURL               string     `json:"seo_url"`
 	ThumbnailImageURL    string     `json:"thumbnail_image_url" valid:"url"`
 	ValidFrom            *time.Time `json:"valid_from" valid:"required"`
 	ValidTo              *time.Time `json:"valid_to" valid:"required"`
@@ -89,6 +91,7 @@ type ReadProgramDonasi struct {
 	AyoBantuLink         *string    `json:"ayobantu_link"`
 	IDPPCPMasterQris     *string    `json:"id_pp_cp_master_qris"`
 	QrisImageURL         *string    `json:"qris_image_url"`
+	SEOURL               string     `json:"seo_url"`
 
 	PenggalangDana penggalangDanaApp.ReadPenggalangDana `json:"penggalang_dana"`
 }
@@ -163,6 +166,7 @@ func (r CreateProgramDonasi) ToEntity() (data entity.ProgramDonasiEntity, dataDe
 		Title:                r.Title,
 		SubTitle:             r.SubTitle,
 		Tag:                  r.Tag,
+		SEOURL:               r.SEOURL,
 		ThumbnailImageURL:    r.ThumbnailImageURL,
 		IDPPCPPenggalangDana: r.IDPPCPPenggalangDana,
 		ValidFrom:            &validFrom,
@@ -190,6 +194,7 @@ func (r UpdateProgramDonasi) ToEntity() (data entity.ProgramDonasiEntity, dataDe
 		Title:                r.Title,
 		SubTitle:             r.SubTitle,
 		Tag:                  r.Tag,
+		SEOURL:               r.SEOURL,
 		ThumbnailImageURL:    r.ThumbnailImageURL,
 		IDPPCPPenggalangDana: r.IDPPCPPenggalangDana,
 		ValidFrom:            &validFrom,
@@ -242,6 +247,7 @@ func ToPayload(data entity.ProgramDonasiEntity) (response ReadProgramDonasi) {
 		Tag:                  data.Tag,
 		ThumbnailImageURL:    data.ThumbnailImageURL,
 		IDPPCPPenggalangDana: data.IDPPCPPenggalangDana,
+		SEOURL:               data.SEOURL,
 		ValidFrom:            data.ValidFrom,
 		ValidTo:              data.ValidTo,
 		Target:               data.Target,

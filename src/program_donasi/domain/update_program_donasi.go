@@ -10,6 +10,7 @@ import (
 	"pemuda-peduli/src/program_donasi/domain/entity"
 	"pemuda-peduli/src/program_donasi/domain/interfaces"
 	"pemuda-peduli/src/program_donasi/infrastructure/repository"
+	"strings"
 	"time"
 
 	penggalangDanaDom "pemuda-peduli/src/penggalang_dana/domain"
@@ -28,6 +29,11 @@ func UpdateProgramDonasi(ctx context.Context, db *db.ConnectTo, data entity.Prog
 		return
 	}
 
+	// Check SEO URL
+	if data.SEOURL == "" {
+		data.SEOURL = strings.ToLower(strings.ReplaceAll(data.Title, " ", "-"))
+	}
+
 	// Check Penggalang dana
 	if data.IDPPCPPenggalangDana != "" {
 		checkPenggalangDana, errCheckPenggalangDana := penggalangDanaDom.GetPenggalangDana(ctx, db, data.IDPPCPPenggalangDana)
@@ -41,6 +47,7 @@ func UpdateProgramDonasi(ctx context.Context, db *db.ConnectTo, data entity.Prog
 		err = errors.New("Can't update this data")
 		return
 	}
+
 	checkData.Title = data.Title
 	checkData.SubTitle = data.SubTitle
 
@@ -50,6 +57,7 @@ func UpdateProgramDonasi(ctx context.Context, db *db.ConnectTo, data entity.Prog
 	checkData.Description = data.Description
 	checkData.ValidFrom = data.ValidFrom
 	checkData.ValidTo = data.ValidTo
+	checkData.SEOURL = data.SEOURL
 	checkData.Target = data.Target
 	checkData.IDPPCPPenggalangDana = data.IDPPCPPenggalangDana
 
