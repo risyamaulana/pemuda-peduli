@@ -33,6 +33,7 @@ type ProgramDonasiRutinPaketEntity struct {
 	IDPPCPProgramDonasiRutinPaket string     `db:"id_pp_cp_program_donasi_rutin_paket"`
 	IDPPCPProgramDonasiRutin      string     `db:"id_pp_cp_program_donasi_rutin"`
 	PaketName                     string     `db:"paket_name"`
+	Benefit                       string     `db:"benefit"`
 	Nominal                       float64    `db:"nominal"`
 	PaketImageURL                 string     `db:"paket_image_url"`
 	CreatedAt                     time.Time  `db:"created_at"`

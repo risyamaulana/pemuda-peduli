@@ -13,10 +13,10 @@ import (
 type CreateProgramDonasiRutin struct {
 	IDPPCPProgramDonasiKategori string `json:"id_kategori" valid:"required"`
 
-	Title             string `json:"title" valid:"required"`
-	SubTitle          string `json:"sub_title" valid:"required"`
-	Content           string `json:"content" valid:"required"`
-	Benefit           string `json:"benefit"`
+	Title    string `json:"title" valid:"required"`
+	SubTitle string `json:"sub_title" valid:"required"`
+	Content  string `json:"content" valid:"required"`
+
 	Tag               string `json:"tag"`
 	ThumbnailImageURL string `json:"thumbnail_image_url" valid:"url"`
 	SEOURL            string `json:"seo_url"`
@@ -29,6 +29,7 @@ type CreateProgramDonasiRutin struct {
 
 type CreateProgramDonasiRutinPaket struct {
 	PaketName     string  `json:"paket_name" valid:"required"`
+	Benefit       string  `json:"benefit" valid:"required"`
 	Nominal       float64 `json:"nominal" valid:"required"`
 	PaketImageURL string  `json:"paket_image_url" valid:"url"`
 }
@@ -36,10 +37,10 @@ type CreateProgramDonasiRutinPaket struct {
 type UpdateProgramDonasiRutin struct {
 	IDPPCPProgramDonasiKategori string `json:"id_kategori" valid:"required"`
 
-	Title             string `json:"title" valid:"required"`
-	SubTitle          string `json:"sub_title" valid:"required"`
-	Content           string `json:"content" valid:"required"`
-	Benefit           string `json:"benefit"`
+	Title    string `json:"title" valid:"required"`
+	SubTitle string `json:"sub_title" valid:"required"`
+	Content  string `json:"content" valid:"required"`
+
 	Tag               string `json:"tag"`
 	ThumbnailImageURL string `json:"thumbnail_image_url" valid:"url"`
 	IsShow            *bool  `json:"is_show"`
@@ -53,6 +54,7 @@ type UpdateProgramDonasiRutin struct {
 
 type UpdateProgramDonasiRutinPaket struct {
 	PaketName     string  `json:"paket_name" valid:"required"`
+	Benefit       string  `json:"benefit" valid:"required"`
 	Nominal       float64 `json:"nominal" valid:"required"`
 	PaketImageURL string  `json:"paket_image_url" valid:"url"`
 }
@@ -104,14 +106,15 @@ type ReadProgramDonasiRutin struct {
 }
 
 type ReadProgramDonasiRutinPaket struct {
-	IDPPCPProgramDonasiRutinPaket string     `db:"id"`
-	IDPPCPProgramDonasiRutin      string     `db:"id_pp_cp_program_donasi_rutin"`
-	PaketName                     string     `db:"paket_name"`
-	Nominal                       float64    `db:"nominal"`
-	PaketImageURL                 string     `db:"paket_image_url"`
-	CreatedAt                     time.Time  `db:"created_at"`
-	UpdatedAt                     *time.Time `db:"updated_at"`
-	IsDeleted                     bool       `db:"is_deleted"`
+	IDPPCPProgramDonasiRutinPaket string     `json:"id"`
+	IDPPCPProgramDonasiRutin      string     `json:"id_pp_cp_program_donasi_rutin"`
+	PaketName                     string     `json:"paket_name"`
+	Benefit                       string     `json:"benefit"`
+	Nominal                       float64    `json:"nominal"`
+	PaketImageURL                 string     `json:"paket_image_url"`
+	CreatedAt                     time.Time  `json:"created_at"`
+	UpdatedAt                     *time.Time `json:"updated_at"`
+	IsDeleted                     bool       `json:"is_deleted"`
 }
 
 func GetCreatePayload(body []byte) (payload CreateProgramDonasiRutin, err error) {
@@ -212,6 +215,7 @@ func (r CreateProgramDonasiRutinPaket) ToEntity(ctx context.Context) (data entit
 	data = entity.ProgramDonasiRutinPaketEntity{
 		IDPPCPProgramDonasiRutin: ctx.Value("id").(string),
 		PaketName:                r.PaketName,
+		Benefit:                  r.Benefit,
 		Nominal:                  r.Nominal,
 		PaketImageURL:            r.PaketImageURL,
 		CreatedAt:                time.Now().UTC(),
@@ -241,6 +245,7 @@ func (r UpdateProgramDonasiRutinPaket) ToEntity() (data entity.ProgramDonasiRuti
 	currentTime := time.Now().UTC()
 	data = entity.ProgramDonasiRutinPaketEntity{
 		PaketName:     r.PaketName,
+		Benefit:       r.Benefit,
 		Nominal:       r.Nominal,
 		PaketImageURL: r.PaketImageURL,
 		UpdatedAt:     &currentTime,
@@ -305,6 +310,7 @@ func ToPayloadPaket(data entity.ProgramDonasiRutinPaketEntity) (response ReadPro
 		IDPPCPProgramDonasiRutinPaket: data.IDPPCPProgramDonasiRutinPaket,
 		IDPPCPProgramDonasiRutin:      data.IDPPCPProgramDonasiRutin,
 		PaketName:                     data.PaketName,
+		Benefit:                       data.Benefit,
 		Nominal:                       data.Nominal,
 		PaketImageURL:                 data.PaketImageURL,
 		CreatedAt:                     data.CreatedAt,
