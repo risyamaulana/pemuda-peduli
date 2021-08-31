@@ -53,6 +53,7 @@ func (s *PenggalangDanaApp) addRoute(r *router.Router) {
 	r.POST("/penggalang-dana/create", middleware.CheckAuthToken(createPenggalangDana))
 
 	r.PUT("/penggalang-dana/{id}", middleware.CheckAuthToken(updatePenggalangDana))
+	r.PUT("/penggalang-dana/verified/{id}", middleware.CheckAuthToken(verifiedPenggalangDana))
 
 	r.POST("/penggalang-dana/list", middleware.CheckAuthToken(findPenggalangDanas))
 	r.GET("/penggalang-dana/{id}", middleware.CheckAuthToken(getPenggalangDana))
@@ -105,6 +106,19 @@ func updatePenggalangDana(ctx *fasthttp.RequestCtx) {
 
 	data := payload.ToEntity()
 	responseData, err := domain.EditPenggalangDana(ctx, DB, data)
+	if err != nil {
+		ctx.SetStatusCode(fasthttp.StatusUnprocessableEntity)
+		fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
+		log.Println(err)
+		return
+	}
+	response := handler.DefaultResponse(ToPayload(responseData), nil)
+	fmt.Fprintf(ctx, utility.PrettyPrint(response))
+}
+
+func verifiedPenggalangDana(ctx *fasthttp.RequestCtx) {
+	penggalangDanaID := fmt.Sprintf("%s", ctx.UserValue("id"))
+	responseData, err := domain.ToogleVerified(ctx, DB, penggalangDanaID)
 	if err != nil {
 		ctx.SetStatusCode(fasthttp.StatusUnprocessableEntity)
 		fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
