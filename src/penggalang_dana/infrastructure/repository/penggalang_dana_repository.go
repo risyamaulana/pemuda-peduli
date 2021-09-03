@@ -62,7 +62,7 @@ func (c *PenggalangDanaRepository) Update(ctx context.Context, data entity.Pengg
 	var str strings.Builder
 	fields := utility.GetNamedStruct(data)
 	for _, field := range fields {
-		if field == "id" || field == "id_pp_cp_penggalang_danar" || field == "created_at" {
+		if field == "id" || field == "id_pp_cp_penggalang_dana" || field == "created_at" {
 			continue
 		}
 		str.WriteString(field + "=:" + field + ", ")
@@ -93,7 +93,7 @@ func (c *PenggalangDanaRepository) Find(ctx context.Context, data *entity.Pengga
 		for _, fil := range data.Filter {
 			field := fil.Field
 			if fil.Field == "id" {
-				field = "id_pp_cp_penggalang_danar"
+				field = "id_pp_cp_penggalang_dana"
 			}
 			switch field {
 			case "is_deleted":
