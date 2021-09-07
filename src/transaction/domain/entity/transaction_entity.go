@@ -10,6 +10,8 @@ type TransactionEntity struct {
 	Email                    string     `db:"email"`
 	NamaLengkap              string     `db:"nama_lengkap"`
 	NamaPanggilan            string     `db:"nama_panggilan"`
+	UcapanDanDoa             string     `db:"ucapan_dan_doa"`
+	IsAnonymous              bool       `db:"is_anonymous"`
 	IsRutin                  bool       `db:"is_rutin"`
 	IDPPCPProgramDonasi      string     `db:"id_pp_cp_program_donasi"`
 	IDPPCPProgramDonasiRutin string     `db:"id_pp_cp_program_donasi_rutin"`

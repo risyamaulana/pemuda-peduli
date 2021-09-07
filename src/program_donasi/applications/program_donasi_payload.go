@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"errors"
 	"pemuda-peduli/src/program_donasi/domain/entity"
+	"strconv"
+	"strings"
 	"time"
 
 	"github.com/asaskevich/govalidator"
@@ -21,6 +23,7 @@ type CreateProgramDonasi struct {
 	SEOURL               string     `json:"seo_url"`
 	ValidFrom            *time.Time `json:"valid_from" valid:"required"`
 	ValidTo              *time.Time `json:"valid_to" valid:"required"`
+	Nominal              []int      `json:"nominal" valid:"required"`
 	Target               *float64   `json:"target" valid:"required"`
 	KitaBisaLink         *string    `json:"kitabisa_link" valid:"url"`
 	AyoBantuLink         *string    `json:"ayobantu_link" valid:"url"`
@@ -39,6 +42,7 @@ type UpdateProgramDonasi struct {
 	ThumbnailImageURL    string     `json:"thumbnail_image_url" valid:"url"`
 	ValidFrom            *time.Time `json:"valid_from" valid:"required"`
 	ValidTo              *time.Time `json:"valid_to" valid:"required"`
+	Nominal              []int      `json:"nominal" valid:"required"`
 	Target               *float64   `json:"target" valid:"required"`
 	KitaBisaLink         *string    `json:"kitabisa_link" valid:"url"`
 	AyoBantuLink         *string    `json:"ayobantu_link" valid:"url"`
@@ -75,6 +79,7 @@ type ReadProgramDonasi struct {
 	ValidFrom            *time.Time `json:"valid_from"`
 	IDPPCPPenggalangDana string     `json:"id_pp_cp_penggalang_dana"`
 	ValidTo              *time.Time `json:"valid_to"`
+	Nominal              []int      `json:"nominal" valid:"required"`
 	Target               *float64   `json:"target"`
 	DonationCollect      float64    `json:"donation_collect"`
 	Description          string     `json:"description"`
@@ -162,6 +167,14 @@ func (r ProgramDonasiQuery) Validate() (err error) {
 func (r CreateProgramDonasi) ToEntity() (data entity.ProgramDonasiEntity, dataDetail entity.ProgramDonasiDetailEntity) {
 	validFrom := r.ValidFrom.UTC()
 	validTo := r.ValidTo.UTC()
+
+	var nominalStr strings.Builder
+	for _, nominal := range r.Nominal {
+		nominalString := strconv.Itoa(nominal)
+		nominalStr.WriteString(nominalString + "|")
+	}
+	nominalValue := strings.TrimSuffix(nominalStr.String(), "|")
+
 	data = entity.ProgramDonasiEntity{
 		Title:                r.Title,
 		SubTitle:             r.SubTitle,
@@ -171,6 +184,7 @@ func (r CreateProgramDonasi) ToEntity() (data entity.ProgramDonasiEntity, dataDe
 		IDPPCPPenggalangDana: r.IDPPCPPenggalangDana,
 		ValidFrom:            &validFrom,
 		ValidTo:              &validTo,
+		Nominal:              nominalValue,
 		Target:               r.Target,
 		KitaBisaLink:         r.KitaBisaLink,
 		AyoBantuLink:         r.AyoBantuLink,
@@ -190,6 +204,14 @@ func (r CreateProgramDonasi) ToEntity() (data entity.ProgramDonasiEntity, dataDe
 func (r UpdateProgramDonasi) ToEntity() (data entity.ProgramDonasiEntity, dataDetail entity.ProgramDonasiDetailEntity) {
 	validFrom := r.ValidFrom.UTC()
 	validTo := r.ValidTo.UTC()
+
+	var nominalStr strings.Builder
+	for _, nominal := range r.Nominal {
+		nominalString := strconv.Itoa(nominal)
+		nominalStr.WriteString(nominalString + "|")
+	}
+	nominalValue := strings.TrimSuffix(nominalStr.String(), "|")
+
 	data = entity.ProgramDonasiEntity{
 		Title:                r.Title,
 		SubTitle:             r.SubTitle,
@@ -199,6 +221,7 @@ func (r UpdateProgramDonasi) ToEntity() (data entity.ProgramDonasiEntity, dataDe
 		IDPPCPPenggalangDana: r.IDPPCPPenggalangDana,
 		ValidFrom:            &validFrom,
 		ValidTo:              &validTo,
+		Nominal:              nominalValue,
 		Target:               r.Target,
 		KitaBisaLink:         r.KitaBisaLink,
 		AyoBantuLink:         r.AyoBantuLink,
@@ -239,6 +262,14 @@ func (r ProgramDonasiQuery) ToEntity() (data entity.ProgramDonasiQueryEntity) {
 }
 
 func ToPayload(data entity.ProgramDonasiEntity) (response ReadProgramDonasi) {
+	nominalSplit := strings.Split(data.Nominal, "|")
+
+	var nominalValue []int
+	for _, nominalString := range nominalSplit {
+		nominal, _ := strconv.Atoi(nominalString)
+		nominalValue = append(nominalValue, nominal)
+	}
+
 	response = ReadProgramDonasi{
 		IDPPCPProgramDonasi:  data.IDPPCPProgramDonasi,
 		Title:                data.Title,
@@ -250,6 +281,7 @@ func ToPayload(data entity.ProgramDonasiEntity) (response ReadProgramDonasi) {
 		SEOURL:               data.SEOURL,
 		ValidFrom:            data.ValidFrom,
 		ValidTo:              data.ValidTo,
+		Nominal:              nominalValue,
 		Target:               data.Target,
 		DonationCollect:      data.DonationCollect,
 		KitaBisaLink:         data.KitaBisaLink,

@@ -11,7 +11,7 @@ import (
 )
 
 type CreateProgramDonasiRutin struct {
-	IDPPCPProgramDonasiKategori string `json:"id_kategori" valid:"required"`
+	// IDPPCPProgramDonasiKategori string `json:"id_kategori" valid:"required"`
 
 	Title    string `json:"title" valid:"required"`
 	SubTitle string `json:"sub_title" valid:"required"`
@@ -35,7 +35,7 @@ type CreateProgramDonasiRutinPaket struct {
 }
 
 type UpdateProgramDonasiRutin struct {
-	IDPPCPProgramDonasiKategori string `json:"id_kategori" valid:"required"`
+	// IDPPCPProgramDonasiKategori string `json:"id_kategori" valid:"required"`
 
 	Title    string `json:"title" valid:"required"`
 	SubTitle string `json:"sub_title" valid:"required"`
@@ -77,32 +77,32 @@ type ProgramDonasiRutinFilterQuery struct {
 }
 
 type ReadProgramDonasiRutin struct {
-	IDPPCPProgramDonasiRutin    string     `json:"id"`
-	IDPPCPProgramDonasiKategori string     `json:"id_kategori"`
-	KategoriName                string     `json:"kategori_name"`
-	Title                       string     `json:"title"`
-	SubTitle                    string     `json:"sub_title"`
-	Content                     string     `json:"content"`
-	Benefit                     string     `json:"benefit"`
-	IDPPCPMasterQris            *string    `json:"id_pp_cp_master_qris"`
-	QrisImageURL                *string    `json:"qris_image_url"`
-	Tag                         string     `json:"tag"`
-	ThumbnailImageURL           string     `json:"thumbnail_image_url"`
-	ValidFrom                   *time.Time `json:"valid_from"`
-	ValidTo                     *time.Time `json:"valid_to"`
-	Target                      *float64   `json:"target"`
-	DonationCollect             float64    `json:"donation_collect"`
-	Description                 string     `json:"description"`
-	SEOURL                      string     `json:"seo_url"`
-	Status                      string     `json:"status"`
-	CreatedAt                   time.Time  `json:"created_at"`
-	CreatedBy                   *string    `json:"created_by"`
-	UpdatedAt                   *time.Time `json:"updated_at"`
-	UpdatedBy                   *string    `json:"updated_by"`
-	PublishedAt                 *time.Time `json:"published_at"`
-	PublishedBy                 *string    `json:"published_by"`
-	IsDeleted                   bool       `json:"is_deleted"`
-	IsShow                      bool       `json:"is_show"`
+	IDPPCPProgramDonasiRutin string `json:"id"`
+	// IDPPCPProgramDonasiKategori string     `json:"id_kategori"`
+	// KategoriName      string     `json:"kategori_name"`
+	Title             string     `json:"title"`
+	SubTitle          string     `json:"sub_title"`
+	Content           string     `json:"content"`
+	Benefit           string     `json:"benefit"`
+	IDPPCPMasterQris  *string    `json:"id_pp_cp_master_qris"`
+	QrisImageURL      *string    `json:"qris_image_url"`
+	Tag               string     `json:"tag"`
+	ThumbnailImageURL string     `json:"thumbnail_image_url"`
+	ValidFrom         *time.Time `json:"valid_from"`
+	ValidTo           *time.Time `json:"valid_to"`
+	Target            *float64   `json:"target"`
+	DonationCollect   float64    `json:"donation_collect"`
+	Description       string     `json:"description"`
+	SEOURL            string     `json:"seo_url"`
+	Status            string     `json:"status"`
+	CreatedAt         time.Time  `json:"created_at"`
+	CreatedBy         *string    `json:"created_by"`
+	UpdatedAt         *time.Time `json:"updated_at"`
+	UpdatedBy         *string    `json:"updated_by"`
+	PublishedAt       *time.Time `json:"published_at"`
+	PublishedBy       *string    `json:"published_by"`
+	IsDeleted         bool       `json:"is_deleted"`
+	IsShow            bool       `json:"is_show"`
 }
 
 type ReadProgramDonasiRutinPaket struct {
@@ -195,14 +195,14 @@ func (r ProgramDonasiRutinQuery) Validate() (err error) {
 
 func (r CreateProgramDonasiRutin) ToEntity() (data entity.ProgramDonasiRutinEntity) {
 	data = entity.ProgramDonasiRutinEntity{
-		IDPPCPProgramDonasiKategori: r.IDPPCPProgramDonasiKategori,
-		Title:                       r.Title,
-		SubTitle:                    r.SubTitle,
-		Content:                     r.Content,
-		Tag:                         r.Tag,
-		ThumbnailImageURL:           r.ThumbnailImageURL,
-		Description:                 r.Description,
-		SEOURL:                      r.SEOURL,
+		// IDPPCPProgramDonasiKategori: r.IDPPCPProgramDonasiKategori,
+		Title:             r.Title,
+		SubTitle:          r.SubTitle,
+		Content:           r.Content,
+		Tag:               r.Tag,
+		ThumbnailImageURL: r.ThumbnailImageURL,
+		Description:       r.Description,
+		SEOURL:            r.SEOURL,
 
 		IDPPCPMasterQris: &r.IDPPCPMasterQris,
 		QrisImageURL:     &r.QrisImageURL,
@@ -226,17 +226,17 @@ func (r CreateProgramDonasiRutinPaket) ToEntity(ctx context.Context) (data entit
 
 func (r UpdateProgramDonasiRutin) ToEntity() (data entity.ProgramDonasiRutinEntity) {
 	data = entity.ProgramDonasiRutinEntity{
-		IDPPCPProgramDonasiKategori: r.IDPPCPProgramDonasiKategori,
-		Title:                       r.Title,
-		SubTitle:                    r.SubTitle,
-		Content:                     r.Content,
-		Tag:                         r.Tag,
-		ThumbnailImageURL:           r.ThumbnailImageURL,
-		Description:                 r.Description,
-		IDPPCPMasterQris:            &r.IDPPCPMasterQris,
-		QrisImageURL:                &r.QrisImageURL,
-		SEOURL:                      r.SEOURL,
-		IsShow:                      *r.IsShow,
+		// IDPPCPProgramDonasiKategori: r.IDPPCPProgramDonasiKategori,
+		Title:             r.Title,
+		SubTitle:          r.SubTitle,
+		Content:           r.Content,
+		Tag:               r.Tag,
+		ThumbnailImageURL: r.ThumbnailImageURL,
+		Description:       r.Description,
+		IDPPCPMasterQris:  &r.IDPPCPMasterQris,
+		QrisImageURL:      &r.QrisImageURL,
+		SEOURL:            r.SEOURL,
+		IsShow:            *r.IsShow,
 	}
 	return
 }
@@ -279,28 +279,28 @@ func (r ProgramDonasiRutinQuery) ToEntity() (data entity.ProgramDonasiRutinQuery
 
 func ToPayload(data entity.ProgramDonasiRutinEntity) (response ReadProgramDonasiRutin) {
 	response = ReadProgramDonasiRutin{
-		IDPPCPProgramDonasiRutin:    data.IDPPCPProgramDonasiRutin,
-		IDPPCPProgramDonasiKategori: data.IDPPCPProgramDonasiKategori,
-		KategoriName:                data.KategoriName,
-		Title:                       data.Title,
-		SubTitle:                    data.SubTitle,
-		Content:                     data.Content,
-		Tag:                         data.Tag,
-		ThumbnailImageURL:           data.ThumbnailImageURL,
-		IDPPCPMasterQris:            data.IDPPCPMasterQris,
-		DonationCollect:             data.DonationCollect,
-		QrisImageURL:                data.QrisImageURL,
-		Description:                 data.Description,
-		SEOURL:                      data.SEOURL,
-		Status:                      data.Status,
-		CreatedAt:                   data.CreatedAt,
-		CreatedBy:                   data.CreatedBy,
-		UpdatedAt:                   data.UpdatedAt,
-		UpdatedBy:                   data.UpdatedBy,
-		PublishedAt:                 data.PublishedAt,
-		PublishedBy:                 data.PublishedBy,
-		IsDeleted:                   data.IsDeleted,
-		IsShow:                      data.IsShow,
+		IDPPCPProgramDonasiRutin: data.IDPPCPProgramDonasiRutin,
+		// IDPPCPProgramDonasiKategori: data.IDPPCPProgramDonasiKategori,
+		// KategoriName:                data.KategoriName,
+		Title:             data.Title,
+		SubTitle:          data.SubTitle,
+		Content:           data.Content,
+		Tag:               data.Tag,
+		ThumbnailImageURL: data.ThumbnailImageURL,
+		IDPPCPMasterQris:  data.IDPPCPMasterQris,
+		DonationCollect:   data.DonationCollect,
+		QrisImageURL:      data.QrisImageURL,
+		Description:       data.Description,
+		SEOURL:            data.SEOURL,
+		Status:            data.Status,
+		CreatedAt:         data.CreatedAt,
+		CreatedBy:         data.CreatedBy,
+		UpdatedAt:         data.UpdatedAt,
+		UpdatedBy:         data.UpdatedBy,
+		PublishedAt:       data.PublishedAt,
+		PublishedBy:       data.PublishedBy,
+		IsDeleted:         data.IsDeleted,
+		IsShow:            data.IsShow,
 	}
 	return
 }

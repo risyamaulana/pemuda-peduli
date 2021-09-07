@@ -3,7 +3,6 @@ package applications
 import (
 	"encoding/json"
 	"errors"
-
 	"pemuda-peduli/src/common/utility"
 	"pemuda-peduli/src/transaction/common/constants"
 	"pemuda-peduli/src/transaction/domain/entity"
@@ -18,6 +17,8 @@ type CreateTransaction struct {
 	IDPPCPProgramDonasiRutin string  `json:"id_pp_cp_program_donasi_rutin"`
 	Amount                   float64 `json:"amount" valid:"required"`
 	PaymentMethod            string  `json:"payment_method" valid:"required"`
+	UcapanDanDoa             string  `json:"ucapan_dan_doa"`
+	IsAnonymous              bool    `json:"is_anonymous"`
 }
 
 type UploadReceiptTransaction struct {
@@ -49,6 +50,8 @@ type ReadTransaction struct {
 	Email                    string     `json:"email"`
 	NamaLengkap              string     `json:"nama_lengkap"`
 	NamaPanggilan            string     `json:"nama_panggilan"`
+	UcapanDanDoa             string     `json:"ucapan_dan_doa"`
+	IsAnonymous              bool       `json:"is_anonymous"`
 	IsRutin                  bool       `json:"is_rutin"`
 	IDPPCPProgramDonasi      string     `json:"id_pp_cp_program_donasi"`
 	IDPPCPProgramDonasiRutin string     `json:"id_pp_cp_program_donasi_rutin"`
@@ -120,6 +123,8 @@ func (r CreateTransaction) ToEntity() (data entity.TransactionEntity) {
 		IDPPCPProgramDonasi:      r.IDPPCPProgramDonasi,
 		IDPPCPProgramDonasiRutin: r.IDPPCPProgramDonasiRutin,
 		Amount:                   r.Amount,
+		IsAnonymous:              r.IsAnonymous,
+		UcapanDanDoa:             r.UcapanDanDoa,
 		PaymentMethod:            r.PaymentMethod,
 		Status:                   constants.StatusUnpaid,
 		CreatedAt:                time.Now().UTC(),
@@ -159,6 +164,8 @@ func ToPayload(data entity.TransactionEntity) (response ReadTransaction) {
 		NamaLengkap:              data.NamaLengkap,
 		NamaPanggilan:            data.NamaPanggilan,
 		IsRutin:                  data.IsRutin,
+		UcapanDanDoa:             data.UcapanDanDoa,
+		IsAnonymous:              data.IsAnonymous,
 		IDPPCPProgramDonasi:      data.IDPPCPProgramDonasi,
 		IDPPCPProgramDonasiRutin: data.IDPPCPProgramDonasiRutin,
 		DonasiTitle:              data.DonasiTitle,

@@ -18,6 +18,7 @@ type ProgramDonasiEntity struct {
 	Status               string     `db:"status"`
 	ValidFrom            *time.Time `db:"valid_from"`
 	ValidTo              *time.Time `db:"valid_to"`
+	Nominal              string     `db:"nominal"`
 	Target               *float64   `db:"target"`
 	DonationCollect      float64    `db:"donation_collect"`
 	CreatedAt            time.Time  `db:"created_at"`

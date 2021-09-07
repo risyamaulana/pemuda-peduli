@@ -11,14 +11,13 @@ import (
 	"pemuda-peduli/src/program_donasi_rutin/infrastructure/repository"
 	"strings"
 	"time"
-
-	kategoriDom "pemuda-peduli/src/program_donasi_kategori/domain"
-	kategoriRep "pemuda-peduli/src/program_donasi_kategori/infrastructure/repository"
+	// kategoriDom "pemuda-peduli/src/program_donasi_kategori/domain"
+	// kategoriRep "pemuda-peduli/src/program_donasi_kategori/infrastructure/repository"
 )
 
 func EditProgramDonasiRutin(ctx context.Context, db *db.ConnectTo, data entity.ProgramDonasiRutinEntity, id string) (response entity.ProgramDonasiRutinEntity, err error) {
 	repo := repository.NewProgramDonasiRutinRepository(db)
-	kategoriRepo := kategoriRep.NewProgramDonasiKategoriRepository(db)
+	// kategoriRepo := kategoriRep.NewProgramDonasiKategoriRepository(db)
 
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
@@ -32,15 +31,15 @@ func EditProgramDonasiRutin(ctx context.Context, db *db.ConnectTo, data entity.P
 	}
 
 	// Check Kategori
-	if checkData.IDPPCPProgramDonasiKategori != data.IDPPCPProgramDonasiKategori {
-		kategoriData, errKategoriData := kategoriDom.GetProgramDonasiKategori(ctx, &kategoriRepo, data.IDPPCPProgramDonasiKategori)
-		if errKategoriData != nil {
-			err = errors.New("Failed, kategori not found")
-			return
-		}
+	// if checkData.IDPPCPProgramDonasiKategori != data.IDPPCPProgramDonasiKategori {
+	// 	kategoriData, errKategoriData := kategoriDom.GetProgramDonasiKategori(ctx, &kategoriRepo, data.IDPPCPProgramDonasiKategori)
+	// 	if errKategoriData != nil {
+	// 		err = errors.New("Failed, kategori not found")
+	// 		return
+	// 	}
 
-		data.KategoriName = kategoriData.KategoriName
-	}
+	// 	data.KategoriName = kategoriData.KategoriName
+	// }
 
 	// Check SEO URL
 	if data.SEOURL == "" {
@@ -74,8 +73,8 @@ func updateProgramDonasiRutin(ctx context.Context, repo interfaces.IProgramDonas
 	checkData.Description = data.Description
 	checkData.SEOURL = data.SEOURL
 
-	checkData.IDPPCPProgramDonasiKategori = data.IDPPCPProgramDonasiKategori
-	checkData.KategoriName = data.KategoriName
+	// checkData.IDPPCPProgramDonasiKategori = data.IDPPCPProgramDonasiKategori
+	// checkData.KategoriName = data.KategoriName
 
 	checkData.IDPPCPMasterQris = data.IDPPCPMasterQris
 	checkData.QrisImageURL = data.QrisImageURL

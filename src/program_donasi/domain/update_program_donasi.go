@@ -57,6 +57,7 @@ func UpdateProgramDonasi(ctx context.Context, db *db.ConnectTo, data entity.Prog
 	checkData.Description = data.Description
 	checkData.ValidFrom = data.ValidFrom
 	checkData.ValidTo = data.ValidTo
+	checkData.Nominal = data.Nominal
 	checkData.SEOURL = data.SEOURL
 	checkData.Target = data.Target
 	checkData.IDPPCPPenggalangDana = data.IDPPCPPenggalangDana
