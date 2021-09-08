@@ -15,4 +15,8 @@ type IUserRepository interface {
 	GetForLogin(ctx context.Context, username string) (response entity.UserEntity, err error)
 
 	GetDuplicateCheck(ctx context.Context, username, phoneNumber, email string) (response entity.UserEntity, err error)
+
+	GetByEmail(ctx context.Context, email string) (response entity.UserEntity, err error)
+
+	GetByToken(ctx context.Context, token string) (response entity.UserEntity, err error)
 }

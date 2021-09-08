@@ -16,9 +16,7 @@ import (
 	"github.com/valyala/fasthttp"
 )
 
-var (
-	DB *db.ConnectTo
-)
+var DB *db.ConnectTo
 
 // db init hardcoded temporary for testing
 func init() {
@@ -55,6 +53,9 @@ func (s *UserApp) addRoute(r *router.Router) {
 
 	r.PUT("/user", middleware.CheckUserToken(updateUserHandler))
 	r.PUT("/user/change-password", middleware.CheckUserToken(changePasswordHandler))
+
+	r.POST("/user/forgot-password", middleware.CheckUserToken(forgotPasswordHandler))
+	r.PUT("/user/reset-password", middleware.CheckAuthToken(resetPasswordHandler))
 
 	r.DELETE("/user", middleware.CheckUserToken(deleteUser))
 
@@ -151,6 +152,64 @@ func changePasswordHandler(ctx *fasthttp.RequestCtx) {
 		return
 	}
 
+	response := handler.DefaultResponse(nil, nil)
+	fmt.Fprintf(ctx, utility.PrettyPrint(response))
+}
+
+func forgotPasswordHandler(ctx *fasthttp.RequestCtx) {
+	payload, err := GetForgotPasswordPayload(ctx.Request.Body())
+	if err != nil {
+		ctx.SetStatusCode(fasthttp.StatusBadRequest)
+		fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, errors.New("Bad JSON Payload"))))
+		log.Println("Error Bad Request JSON Payload:", err)
+		return
+	}
+
+	if err := payload.Validate(); err != nil {
+		ctx.SetStatusCode(fasthttp.StatusBadRequest)
+		fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
+		return
+	}
+
+	repo := repository.NewUserRepository(DB)
+	_, err = domain.ForgotPassword(ctx, &repo, payload.Email)
+	if err != nil {
+		if err != nil {
+			ctx.SetStatusCode(fasthttp.StatusUnprocessableEntity)
+			fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
+			log.Println(err)
+			return
+		}
+	}
+	response := handler.DefaultResponse(nil, nil)
+	fmt.Fprintf(ctx, utility.PrettyPrint(response))
+}
+
+func resetPasswordHandler(ctx *fasthttp.RequestCtx) {
+	payload, err := GetResetPasswordPayload(ctx.Request.Body())
+	if err != nil {
+		ctx.SetStatusCode(fasthttp.StatusBadRequest)
+		fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, errors.New("Bad JSON Payload"))))
+		log.Println("Error Bad Request JSON Payload:", err)
+		return
+	}
+
+	if err := payload.Validate(); err != nil {
+		ctx.SetStatusCode(fasthttp.StatusBadRequest)
+		fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
+		return
+	}
+
+	repo := repository.NewUserRepository(DB)
+	_, err = domain.ResetPassword(ctx, &repo, payload.Token, payload.NewPassword)
+	if err != nil {
+		if err != nil {
+			ctx.SetStatusCode(fasthttp.StatusUnprocessableEntity)
+			fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
+			log.Println(err)
+			return
+		}
+	}
 	response := handler.DefaultResponse(nil, nil)
 	fmt.Fprintf(ctx, utility.PrettyPrint(response))
 }

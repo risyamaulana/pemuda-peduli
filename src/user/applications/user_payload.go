@@ -53,7 +53,29 @@ type RegisterUser struct {
 	Alamat        string `json:"alamat"`
 }
 
+// ============================ Forgot Password ============================
+type ForgotPassword struct {
+	Email string `json:"email" valid:"required,email"`
+}
+
+// ============================ Reset Password ============================
+type ResetPassword struct {
+	NewPassword     string `json:"new_password" valid:"required"`
+	ConfNewPassword string `json:"conf_new_password" valid:"required"`
+	Token           string `json:"token" valid:"required"`
+}
+
 func GetRegisterUserPayload(body []byte) (payload RegisterUser, err error) {
+	err = json.Unmarshal(body, &payload)
+	return
+}
+
+func GetForgotPasswordPayload(body []byte) (payload ForgotPassword, err error) {
+	err = json.Unmarshal(body, &payload)
+	return
+}
+
+func GetResetPasswordPayload(body []byte) (payload ResetPassword, err error) {
 	err = json.Unmarshal(body, &payload)
 	return
 }
@@ -70,6 +92,29 @@ func (r RegisterUser) Validate() (err error) {
 		return
 	}
 
+	return
+}
+
+func (r ForgotPassword) Validate() (err error) {
+	// Validate Payload
+	_, err = govalidator.ValidateStruct(r)
+	if err != nil {
+		return
+	}
+	return
+}
+
+func (r ResetPassword) Validate() (err error) {
+	// Validate Payload
+	_, err = govalidator.ValidateStruct(r)
+	if err != nil {
+		return
+	}
+
+	if r.NewPassword != r.ConfNewPassword {
+		err = errors.New("Failed: Password not match")
+		return
+	}
 	return
 }
 

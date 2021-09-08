@@ -14,6 +14,12 @@ func ReadUser(ctx context.Context, repo interfaces.IUserRepository, id string) (
 	return
 }
 
+// Get by email
+func ReadUserByEmail(ctx context.Context, repo interfaces.IUserRepository, email string) (response entity.UserEntity, err error) {
+	response, err = repo.GetByEmail(ctx, email)
+	return
+}
+
 // Get Login
 func ReadLoginuser(ctx context.Context, repo interfaces.IUserRepository, username string) (response entity.UserEntity, err error) {
 	username = utility.UsernameIsPhoneNumber(username)

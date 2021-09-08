@@ -25,7 +25,6 @@ func NewAdminUserRepository(db *db.ConnectTo) AdminUserRepository {
 
 // Create data token
 func (c *AdminUserRepository) Insert(ctx context.Context, data *entity.AdminUserEntity) (err error) {
-
 	tx := c.db.DBExec.MustBegin()
 
 	// Generate UUID
@@ -88,7 +87,6 @@ func (c *AdminUserRepository) Update(ctx context.Context, data entity.AdminUserE
 
 // READ
 func (c *AdminUserRepository) Find(ctx context.Context, data *entity.AdminUserQueryEntity) (response []entity.AdminUserEntity, count int, err error) {
-
 	sql := `SELECT * FROM pp_bo_user_admin WHERE 1=1 `
 
 	var str strings.Builder

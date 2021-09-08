@@ -25,7 +25,6 @@ func NewUserRepository(db *db.ConnectTo) UserRepository {
 
 // Create User
 func (c *UserRepository) Insert(ctx context.Context, data *entity.UserEntity) (err error) {
-
 	tx := c.db.DBExec.MustBegin()
 
 	sql := `INSERT INTO pp_user `
@@ -91,6 +90,13 @@ func (c *UserRepository) Get(ctx context.Context, id string) (response entity.Us
 	return
 }
 
+func (c *UserRepository) GetByEmail(ctx context.Context, email string) (response entity.UserEntity, err error) {
+	if err = c.db.DBRead.Get(&response, "SELECT * FROM pp_user WHERE email = $1 AND is_deleted = false", email); err != nil {
+		return
+	}
+	return
+}
+
 func (c *UserRepository) GetForLogin(ctx context.Context, username string) (response entity.UserEntity, err error) {
 	if err = c.db.DBRead.Get(&response, "SELECT * FROM pp_user WHERE (username = $1 OR email = $1 OR phone_number = $1) AND is_deleted = false", username); err != nil {
 		return
@@ -108,6 +114,13 @@ func (c *UserRepository) GetDuplicateCheck(ctx context.Context, username, phoneN
 	}
 	if response.IsDeleted {
 		err = errors.New("Failed: user not found")
+		return
+	}
+	return
+}
+
+func (c *UserRepository) GetByToken(ctx context.Context, token string) (response entity.UserEntity, err error) {
+	if err = c.db.DBRead.Get(&response, "SELECT * FROM pp_user WHERE token_reset = $1", token); err != nil {
 		return
 	}
 	return
