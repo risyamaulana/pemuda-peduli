@@ -45,7 +45,7 @@ func main() {
 	initialize(apps, router)
 
 	// Turn on Web API Server
-	ws, _ := web.NewWebServer(router, 8899)
+	ws, _ := web.NewWebServer(router, 6969)
 	go ws.Listen()
 
 	ctx := infrastructure.CaptureSignal()
