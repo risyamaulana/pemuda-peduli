@@ -3,9 +3,11 @@ package domain
 import (
 	"context"
 	"errors"
+	"pemuda-peduli/src/common/infrastructure"
 	"pemuda-peduli/src/common/utility"
 	"pemuda-peduli/src/user/domain/entity"
 	"pemuda-peduli/src/user/domain/interfaces"
+	"strings"
 	"time"
 )
 
@@ -64,6 +66,16 @@ func ForgotPassword(ctx context.Context, repo interfaces.IUserRepository, email 
 	response, err = repo.Update(ctx, data)
 
 	// Send mail
+	sendMailForgotPassword(data)
+	return
+}
+
+func sendMailForgotPassword(data entity.UserEntity) (err error) {
+	to := []string{data.Email}
+	var msgStr strings.Builder
+	msgStr.WriteString("Berikut token untuk reset password : " + data.TokenReset + "\n")
+	msgStr.WriteString("Berikut url token untuk reset : " + "http://ayokitapeduli.com/reset?token=" + data.TokenReset)
+	err = infrastructure.SendMail(to, "Reset password", msgStr.String())
 	return
 }
 
