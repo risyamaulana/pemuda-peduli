@@ -60,8 +60,8 @@ type ForgotPassword struct {
 
 // ============================ Reset Password ============================
 type ResetPassword struct {
-	NewPassword     string `json:"new_password" valid:"required"`
-	ConfNewPassword string `json:"conf_new_password" valid:"required"`
+	NewPassword     string `json:"new_password" valid:"required,minstringlength(8)"`
+	ConfNewPassword string `json:"conf_new_password" valid:"required,minstringlength(8)"`
 	Token           string `json:"token" valid:"required"`
 }
 
