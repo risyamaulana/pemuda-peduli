@@ -8,7 +8,6 @@ import (
 	"pemuda-peduli/src/common/utility"
 	"pemuda-peduli/src/user/domain/entity"
 	"pemuda-peduli/src/user/domain/interfaces"
-	"strings"
 	"time"
 )
 
@@ -73,12 +72,21 @@ func ForgotPassword(ctx context.Context, repo interfaces.IUserRepository, email 
 }
 
 func sendMailForgotPassword(data entity.UserEntity) (err error) {
+	currentDate := time.Now()
 	to := []string{data.Email}
-	var msgStr strings.Builder
-	msgStr.WriteString("Berikut token untuk reset password : " + data.TokenReset + "\n")
-	msgStr.WriteString("Berikut url token untuk reset : " + "http://ayokitapeduli.com/reset?token=" + data.TokenReset)
+	subject := "Reset Password " + currentDate.Format("02 Januari 2006")
+	resetURL := "http://ayokitapeduli.com/reset?token=" + data.TokenReset
+	templateData := struct {
+		Name             string
+		URLResetPassword string
+	}{
+		Name:             data.NamaLengkap,
+		URLResetPassword: resetURL,
+	}
 
-	mailer := infrastructure.NewMailer(to, "Reset Password", msgStr.String())
+	mailer := infrastructure.NewMailer(to, subject, "")
+	mailer.ParseTemplate("doc/template/mail/reset_password_user_pp.html", templateData)
+
 	err = mailer.SendEmail()
 	if err != nil {
 		log.Println("errors send mail : ", err)

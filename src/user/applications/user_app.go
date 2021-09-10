@@ -54,7 +54,7 @@ func (s *UserApp) addRoute(r *router.Router) {
 	r.PUT("/user", middleware.CheckUserToken(updateUserHandler))
 	r.PUT("/user/change-password", middleware.CheckUserToken(changePasswordHandler))
 
-	r.POST("/user/forgot-password", middleware.CheckUserToken(forgotPasswordHandler))
+	r.POST("/user/forgot-password", middleware.CheckAuthToken(forgotPasswordHandler))
 	r.PUT("/user/reset-password", middleware.CheckAuthToken(resetPasswordHandler))
 
 	r.DELETE("/user", middleware.CheckUserToken(deleteUser))

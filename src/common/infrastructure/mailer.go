@@ -1,6 +1,8 @@
 package infrastructure
 
 import (
+	"bytes"
+	"html/template"
 	"log"
 
 	"gopkg.in/gomail.v2"
@@ -31,39 +33,6 @@ func NewMailer(to []string, subject, message string) *Mailer {
 	}
 }
 
-// func SendMail(to []string, subject, message string) (err error) {
-// 	cc := []string{""}
-
-// 	err = sendMail(to, cc, subject, message)
-// 	if err != nil {
-// 		log.Fatal(err.Error())
-// 		return
-// 	}
-
-// 	log.Println("Mail sent!")
-// 	return
-// }
-
-// func sendMail(to []string, cc []string, subject, message string) error {
-// 	body := "From: " + CONFIG_SENDER_NAME + "\n" +
-// 		"To: " + strings.Join(to, ",") + "\n" +
-// 		"Cc: " + strings.Join(cc, ",") + "\n" +
-// 		"Subject: " + subject + "\n\n" +
-// 		message
-
-// 	log.Println("Body Message Email : ", body)
-
-// 	auth := smtp.PlainAuth("", CONFIG_AUTH_EMAIL, CONFIG_AUTH_PASSWORD, CONFIG_SMTP_HOST)
-// 	smtpAddr := fmt.Sprintf("%s:%d", CONFIG_SMTP_HOST, CONFIG_SMTP_PORT)
-
-// 	err := smtp.SendMail(smtpAddr, auth, CONFIG_AUTH_EMAIL, append(to, cc...), []byte(body))
-// 	if err != nil {
-// 		return err
-// 	}
-
-// 	return nil
-// }
-
 func (r *Mailer) SendEmail() error {
 	mailer := gomail.NewMessage()
 	mailer.SetHeader("From", CONFIG_SENDER_NAME)
@@ -86,5 +55,18 @@ func (r *Mailer) SendEmail() error {
 		return err
 	}
 
+	return nil
+}
+
+func (r *Mailer) ParseTemplate(templateFileName string, data interface{}) error {
+	t, err := template.ParseFiles(templateFileName)
+	if err != nil {
+		return err
+	}
+	buf := new(bytes.Buffer)
+	if err = t.Execute(buf, data); err != nil {
+		return err
+	}
+	r.body = buf.String()
 	return nil
 }
