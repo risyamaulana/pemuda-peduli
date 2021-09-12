@@ -179,6 +179,8 @@ func (c *TransactionRepository) FindMyTransaction(ctx context.Context, data *ent
 			switch field {
 			case "status":
 				str.WriteString(field + " = '" + fil.Keyword + "' AND ")
+			case "is_rutin":
+				str.WriteString(field + " = " + fil.Keyword + " AND ")
 			default:
 				str.WriteString(field + " LIKE '%" + fil.Keyword + "%' AND ")
 			}
