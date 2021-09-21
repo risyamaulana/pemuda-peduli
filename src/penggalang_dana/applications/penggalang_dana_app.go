@@ -19,20 +19,16 @@ import (
 
 var DB *db.ConnectTo
 
-// db init hardcoded temporary for testing
-func init() {
-	DB = db.NewDBConnectionFactory(0)
-}
-
 // PenggalangDanaApp ...
 type PenggalangDanaApp struct {
 	interfaces.IApplication
 }
 
 // NewPenggalangDanaApp ...
-func NewPenggalangDanaApp() *PenggalangDanaApp {
+func NewPenggalangDanaApp(db *db.ConnectTo) *PenggalangDanaApp {
 	// Place where we init infrastructure, repo etc
 	s := PenggalangDanaApp{}
+	DB = db
 	return &s
 }
 
@@ -50,15 +46,15 @@ func (s *PenggalangDanaApp) Destroy() {
 
 // Route declaration
 func (s *PenggalangDanaApp) addRoute(r *router.Router) {
-	r.POST("/penggalang-dana/create", middleware.CheckAuthToken(createPenggalangDana))
+	r.POST("/penggalang-dana/create", middleware.CheckAuthToken(DB, createPenggalangDana))
 
-	r.PUT("/penggalang-dana/{id}", middleware.CheckAuthToken(updatePenggalangDana))
-	r.PUT("/penggalang-dana/verified/{id}", middleware.CheckAuthToken(verifiedPenggalangDana))
+	r.PUT("/penggalang-dana/{id}", middleware.CheckAuthToken(DB, updatePenggalangDana))
+	r.PUT("/penggalang-dana/verified/{id}", middleware.CheckAuthToken(DB, verifiedPenggalangDana))
 
-	r.POST("/penggalang-dana/list", middleware.CheckAuthToken(findPenggalangDanas))
-	r.GET("/penggalang-dana/{id}", middleware.CheckAuthToken(getPenggalangDana))
+	r.POST("/penggalang-dana/list", middleware.CheckAuthToken(DB, findPenggalangDanas))
+	r.GET("/penggalang-dana/{id}", middleware.CheckAuthToken(DB, getPenggalangDana))
 
-	r.DELETE("/penggalang-dana/{id}", middleware.CheckAuthToken(deletePenggalangDana))
+	r.DELETE("/penggalang-dana/{id}", middleware.CheckAuthToken(DB, deletePenggalangDana))
 }
 
 // ============== Handler for each route start here ============

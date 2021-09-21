@@ -2,28 +2,32 @@ package applications
 
 import (
 	"encoding/json"
+	"errors"
 	"pemuda-peduli/src/program_kami/domain/entity"
+	"strings"
 	"time"
 
 	"github.com/asaskevich/govalidator"
 )
 
 type CreateProgramKami struct {
-	Title             string `json:"title" valid:"required"`
-	SubTitle          string `json:"sub_title" valid:"required"`
-	Content           string `json:"content" valid:"required"`
-	Tag               string `json:"tag"`
-	ThumbnailImageURL string `json:"thumbnail_image_url" valid:"url"`
-	Description       string `json:"description"`
+	Title                string   `json:"title" valid:"required"`
+	SubTitle             string   `json:"sub_title" valid:"required"`
+	Content              string   `json:"content" valid:"required"`
+	Tag                  string   `json:"tag"`
+	ThumbnailImageURL    string   `json:"thumbnail_image_url" valid:"url"`
+	BeneficariesImageURL []string `json:"beneficaries_image_url" valid:"url"`
+	Description          string   `json:"description"`
 }
 
 type UpdateProgramKami struct {
-	Title             string `json:"title" valid:"required"`
-	SubTitle          string `json:"sub_title" valid:"required"`
-	Content           string `json:"content" valid:"required"`
-	Tag               string `json:"tag"`
-	ThumbnailImageURL string `json:"thumbnail_image_url" valid:"url"`
-	Description       string `json:"description"`
+	Title                string   `json:"title" valid:"required"`
+	SubTitle             string   `json:"sub_title" valid:"required"`
+	Content              string   `json:"content" valid:"required"`
+	Tag                  string   `json:"tag"`
+	ThumbnailImageURL    string   `json:"thumbnail_image_url" valid:"url"`
+	BeneficariesImageURL []string `json:"beneficaries_image_url" valid:"url"`
+	Description          string   `json:"description"`
 }
 
 type ProgramKamiQuery struct {
@@ -44,11 +48,12 @@ type ProgramKamiFilterQuery struct {
 }
 
 type ReadProgramKami struct {
-	IDPPCPProgramKami string `json:"id"`
-	Title             string `json:"title"`
-	SubTitle          string `json:"sub_title"`
-	Tag               string `json:"tag"`
-	ThumbnailImageURL string `json:"thumbnail_image_url"`
+	IDPPCPProgramKami    string   `json:"id"`
+	Title                string   `json:"title"`
+	SubTitle             string   `json:"sub_title"`
+	Tag                  string   `json:"tag"`
+	ThumbnailImageURL    string   `json:"thumbnail_image_url"`
+	BeneficariesImageURL []string `json:"beneficaries_image_url"`
 	// Detail            *ReadProgramKamiDetail `json:"detail,omitempty"`
 	Content     string     `json:"content,omitempty"`
 	Description string     `json:"description"`
@@ -87,6 +92,11 @@ func (r CreateProgramKami) Validate() (err error) {
 	if err != nil {
 		return
 	}
+
+	if len(r.BeneficariesImageURL) > 3 {
+		err = errors.New("Failed, limit beneficaries image url is 3")
+		return
+	}
 	return
 }
 
@@ -96,6 +106,12 @@ func (r UpdateProgramKami) Validate() (err error) {
 	if err != nil {
 		return
 	}
+
+	if len(r.BeneficariesImageURL) > 3 {
+		err = errors.New("Failed, limit beneficaries image url is 3")
+		return
+	}
+
 	return
 }
 
@@ -109,13 +125,21 @@ func (r ProgramKamiQuery) Validate() (err error) {
 }
 
 func (r CreateProgramKami) ToEntity() (data entity.ProgramKamiEntity, dataDetail entity.ProgramKamiDetailEntity) {
+	var beneficariesURL strings.Builder
+	for _, beneficariesImageURL := range r.BeneficariesImageURL {
+		beneficariesURL.WriteString(beneficariesImageURL + "|")
+	}
+
+	beneficariesURLValue := strings.TrimSuffix(beneficariesURL.String(), "|")
+
 	data = entity.ProgramKamiEntity{
-		Title:             r.Title,
-		SubTitle:          r.SubTitle,
-		Tag:               r.Tag,
-		ThumbnailImageURL: r.ThumbnailImageURL,
-		Description:       r.Description,
-		CreatedAt:         time.Now().UTC(),
+		Title:                r.Title,
+		SubTitle:             r.SubTitle,
+		Tag:                  r.Tag,
+		ThumbnailImageURL:    r.ThumbnailImageURL,
+		BeneficariesImageURL: beneficariesURLValue,
+		Description:          r.Description,
+		CreatedAt:            time.Now().UTC(),
 	}
 	dataDetail = entity.ProgramKamiDetailEntity{
 		Content: r.Content,
@@ -126,12 +150,20 @@ func (r CreateProgramKami) ToEntity() (data entity.ProgramKamiEntity, dataDetail
 }
 
 func (r UpdateProgramKami) ToEntity() (data entity.ProgramKamiEntity, dataDetail entity.ProgramKamiDetailEntity) {
+	var beneficariesURL strings.Builder
+	for _, beneficariesImageURL := range r.BeneficariesImageURL {
+		beneficariesURL.WriteString(beneficariesImageURL + "|")
+	}
+
+	beneficariesURLValue := strings.TrimSuffix(beneficariesURL.String(), "|")
+
 	data = entity.ProgramKamiEntity{
-		Title:             r.Title,
-		SubTitle:          r.SubTitle,
-		Tag:               r.Tag,
-		ThumbnailImageURL: r.ThumbnailImageURL,
-		Description:       r.Description,
+		Title:                r.Title,
+		SubTitle:             r.SubTitle,
+		Tag:                  r.Tag,
+		BeneficariesImageURL: beneficariesURLValue,
+		ThumbnailImageURL:    r.ThumbnailImageURL,
+		Description:          r.Description,
 	}
 
 	dataDetail = entity.ProgramKamiDetailEntity{
@@ -172,13 +204,16 @@ func ToPayload(data entity.ProgramKamiEntity, isDetail bool) (response ReadProgr
 	// 	}
 	// }
 
+	beneficariesUrl := strings.Split(data.BeneficariesImageURL, "|")
+
 	response = ReadProgramKami{
-		IDPPCPProgramKami: data.IDPPCPProgramKami,
-		Title:             data.Title,
-		SubTitle:          data.SubTitle,
-		Tag:               data.Tag,
-		ThumbnailImageURL: data.ThumbnailImageURL,
-		Content:           data.Detail.Content,
+		IDPPCPProgramKami:    data.IDPPCPProgramKami,
+		Title:                data.Title,
+		SubTitle:             data.SubTitle,
+		Tag:                  data.Tag,
+		ThumbnailImageURL:    data.ThumbnailImageURL,
+		BeneficariesImageURL: beneficariesUrl,
+		Content:              data.Detail.Content,
 		// Detail:            detail,
 		Description: data.Description,
 		Status:      data.Status,

@@ -18,14 +18,7 @@ import (
 	"github.com/valyala/fasthttp"
 )
 
-var (
-	DB *db.ConnectTo
-)
-
-// db init hardcoded temporary for testing
-func init() {
-	DB = db.NewDBConnectionFactory(0)
-}
+var DB *db.ConnectTo
 
 // TestimoniApp ...
 type TestimoniApp struct {
@@ -33,9 +26,10 @@ type TestimoniApp struct {
 }
 
 // NewTestimoniApp ...
-func NewTestimoniApp() *TestimoniApp {
+func NewTestimoniApp(db *db.ConnectTo) *TestimoniApp {
 	// Place where we init infrastructure, repo etc
 	s := TestimoniApp{}
+	DB = db
 	return &s
 }
 
@@ -53,16 +47,16 @@ func (s *TestimoniApp) Destroy() {
 
 // Route declaration
 func (s *TestimoniApp) addRoute(r *router.Router) {
-	r.POST("/testimoni/create", middleware.CheckAuthToken(createTestimoni))
+	r.POST("/testimoni/create", middleware.CheckAuthToken(DB, createTestimoni))
 
-	r.PUT("/testimoni/{id}", middleware.CheckAuthToken(updateTestimoni))
-	r.PUT("/testimoni/publish/{id}", middleware.CheckAuthToken(publishTestimoni))
-	r.PUT("/testimoni/hide/{id}", middleware.CheckAuthToken(hideTestimoni))
+	r.PUT("/testimoni/{id}", middleware.CheckAuthToken(DB, updateTestimoni))
+	r.PUT("/testimoni/publish/{id}", middleware.CheckAuthToken(DB, publishTestimoni))
+	r.PUT("/testimoni/hide/{id}", middleware.CheckAuthToken(DB, hideTestimoni))
 
-	r.POST("/testimoni/list", middleware.CheckAuthToken(findTestimonis))
-	r.GET("/testimoni/{id}", middleware.CheckAuthToken(getTestimoni))
+	r.POST("/testimoni/list", middleware.CheckAuthToken(DB, findTestimonis))
+	r.GET("/testimoni/{id}", middleware.CheckAuthToken(DB, getTestimoni))
 
-	r.DELETE("/testimoni/{id}", middleware.CheckAuthToken(deleteTestimoni))
+	r.DELETE("/testimoni/{id}", middleware.CheckAuthToken(DB, deleteTestimoni))
 }
 
 // ============== Handler for each route start here ============

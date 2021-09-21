@@ -18,14 +18,7 @@ import (
 	"github.com/valyala/fasthttp"
 )
 
-var (
-	DB *db.ConnectTo
-)
-
-// db init hardcoded temporary for testing
-func init() {
-	DB = db.NewDBConnectionFactory(0)
-}
+var DB *db.ConnectTo
 
 // AchievementApp ...
 type AchievementApp struct {
@@ -33,9 +26,11 @@ type AchievementApp struct {
 }
 
 // NewAchievementApp ...
-func NewAchievementApp() *AchievementApp {
+func NewAchievementApp(db *db.ConnectTo) *AchievementApp {
 	// Place where we init infrastructure, repo etc
 	s := AchievementApp{}
+
+	DB = db
 	return &s
 }
 
@@ -53,16 +48,16 @@ func (s *AchievementApp) Destroy() {
 
 // Route declaration
 func (s *AchievementApp) addRoute(r *router.Router) {
-	r.POST("/achievement/create", middleware.CheckAuthToken(createAchievement))
+	r.POST("/achievement/create", middleware.CheckAuthToken(DB, createAchievement))
 
-	r.PUT("/achievement/{id}", middleware.CheckAuthToken(updateAchievement))
-	r.PUT("/achievement/publish/{id}", middleware.CheckAuthToken(publishAchievement))
-	r.PUT("/achievement/hide/{id}", middleware.CheckAuthToken(hideAchievement))
+	r.PUT("/achievement/{id}", middleware.CheckAuthToken(DB, updateAchievement))
+	r.PUT("/achievement/publish/{id}", middleware.CheckAuthToken(DB, publishAchievement))
+	r.PUT("/achievement/hide/{id}", middleware.CheckAuthToken(DB, hideAchievement))
 
-	r.POST("/achievement/list", middleware.CheckAuthToken(findAchievements))
-	r.GET("/achievement/{id}", middleware.CheckAuthToken(getAchievement))
+	r.POST("/achievement/list", middleware.CheckAuthToken(DB, findAchievements))
+	r.GET("/achievement/{id}", middleware.CheckAuthToken(DB, getAchievement))
 
-	r.DELETE("/achievement/{id}", middleware.CheckAuthToken(deleteAchievement))
+	r.DELETE("/achievement/{id}", middleware.CheckAuthToken(DB, deleteAchievement))
 }
 
 // ============== Handler for each route start here ============

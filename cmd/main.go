@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"pemuda-peduli/src/common/infrastructure"
+	"pemuda-peduli/src/common/infrastructure/db"
 	"pemuda-peduli/src/common/infrastructure/web"
 	"pemuda-peduli/src/common/interfaces"
 
@@ -37,6 +38,13 @@ import (
 	"github.com/joho/godotenv"
 )
 
+var DB *db.ConnectTo
+
+// db init hardcoded temporary for testing
+func init() {
+	DB = db.NewDBConnectionFactory(0)
+}
+
 // App entry point
 func main() {
 	// App and Routing Initialization
@@ -70,34 +78,34 @@ func initialize(apps map[string]interfaces.IApplication, r *router.Router) {
 	}
 
 	// Register applications to run
-	apps["token"] = tokenApp.NewTokenApp()
-	apps["auth-admin"] = authAdminApp.NewAuthAdminApp()
-	apps["auth-user"] = authUserApp.NewAuthUserApp()
-	apps["role"] = roleApp.NewRoleApp()
-	apps["admin-user"] = adminUserApp.NewAdminUserApp()
-	apps["user"] = userApp.NewUserApp()
+	apps["token"] = tokenApp.NewTokenApp(DB)
+	apps["auth-admin"] = authAdminApp.NewAuthAdminApp(DB)
+	apps["auth-user"] = authUserApp.NewAuthUserApp(DB)
+	apps["role"] = roleApp.NewRoleApp(DB)
+	apps["admin-user"] = adminUserApp.NewAdminUserApp(DB)
+	apps["user"] = userApp.NewUserApp(DB)
 
-	apps["achievement"] = achievementApp.NewAchievementApp()
-	apps["album"] = albumApp.NewAlbumApp()
-	apps["banner"] = bannerApp.NewBannerApp()
-	apps["beneficaries"] = beneficariesApp.NewBeneficariesApp()
-	apps["berita"] = beritaApp.NewBeritaApp()
-	apps["kontak-kami"] = kontakKamiApp.NewKontakKamiApp()
-	apps["hubungi-kami"] = hubungiKamiApp.NewHubungiKamiApp()
-	apps["partner-kami"] = partnerKamiApp.NewPartnerKamiApp()
-	apps["program-donasi"] = programDonasiApp.NewProgramDonasiApp()
-	apps["program-donasi-rutin"] = programDonasiRutinApp.NewProgramDonasiRutinApp()
-	apps["program-donasi-kategori"] = programDonasiKategoriApp.NewProgramDonasiKategoriApp()
-	apps["program-kami"] = programKamiApp.NewProgramKamiApp()
-	apps["team"] = teamApp.NewTeamApp()
-	apps["tentang-kami"] = tentangKamiApp.NewTentangKamiApp()
-	apps["testimoni"] = testimoniApp.NewTestimoniApp()
-	apps["tujuan-kami"] = tujuanKamiApp.NewTujuanKamiApp()
-	apps["menu-extras"] = menuExtrasApp.NewMenuExtrasApp()
-	apps["qris"] = qrisApp.NewQrisApp()
-	apps["transaction"] = transactionApp.NewTransactionApp()
+	apps["achievement"] = achievementApp.NewAchievementApp(DB)
+	apps["album"] = albumApp.NewAlbumApp(DB)
+	apps["banner"] = bannerApp.NewBannerApp(DB)
+	apps["beneficaries"] = beneficariesApp.NewBeneficariesApp(DB)
+	apps["berita"] = beritaApp.NewBeritaApp(DB)
+	apps["kontak-kami"] = kontakKamiApp.NewKontakKamiApp(DB)
+	apps["hubungi-kami"] = hubungiKamiApp.NewHubungiKamiApp(DB)
+	apps["partner-kami"] = partnerKamiApp.NewPartnerKamiApp(DB)
+	apps["program-donasi"] = programDonasiApp.NewProgramDonasiApp(DB)
+	apps["program-donasi-rutin"] = programDonasiRutinApp.NewProgramDonasiRutinApp(DB)
+	apps["program-donasi-kategori"] = programDonasiKategoriApp.NewProgramDonasiKategoriApp(DB)
+	apps["program-kami"] = programKamiApp.NewProgramKamiApp(DB)
+	apps["team"] = teamApp.NewTeamApp(DB)
+	apps["tentang-kami"] = tentangKamiApp.NewTentangKamiApp(DB)
+	apps["testimoni"] = testimoniApp.NewTestimoniApp(DB)
+	apps["tujuan-kami"] = tujuanKamiApp.NewTujuanKamiApp(DB)
+	apps["menu-extras"] = menuExtrasApp.NewMenuExtrasApp(DB)
+	apps["qris"] = qrisApp.NewQrisApp(DB)
+	apps["transaction"] = transactionApp.NewTransactionApp(DB)
 
-	apps["penggalang_dana"] = penggalangDanaApp.NewPenggalangDanaApp()
+	apps["penggalang_dana"] = penggalangDanaApp.NewPenggalangDanaApp(DB)
 
 	for _, v := range apps {
 		// log.Printf("Initializing app %s", k)

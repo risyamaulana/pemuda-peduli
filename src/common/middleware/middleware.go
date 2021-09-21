@@ -3,7 +3,6 @@ package middleware
 import (
 	"errors"
 	"fmt"
-
 	"pemuda-peduli/src/common/handler"
 	"pemuda-peduli/src/common/infrastructure/db"
 	"pemuda-peduli/src/common/utility"
@@ -28,14 +27,7 @@ var (
 	corsAllowOrigin      = "*"
 	corsAllowCredentials = "true"
 	corsAllow            = "DELETE, GET, OPTIONS, POST, PUT"
-
-	DB *db.ConnectTo
 )
-
-// db init hardcoded temporary for testing
-func init() {
-	DB = db.NewDBConnectionFactory(0)
-}
 
 func Cors(next fasthttp.RequestHandler) fasthttp.RequestHandler {
 	return fasthttp.RequestHandler(func(ctx *fasthttp.RequestCtx) {
@@ -51,7 +43,7 @@ func Cors(next fasthttp.RequestHandler) fasthttp.RequestHandler {
 	})
 }
 
-func CheckAuthToken(next fasthttp.RequestHandler) fasthttp.RequestHandler {
+func CheckAuthToken(db *db.ConnectTo, next fasthttp.RequestHandler) fasthttp.RequestHandler {
 	return fasthttp.RequestHandler(func(ctx *fasthttp.RequestCtx) {
 		method := ctx.Request.Header.Method()
 		if string(method) != "OPTIONS" {
@@ -62,7 +54,7 @@ func CheckAuthToken(next fasthttp.RequestHandler) fasthttp.RequestHandler {
 				return
 			}
 			// Check validation token
-			err := tokenDom.Validate(ctx, string(token), DB)
+			err := tokenDom.Validate(ctx, string(token), db)
 			if err != nil {
 				ctx.SetStatusCode(fasthttp.StatusUnauthorized)
 				fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
@@ -73,7 +65,7 @@ func CheckAuthToken(next fasthttp.RequestHandler) fasthttp.RequestHandler {
 	})
 }
 
-func CheckLoginAdminToken(next fasthttp.RequestHandler) fasthttp.RequestHandler {
+func CheckLoginAdminToken(db *db.ConnectTo, next fasthttp.RequestHandler) fasthttp.RequestHandler {
 	return fasthttp.RequestHandler(func(ctx *fasthttp.RequestCtx) {
 		method := ctx.Request.Header.Method()
 		if string(method) != "OPTIONS" {
@@ -84,7 +76,7 @@ func CheckLoginAdminToken(next fasthttp.RequestHandler) fasthttp.RequestHandler 
 				return
 			}
 			// Check validation token
-			err := tokenDom.ValidateAdminLogin(ctx, string(token), DB)
+			err := tokenDom.ValidateAdminLogin(ctx, string(token), db)
 			if err != nil {
 				ctx.SetStatusCode(fasthttp.StatusUnauthorized)
 				fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
@@ -95,7 +87,7 @@ func CheckLoginAdminToken(next fasthttp.RequestHandler) fasthttp.RequestHandler 
 	})
 }
 
-func CheckAdminToken(next fasthttp.RequestHandler) fasthttp.RequestHandler {
+func CheckAdminToken(db *db.ConnectTo, next fasthttp.RequestHandler) fasthttp.RequestHandler {
 	return fasthttp.RequestHandler(func(ctx *fasthttp.RequestCtx) {
 		method := ctx.Request.Header.Method()
 		if string(method) != "OPTIONS" {
@@ -106,7 +98,7 @@ func CheckAdminToken(next fasthttp.RequestHandler) fasthttp.RequestHandler {
 				return
 			}
 			// Check validation token
-			err := tokenDom.ValidateAdminLogin(ctx, string(token), DB)
+			err := tokenDom.ValidateAdminLogin(ctx, string(token), db)
 			if err != nil {
 				ctx.SetStatusCode(fasthttp.StatusUnauthorized)
 				fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, errors.New("Failed, user is unauthorized"))))
@@ -115,7 +107,7 @@ func CheckAdminToken(next fasthttp.RequestHandler) fasthttp.RequestHandler {
 
 			// Get User Data
 			userID := ctx.UserValue("user_id").(string)
-			dataUser, err := adminUserDom.GetAdminUser(ctx, DB, userID)
+			dataUser, err := adminUserDom.GetAdminUser(ctx, db, userID)
 			if err != nil {
 				ctx.SetStatusCode(fasthttp.StatusUnauthorized)
 				fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, errors.New("Failed, user is unauthorized"))))
@@ -123,7 +115,7 @@ func CheckAdminToken(next fasthttp.RequestHandler) fasthttp.RequestHandler {
 			}
 
 			// Get Role Data
-			roleRepository := roleRepo.NewRoleRepository(DB)
+			roleRepository := roleRepo.NewRoleRepository(db)
 			roleData, err := roleDom.GetRole(ctx, &roleRepository, dataUser.Role)
 			if err != nil {
 				ctx.SetStatusCode(fasthttp.StatusUnauthorized)
@@ -136,7 +128,7 @@ func CheckAdminToken(next fasthttp.RequestHandler) fasthttp.RequestHandler {
 	})
 }
 
-func CheckLoginuserToken(next fasthttp.RequestHandler) fasthttp.RequestHandler {
+func CheckLoginuserToken(db *db.ConnectTo, next fasthttp.RequestHandler) fasthttp.RequestHandler {
 	return fasthttp.RequestHandler(func(ctx *fasthttp.RequestCtx) {
 		method := ctx.Request.Header.Method()
 		if string(method) != "OPTIONS" {
@@ -147,7 +139,7 @@ func CheckLoginuserToken(next fasthttp.RequestHandler) fasthttp.RequestHandler {
 				return
 			}
 			// Check validation token
-			err := tokenDom.ValidateUserLogin(ctx, string(token), DB)
+			err := tokenDom.ValidateUserLogin(ctx, string(token), db)
 			if err != nil {
 				ctx.SetStatusCode(fasthttp.StatusUnauthorized)
 				fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
@@ -158,7 +150,7 @@ func CheckLoginuserToken(next fasthttp.RequestHandler) fasthttp.RequestHandler {
 	})
 }
 
-func CheckUserToken(next fasthttp.RequestHandler) fasthttp.RequestHandler {
+func CheckUserToken(db *db.ConnectTo, next fasthttp.RequestHandler) fasthttp.RequestHandler {
 	return fasthttp.RequestHandler(func(ctx *fasthttp.RequestCtx) {
 		method := ctx.Request.Header.Method()
 		if string(method) != "OPTIONS" {
@@ -169,7 +161,7 @@ func CheckUserToken(next fasthttp.RequestHandler) fasthttp.RequestHandler {
 				return
 			}
 			// Check validation token
-			err := tokenDom.ValidateUserLogin(ctx, string(token), DB)
+			err := tokenDom.ValidateUserLogin(ctx, string(token), db)
 			if err != nil {
 				ctx.SetStatusCode(fasthttp.StatusUnauthorized)
 				fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
@@ -178,7 +170,7 @@ func CheckUserToken(next fasthttp.RequestHandler) fasthttp.RequestHandler {
 
 			// Get User Data
 			userID := ctx.UserValue("user_id").(string)
-			repo := userRep.NewUserRepository(DB)
+			repo := userRep.NewUserRepository(db)
 			_, err = userDom.ReadUser(ctx, &repo, userID)
 			if err != nil {
 				ctx.SetStatusCode(fasthttp.StatusUnauthorized)

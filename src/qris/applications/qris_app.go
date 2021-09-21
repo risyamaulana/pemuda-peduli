@@ -18,14 +18,7 @@ import (
 	"github.com/valyala/fasthttp"
 )
 
-var (
-	DB *db.ConnectTo
-)
-
-// db init hardcoded temporary for testing
-func init() {
-	DB = db.NewDBConnectionFactory(0)
-}
+var DB *db.ConnectTo
 
 // QrisApp ...
 type QrisApp struct {
@@ -33,9 +26,10 @@ type QrisApp struct {
 }
 
 // NewQrisApp ...
-func NewQrisApp() *QrisApp {
+func NewQrisApp(db *db.ConnectTo) *QrisApp {
 	// Place where we init infrastructure, repo etc
 	s := QrisApp{}
+	DB = db
 	return &s
 }
 
@@ -53,14 +47,14 @@ func (s *QrisApp) Destroy() {
 
 // Route declaration
 func (s *QrisApp) addRoute(r *router.Router) {
-	r.POST("/qris/create", middleware.CheckAuthToken(createQris))
+	r.POST("/qris/create", middleware.CheckAuthToken(DB, createQris))
 
-	r.PUT("/qris/{id}", middleware.CheckAuthToken(updateQris))
+	r.PUT("/qris/{id}", middleware.CheckAuthToken(DB, updateQris))
 
-	r.POST("/qris/list", middleware.CheckAuthToken(findQriss))
-	r.GET("/qris/{id}", middleware.CheckAuthToken(getQris))
+	r.POST("/qris/list", middleware.CheckAuthToken(DB, findQriss))
+	r.GET("/qris/{id}", middleware.CheckAuthToken(DB, getQris))
 
-	r.DELETE("/qris/{id}", middleware.CheckAuthToken(deleteQris))
+	r.DELETE("/qris/{id}", middleware.CheckAuthToken(DB, deleteQris))
 }
 
 // ============== Handler for each route start here ============

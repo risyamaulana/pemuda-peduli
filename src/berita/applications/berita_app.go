@@ -18,14 +18,7 @@ import (
 	"github.com/valyala/fasthttp"
 )
 
-var (
-	DB *db.ConnectTo
-)
-
-// db init hardcoded temporary for testing
-func init() {
-	DB = db.NewDBConnectionFactory(0)
-}
+var DB *db.ConnectTo
 
 // BeritaApp ...
 type BeritaApp struct {
@@ -33,9 +26,10 @@ type BeritaApp struct {
 }
 
 // NewBeritaApp ...
-func NewBeritaApp() *BeritaApp {
+func NewBeritaApp(db *db.ConnectTo) *BeritaApp {
 	// Place where we init infrastructure, repo etc
 	s := BeritaApp{}
+	DB = db
 	return &s
 }
 
@@ -53,16 +47,19 @@ func (s *BeritaApp) Destroy() {
 
 // Route declaration
 func (s *BeritaApp) addRoute(r *router.Router) {
-	r.POST("/berita/create", middleware.CheckAuthToken(createBerita))
+	r.POST("/berita/create", middleware.CheckAuthToken(DB, createBerita))
 
-	r.PUT("/berita/{id}", middleware.CheckAuthToken(updateBerita))
-	r.PUT("/berita/publish/{id}", middleware.CheckAuthToken(publishBerita))
-	r.PUT("/berita/hide/{id}", middleware.CheckAuthToken(hideBerita))
+	r.PUT("/berita/{id}", middleware.CheckAuthToken(DB, updateBerita))
+	r.PUT("/berita/publish/{id}", middleware.CheckAuthToken(DB, publishBerita))
+	r.PUT("/berita/hide/{id}", middleware.CheckAuthToken(DB, hideBerita))
 
-	r.POST("/berita/list", middleware.CheckAuthToken(findBeritas))
-	r.GET("/berita/{id}", middleware.CheckAuthToken(getBerita))
+	r.POST("/berita/list", middleware.CheckAuthToken(DB, findBeritas))
+	r.GET("/berita/{id}", middleware.CheckAuthToken(DB, getBerita))
 
-	r.DELETE("/berita/{id}", middleware.CheckAuthToken(deleteBerita))
+	r.DELETE("/berita/{id}", middleware.CheckAuthToken(DB, deleteBerita))
+
+	r.GET("/berita/list-headline", getListHeadline)
+	r.GET("/berita/list-tag", getListTag)
 }
 
 // ============== Handler for each route start here ============
@@ -218,5 +215,31 @@ func getBerita(ctx *fasthttp.RequestCtx) {
 		return
 	}
 	response := handler.DefaultResponse(ToPayload(responseData, true), nil)
+	fmt.Fprintf(ctx, utility.PrettyPrint(response))
+}
+
+func getListHeadline(ctx *fasthttp.RequestCtx) {
+	repo := repository.NewBeritaRepository(DB)
+	responseData, err := domain.GetListHeadline(ctx, &repo)
+	if err != nil {
+		ctx.SetStatusCode(fasthttp.StatusUnprocessableEntity)
+		fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
+		log.Println(err)
+		return
+	}
+	response := handler.DefaultResponse(responseData, nil)
+	fmt.Fprintf(ctx, utility.PrettyPrint(response))
+}
+
+func getListTag(ctx *fasthttp.RequestCtx) {
+	repo := repository.NewBeritaRepository(DB)
+	responseData, err := domain.GetListTag(ctx, &repo)
+	if err != nil {
+		ctx.SetStatusCode(fasthttp.StatusUnprocessableEntity)
+		fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
+		log.Println(err)
+		return
+	}
+	response := handler.DefaultResponse(responseData, nil)
 	fmt.Fprintf(ctx, utility.PrettyPrint(response))
 }

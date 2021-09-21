@@ -18,14 +18,7 @@ import (
 	"github.com/valyala/fasthttp"
 )
 
-var (
-	DB *db.ConnectTo
-)
-
-// db init hardcoded temporary for testing
-func init() {
-	DB = db.NewDBConnectionFactory(0)
-}
+var DB *db.ConnectTo
 
 // MenuExtrasApp ...
 type MenuExtrasApp struct {
@@ -33,9 +26,10 @@ type MenuExtrasApp struct {
 }
 
 // NewMenuExtrasApp ...
-func NewMenuExtrasApp() *MenuExtrasApp {
+func NewMenuExtrasApp(db *db.ConnectTo) *MenuExtrasApp {
 	// Place where we init infrastructure, repo etc
 	s := MenuExtrasApp{}
+	DB = db
 	return &s
 }
 
@@ -53,16 +47,16 @@ func (s *MenuExtrasApp) Destroy() {
 
 // Route declaration
 func (s *MenuExtrasApp) addRoute(r *router.Router) {
-	r.POST("/menu-extras/create", middleware.CheckAuthToken(createMenuExtras))
+	r.POST("/menu-extras/create", middleware.CheckAuthToken(DB, createMenuExtras))
 
-	r.PUT("/menu-extras/{id}", middleware.CheckAuthToken(updateMenuExtras))
-	r.PUT("/menu-extras/publish/{id}", middleware.CheckAuthToken(publishMenuExtras))
-	r.PUT("/menu-extras/hide/{id}", middleware.CheckAuthToken(hideMenuExtras))
+	r.PUT("/menu-extras/{id}", middleware.CheckAuthToken(DB, updateMenuExtras))
+	r.PUT("/menu-extras/publish/{id}", middleware.CheckAuthToken(DB, publishMenuExtras))
+	r.PUT("/menu-extras/hide/{id}", middleware.CheckAuthToken(DB, hideMenuExtras))
 
-	r.POST("/menu-extras/list", middleware.CheckAuthToken(findMenuExtrass))
-	r.GET("/menu-extras/{id}", middleware.CheckAuthToken(getMenuExtras))
+	r.POST("/menu-extras/list", middleware.CheckAuthToken(DB, findMenuExtrass))
+	r.GET("/menu-extras/{id}", middleware.CheckAuthToken(DB, getMenuExtras))
 
-	r.DELETE("/menu-extras/{id}", middleware.CheckAuthToken(deleteMenuExtras))
+	r.DELETE("/menu-extras/{id}", middleware.CheckAuthToken(DB, deleteMenuExtras))
 }
 
 // ============== Handler for each route start here ============

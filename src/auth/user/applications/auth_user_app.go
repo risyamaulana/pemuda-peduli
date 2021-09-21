@@ -22,14 +22,7 @@ import (
 	"github.com/valyala/fasthttp"
 )
 
-var (
-	DB *db.ConnectTo
-)
-
-// db init hardcoded temporary for testing
-func init() {
-	DB = db.NewDBConnectionFactory(0)
-}
+var DB *db.ConnectTo
 
 // AuthUserApp ...
 type AuthUserApp struct {
@@ -37,9 +30,10 @@ type AuthUserApp struct {
 }
 
 // NewAuthUserApp ...
-func NewAuthUserApp() *AuthUserApp {
+func NewAuthUserApp(db *db.ConnectTo) *AuthUserApp {
 	// Place where we init infrastructure, repo etc
 	s := AuthUserApp{}
+	DB = db
 	return &s
 }
 
@@ -57,9 +51,9 @@ func (s *AuthUserApp) Destroy() {
 
 // Route declaration
 func (s *AuthUserApp) addRoute(r *router.Router) {
-	r.POST("/auth/user/login", middleware.CheckAuthToken(login))
+	r.POST("/auth/user/login", middleware.CheckAuthToken(DB, login))
 
-	r.POST("/auth/user/logout", middleware.CheckLoginuserToken(logout))
+	r.POST("/auth/user/logout", middleware.CheckLoginuserToken(DB, logout))
 }
 
 // ============== Handler for each route start here ============

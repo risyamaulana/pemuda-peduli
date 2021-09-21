@@ -25,7 +25,6 @@ func NewBeritaRepository(db *db.ConnectTo) BeritaRepository {
 
 // Create data token
 func (c *BeritaRepository) Insert(ctx context.Context, data *entity.BeritaEntity) (err error) {
-
 	tx := c.db.DBExec.MustBegin()
 
 	// Generate UUID
@@ -59,7 +58,6 @@ func (c *BeritaRepository) Insert(ctx context.Context, data *entity.BeritaEntity
 }
 
 func (c *BeritaRepository) InsertDetail(ctx context.Context, data *entity.BeritaDetailEntity) (err error) {
-
 	tx := c.db.DBExec.MustBegin()
 
 	// Generate UUID
@@ -153,7 +151,6 @@ func (c *BeritaRepository) UpdateDetail(ctx context.Context, data entity.BeritaD
 
 // READ
 func (c *BeritaRepository) Find(ctx context.Context, data *entity.BeritaQueryEntity) (response []entity.BeritaEntity, count int, err error) {
-
 	sql := `SELECT * FROM pp_cp_berita WHERE 1=1 `
 
 	var str strings.Builder
@@ -239,6 +236,20 @@ func (c *BeritaRepository) Get(ctx context.Context, id string) (response entity.
 
 func (c *BeritaRepository) GetDetail(ctx context.Context, id string) (response entity.BeritaDetailEntity, err error) {
 	if err = c.db.DBRead.Get(&response, "SELECT * FROM pp_cp_berita_detail WHERE id_pp_cp_berita = $1", id); err != nil {
+		return
+	}
+	return
+}
+
+func (c *BeritaRepository) GetListHeadline(ctx context.Context) (response []entity.HeadlineEntity, err error) {
+	if err = c.db.DBRead.Select(&response, "SELECT headline FROM public.pp_cp_berita GROUP BY headline"); err != nil {
+		return
+	}
+	return
+}
+
+func (c *BeritaRepository) GetListTag(ctx context.Context) (response []entity.TagEntity, err error) {
+	if err = c.db.DBRead.Select(&response, "SELECT tag FROM public.pp_cp_berita GROUP BY tag"); err != nil {
 		return
 	}
 	return

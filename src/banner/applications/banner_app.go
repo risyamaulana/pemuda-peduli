@@ -18,14 +18,7 @@ import (
 	"github.com/valyala/fasthttp"
 )
 
-var (
-	DB *db.ConnectTo
-)
-
-// db init hardcoded temporary for testing
-func init() {
-	DB = db.NewDBConnectionFactory(0)
-}
+var DB *db.ConnectTo
 
 // BannerApp ...
 type BannerApp struct {
@@ -33,9 +26,10 @@ type BannerApp struct {
 }
 
 // NewBannerApp ...
-func NewBannerApp() *BannerApp {
+func NewBannerApp(db *db.ConnectTo) *BannerApp {
 	// Place where we init infrastructure, repo etc
 	s := BannerApp{}
+	DB = db
 	return &s
 }
 
@@ -53,16 +47,16 @@ func (s *BannerApp) Destroy() {
 
 // Route declaration
 func (s *BannerApp) addRoute(r *router.Router) {
-	r.POST("/banner/create", middleware.CheckAuthToken(createBanner))
+	r.POST("/banner/create", middleware.CheckAuthToken(DB, createBanner))
 
-	r.PUT("/banner/{id}", middleware.CheckAuthToken(updateBanner))
-	r.PUT("/banner/publish/{id}", middleware.CheckAuthToken(publishBanner))
-	r.PUT("/banner/hide/{id}", middleware.CheckAuthToken(hideBanner))
+	r.PUT("/banner/{id}", middleware.CheckAuthToken(DB, updateBanner))
+	r.PUT("/banner/publish/{id}", middleware.CheckAuthToken(DB, publishBanner))
+	r.PUT("/banner/hide/{id}", middleware.CheckAuthToken(DB, hideBanner))
 
-	r.POST("/banner/list", middleware.CheckAuthToken(findBanners))
-	r.GET("/banner/{id}", middleware.CheckAuthToken(getBanner))
+	r.POST("/banner/list", middleware.CheckAuthToken(DB, findBanners))
+	r.GET("/banner/{id}", middleware.CheckAuthToken(DB, getBanner))
 
-	r.DELETE("/banner/{id}", middleware.CheckAuthToken(deleteBanner))
+	r.DELETE("/banner/{id}", middleware.CheckAuthToken(DB, deleteBanner))
 }
 
 // ============== Handler for each route start here ============

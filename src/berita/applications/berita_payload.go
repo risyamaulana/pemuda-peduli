@@ -13,6 +13,7 @@ type CreateBerita struct {
 	SubTitle          string `json:"sub_title" valid:"required"`
 	Content           string `json:"content" valid:"required"`
 	Tag               string `json:"tag"`
+	Headline          string `json:"headline"`
 	ThumbnailImageURL string `json:"thumbnail_image_url" valid:"url"`
 	Description       string `json:"description"`
 }
@@ -22,6 +23,7 @@ type UpdateBerita struct {
 	SubTitle          string `json:"sub_title" valid:"required"`
 	Content           string `json:"content" valid:"required"`
 	Tag               string `json:"tag"`
+	Headline          string `json:"headline"`
 	ThumbnailImageURL string `json:"thumbnail_image_url" valid:"url"`
 	Description       string `json:"description"`
 }
@@ -44,11 +46,12 @@ type BeritaFilterQuery struct {
 }
 
 type ReadBerita struct {
-	IDPPCPBerita      string `json:"id"`
-	Title             string `json:"title"`
-	SubTitle          string `json:"sub_title"`
-	Tag               string `json:"tag"`
-	ThumbnailImageURL string `json:"thumbnail_image_url"`
+	IDPPCPBerita      string  `json:"id"`
+	Title             string  `json:"title"`
+	SubTitle          string  `json:"sub_title"`
+	Tag               string  `json:"tag"`
+	Headline          *string `json:"headline"`
+	ThumbnailImageURL string  `json:"thumbnail_image_url"`
 	// Detail            *ReadBeritaDetail `json:"detail,omitempty"`
 	Content     string     `json:"content,omitempty"`
 	Description string     `json:"description"`
@@ -113,6 +116,7 @@ func (r CreateBerita) ToEntity() (data entity.BeritaEntity, dataDetail entity.Be
 		Title:             r.Title,
 		SubTitle:          r.SubTitle,
 		Tag:               r.Tag,
+		Headline:          &r.Headline,
 		ThumbnailImageURL: r.ThumbnailImageURL,
 		Description:       r.Description,
 		CreatedAt:         time.Now().UTC(),
@@ -130,6 +134,7 @@ func (r UpdateBerita) ToEntity() (data entity.BeritaEntity, dataDetail entity.Be
 		Title:             r.Title,
 		SubTitle:          r.SubTitle,
 		Tag:               r.Tag,
+		Headline:          &r.Headline,
 		ThumbnailImageURL: r.ThumbnailImageURL,
 		Description:       r.Description,
 	}
@@ -176,6 +181,7 @@ func ToPayload(data entity.BeritaEntity, isDetail bool) (response ReadBerita) {
 		Title:             data.Title,
 		SubTitle:          data.SubTitle,
 		Tag:               data.Tag,
+		Headline:          data.Headline,
 		ThumbnailImageURL: data.ThumbnailImageURL,
 		Content:           data.Detail.Content,
 		// Detail:            detail,

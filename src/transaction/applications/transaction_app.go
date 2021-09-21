@@ -18,14 +18,7 @@ import (
 	"github.com/valyala/fasthttp"
 )
 
-var (
-	DB *db.ConnectTo
-)
-
-// db init hardcoded temporary for testing
-func init() {
-	DB = db.NewDBConnectionFactory(0)
-}
+var DB *db.ConnectTo
 
 // TransactionApp ...
 type TransactionApp struct {
@@ -33,9 +26,10 @@ type TransactionApp struct {
 }
 
 // NewTransactionApp ...
-func NewTransactionApp() *TransactionApp {
+func NewTransactionApp(db *db.ConnectTo) *TransactionApp {
 	// Place where we init infrastructure, repo etc
 	s := TransactionApp{}
+	DB = db
 	return &s
 }
 
@@ -53,18 +47,18 @@ func (s *TransactionApp) Destroy() {
 
 // Route declaration
 func (s *TransactionApp) addRoute(r *router.Router) {
-	r.POST("/transaction/create", middleware.CheckUserToken(createTransaction))
+	r.POST("/transaction/create", middleware.CheckUserToken(DB, createTransaction))
 
-	r.PUT("/transaction/applied/{id}", middleware.CheckAdminToken(appliedTransaction))
-	r.PUT("/transaction/decline/{id}", middleware.CheckAdminToken(declineTransaction))
+	r.PUT("/transaction/applied/{id}", middleware.CheckAdminToken(DB, appliedTransaction))
+	r.PUT("/transaction/decline/{id}", middleware.CheckAdminToken(DB, declineTransaction))
 
-	r.PUT("/transaction/pay", middleware.CheckUserToken(uploadReceiptTransaction))
-	r.PUT("/transaction/cancel/{id}", middleware.CheckUserToken(cancelTransaction))
+	r.PUT("/transaction/pay", middleware.CheckUserToken(DB, uploadReceiptTransaction))
+	r.PUT("/transaction/cancel/{id}", middleware.CheckUserToken(DB, cancelTransaction))
 
-	r.POST("/transaction/list", middleware.CheckAuthToken(findTransactions))
-	r.POST("/transaction/my-list", middleware.CheckUserToken(findMyTransactions))
+	r.POST("/transaction/list", middleware.CheckAuthToken(DB, findTransactions))
+	r.POST("/transaction/my-list", middleware.CheckUserToken(DB, findMyTransactions))
 
-	r.GET("/transaction/{id}", middleware.CheckAuthToken(getTransaction))
+	r.GET("/transaction/{id}", middleware.CheckAuthToken(DB, getTransaction))
 }
 
 // ============== Handler for each route start here ============

@@ -18,14 +18,7 @@ import (
 	"github.com/valyala/fasthttp"
 )
 
-var (
-	DB *db.ConnectTo
-)
-
-// db init hardcoded temporary for testing
-func init() {
-	DB = db.NewDBConnectionFactory(0)
-}
+var DB *db.ConnectTo
 
 // ProgramDonasiKategoriApp ...
 type ProgramDonasiKategoriApp struct {
@@ -33,9 +26,10 @@ type ProgramDonasiKategoriApp struct {
 }
 
 // NewProgramDonasiKategoriApp ...
-func NewProgramDonasiKategoriApp() *ProgramDonasiKategoriApp {
+func NewProgramDonasiKategoriApp(db *db.ConnectTo) *ProgramDonasiKategoriApp {
 	// Place where we init infrastructure, repo etc
 	s := ProgramDonasiKategoriApp{}
+	DB = db
 	return &s
 }
 
@@ -53,13 +47,12 @@ func (s *ProgramDonasiKategoriApp) Destroy() {
 
 // Route declaration
 func (s *ProgramDonasiKategoriApp) addRoute(r *router.Router) {
-	r.POST("/kategori/program-donasi-rutin/create", middleware.CheckAuthToken(createProgramDonasiKategori))
-	r.PUT("/kategori/program-donasi-rutin/{id}", middleware.CheckAuthToken(updateProgramDonasiKategori))
-	r.DELETE("/kategori/program-donasi-rutin/{id}", middleware.CheckAuthToken(deleteProgramDonasiKategori))
+	r.POST("/kategori/program-donasi-rutin/create", middleware.CheckAuthToken(DB, createProgramDonasiKategori))
+	r.PUT("/kategori/program-donasi-rutin/{id}", middleware.CheckAuthToken(DB, updateProgramDonasiKategori))
+	r.DELETE("/kategori/program-donasi-rutin/{id}", middleware.CheckAuthToken(DB, deleteProgramDonasiKategori))
 
-	r.POST("/kategori/program-donasi-rutin/list", middleware.CheckAuthToken(findProgramDonasiKategoris))
-	r.GET("/kategori/program-donasi-rutin/{id}", middleware.CheckAuthToken(getProgramDonasiKategori))
-
+	r.POST("/kategori/program-donasi-rutin/list", middleware.CheckAuthToken(DB, findProgramDonasiKategoris))
+	r.GET("/kategori/program-donasi-rutin/{id}", middleware.CheckAuthToken(DB, getProgramDonasiKategori))
 }
 
 // ============== Handler for each route start here ============

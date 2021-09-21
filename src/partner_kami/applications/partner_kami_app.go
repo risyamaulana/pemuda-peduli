@@ -18,14 +18,7 @@ import (
 	"github.com/valyala/fasthttp"
 )
 
-var (
-	DB *db.ConnectTo
-)
-
-// db init hardcoded temporary for testing
-func init() {
-	DB = db.NewDBConnectionFactory(0)
-}
+var DB *db.ConnectTo
 
 // PartnerKamiApp ...
 type PartnerKamiApp struct {
@@ -33,9 +26,10 @@ type PartnerKamiApp struct {
 }
 
 // NewPartnerKamiApp ...
-func NewPartnerKamiApp() *PartnerKamiApp {
+func NewPartnerKamiApp(db *db.ConnectTo) *PartnerKamiApp {
 	// Place where we init infrastructure, repo etc
 	s := PartnerKamiApp{}
+	DB = db
 	return &s
 }
 
@@ -53,16 +47,16 @@ func (s *PartnerKamiApp) Destroy() {
 
 // Route declaration
 func (s *PartnerKamiApp) addRoute(r *router.Router) {
-	r.POST("/partner-kami/create", middleware.CheckAuthToken(createPartnerKami))
+	r.POST("/partner-kami/create", middleware.CheckAuthToken(DB, createPartnerKami))
 
-	r.PUT("/partner-kami/{id}", middleware.CheckAuthToken(updatePartnerKami))
-	r.PUT("/partner-kami/publish/{id}", middleware.CheckAuthToken(publishPartnerKami))
-	r.PUT("/partner-kami/hide/{id}", middleware.CheckAuthToken(hidePartnerKami))
+	r.PUT("/partner-kami/{id}", middleware.CheckAuthToken(DB, updatePartnerKami))
+	r.PUT("/partner-kami/publish/{id}", middleware.CheckAuthToken(DB, publishPartnerKami))
+	r.PUT("/partner-kami/hide/{id}", middleware.CheckAuthToken(DB, hidePartnerKami))
 
-	r.POST("/partner-kami/list", middleware.CheckAuthToken(findPartnerKamis))
-	r.GET("/partner-kami/{id}", middleware.CheckAuthToken(getPartnerKami))
+	r.POST("/partner-kami/list", middleware.CheckAuthToken(DB, findPartnerKamis))
+	r.GET("/partner-kami/{id}", middleware.CheckAuthToken(DB, getPartnerKami))
 
-	r.DELETE("/partner-kami/{id}", middleware.CheckAuthToken(deletePartnerKami))
+	r.DELETE("/partner-kami/{id}", middleware.CheckAuthToken(DB, deletePartnerKami))
 }
 
 // ============== Handler for each route start here ============

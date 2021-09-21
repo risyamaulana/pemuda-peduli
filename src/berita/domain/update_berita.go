@@ -25,6 +25,7 @@ func UpdateBerita(ctx context.Context, repo interfaces.IBeritaRepository, data e
 	checkData.Title = data.Title
 	checkData.SubTitle = data.SubTitle
 	checkData.Tag = data.Tag
+	checkData.Headline = data.Headline
 	checkData.ThumbnailImageURL = data.ThumbnailImageURL
 	checkData.Description = data.Description
 

@@ -18,14 +18,7 @@ import (
 	"github.com/valyala/fasthttp"
 )
 
-var (
-	DB *db.ConnectTo
-)
-
-// db init hardcoded temporary for testing
-func init() {
-	DB = db.NewDBConnectionFactory(0)
-}
+var DB *db.ConnectTo
 
 // KontakKamiApp ...
 type KontakKamiApp struct {
@@ -33,9 +26,10 @@ type KontakKamiApp struct {
 }
 
 // NewKontakKamiApp ...
-func NewKontakKamiApp() *KontakKamiApp {
+func NewKontakKamiApp(db *db.ConnectTo) *KontakKamiApp {
 	// Place where we init infrastructure, repo etc
 	s := KontakKamiApp{}
+	DB = db
 	return &s
 }
 
@@ -53,16 +47,16 @@ func (s *KontakKamiApp) Destroy() {
 
 // Route declaration
 func (s *KontakKamiApp) addRoute(r *router.Router) {
-	r.POST("/kontak-kami/create", middleware.CheckAuthToken(createKontakKami))
+	r.POST("/kontak-kami/create", middleware.CheckAuthToken(DB, createKontakKami))
 
-	r.PUT("/kontak-kami/{id}", middleware.CheckAuthToken(updateKontakKami))
-	r.PUT("/kontak-kami/publish/{id}", middleware.CheckAuthToken(publishKontakKami))
-	r.PUT("/kontak-kami/hide/{id}", middleware.CheckAuthToken(hideKontakKami))
+	r.PUT("/kontak-kami/{id}", middleware.CheckAuthToken(DB, updateKontakKami))
+	r.PUT("/kontak-kami/publish/{id}", middleware.CheckAuthToken(DB, publishKontakKami))
+	r.PUT("/kontak-kami/hide/{id}", middleware.CheckAuthToken(DB, hideKontakKami))
 
-	r.POST("/kontak-kami/list", middleware.CheckAuthToken(findKontakKamis))
-	r.GET("/kontak-kami/{id}", middleware.CheckAuthToken(getKontakKami))
+	r.POST("/kontak-kami/list", middleware.CheckAuthToken(DB, findKontakKamis))
+	r.GET("/kontak-kami/{id}", middleware.CheckAuthToken(DB, getKontakKami))
 
-	r.DELETE("/kontak-kami/{id}", middleware.CheckAuthToken(deleteKontakKami))
+	r.DELETE("/kontak-kami/{id}", middleware.CheckAuthToken(DB, deleteKontakKami))
 }
 
 // ============== Handler for each route start here ============

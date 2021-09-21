@@ -20,20 +20,16 @@ import (
 
 var DB *db.ConnectTo
 
-// db init hardcoded temporary for testing
-func init() {
-	DB = db.NewDBConnectionFactory(0)
-}
-
 // ProgramDonasiApp ...
 type ProgramDonasiApp struct {
 	interfaces.IApplication
 }
 
 // NewProgramDonasiApp ...
-func NewProgramDonasiApp() *ProgramDonasiApp {
+func NewProgramDonasiApp(db *db.ConnectTo) *ProgramDonasiApp {
 	// Place where we init infrastructure, repo etc
 	s := ProgramDonasiApp{}
+	DB = db
 	return &s
 }
 
@@ -51,16 +47,16 @@ func (s *ProgramDonasiApp) Destroy() {
 
 // Route declaration
 func (s *ProgramDonasiApp) addRoute(r *router.Router) {
-	r.POST("/program-donasi/create", middleware.CheckAuthToken(createProgramDonasi))
+	r.POST("/program-donasi/create", middleware.CheckAuthToken(DB, createProgramDonasi))
 
-	r.PUT("/program-donasi/{id}", middleware.CheckAuthToken(updateProgramDonasi))
-	r.PUT("/program-donasi/publish/{id}", middleware.CheckAuthToken(publishProgramDonasi))
-	r.PUT("/program-donasi/hide/{id}", middleware.CheckAuthToken(hideProgramDonasi))
+	r.PUT("/program-donasi/{id}", middleware.CheckAuthToken(DB, updateProgramDonasi))
+	r.PUT("/program-donasi/publish/{id}", middleware.CheckAuthToken(DB, publishProgramDonasi))
+	r.PUT("/program-donasi/hide/{id}", middleware.CheckAuthToken(DB, hideProgramDonasi))
 
-	r.POST("/program-donasi/list", middleware.CheckAuthToken(findProgramDonasis))
-	r.GET("/program-donasi/{id}", middleware.CheckAuthToken(getProgramDonasi))
+	r.POST("/program-donasi/list", middleware.CheckAuthToken(DB, findProgramDonasis))
+	r.GET("/program-donasi/{id}", middleware.CheckAuthToken(DB, getProgramDonasi))
 
-	r.DELETE("/program-donasi/{id}", middleware.CheckAuthToken(deleteProgramDonasi))
+	r.DELETE("/program-donasi/{id}", middleware.CheckAuthToken(DB, deleteProgramDonasi))
 }
 
 // ============== Handler for each route start here ============

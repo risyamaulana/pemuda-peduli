@@ -18,14 +18,7 @@ import (
 	"github.com/valyala/fasthttp"
 )
 
-var (
-	DB *db.ConnectTo
-)
-
-// db init hardcoded temporary for testing
-func init() {
-	DB = db.NewDBConnectionFactory(0)
-}
+var DB *db.ConnectTo
 
 // AlbumApp ...
 type AlbumApp struct {
@@ -33,9 +26,10 @@ type AlbumApp struct {
 }
 
 // NewAlbumApp ...
-func NewAlbumApp() *AlbumApp {
+func NewAlbumApp(db *db.ConnectTo) *AlbumApp {
 	// Place where we init infrastructure, repo etc
 	s := AlbumApp{}
+	DB = db
 	return &s
 }
 
@@ -53,16 +47,16 @@ func (s *AlbumApp) Destroy() {
 
 // Route declaration
 func (s *AlbumApp) addRoute(r *router.Router) {
-	r.POST("/album/create", middleware.CheckAuthToken(createAlbum))
+	r.POST("/album/create", middleware.CheckAuthToken(DB, createAlbum))
 
-	r.PUT("/album/{id}", middleware.CheckAuthToken(updateAlbum))
-	r.PUT("/album/publish/{id}", middleware.CheckAuthToken(publishAlbum))
-	r.PUT("/album/hide/{id}", middleware.CheckAuthToken(hideAlbum))
+	r.PUT("/album/{id}", middleware.CheckAuthToken(DB, updateAlbum))
+	r.PUT("/album/publish/{id}", middleware.CheckAuthToken(DB, publishAlbum))
+	r.PUT("/album/hide/{id}", middleware.CheckAuthToken(DB, hideAlbum))
 
-	r.POST("/album/list", middleware.CheckAuthToken(findAlbums))
-	r.GET("/album/{id}", middleware.CheckAuthToken(getAlbum))
+	r.POST("/album/list", middleware.CheckAuthToken(DB, findAlbums))
+	r.GET("/album/{id}", middleware.CheckAuthToken(DB, getAlbum))
 
-	r.DELETE("/album/{id}", middleware.CheckAuthToken(deleteAlbum))
+	r.DELETE("/album/{id}", middleware.CheckAuthToken(DB, deleteAlbum))
 }
 
 // ============== Handler for each route start here ============

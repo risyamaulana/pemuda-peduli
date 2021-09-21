@@ -18,14 +18,7 @@ import (
 	"github.com/valyala/fasthttp"
 )
 
-var (
-	DB *db.ConnectTo
-)
-
-// db init hardcoded temporary for testing
-func init() {
-	DB = db.NewDBConnectionFactory(0)
-}
+var DB *db.ConnectTo
 
 // RoleApp ...
 type RoleApp struct {
@@ -33,9 +26,10 @@ type RoleApp struct {
 }
 
 // NewRoleApp ...
-func NewRoleApp() *RoleApp {
+func NewRoleApp(db *db.ConnectTo) *RoleApp {
 	// Place where we init infrastructure, repo etc
 	s := RoleApp{}
+	DB = db
 	return &s
 }
 
@@ -53,8 +47,8 @@ func (s *RoleApp) Destroy() {
 
 // Route declaration
 func (s *RoleApp) addRoute(r *router.Router) {
-	r.POST("/role/list", middleware.CheckAdminToken(findRoles))
-	r.GET("/role/{id}", middleware.CheckAdminToken(getRole))
+	r.POST("/role/list", middleware.CheckAdminToken(DB, findRoles))
+	r.GET("/role/{id}", middleware.CheckAdminToken(DB, getRole))
 }
 
 // ============== Handler for each route start here ============

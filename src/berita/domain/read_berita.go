@@ -31,3 +31,13 @@ func GetBerita(ctx context.Context, repo interfaces.IBeritaRepository, id string
 	response.Detail = dataDetail
 	return
 }
+
+func GetListHeadline(ctx context.Context, repo interfaces.IBeritaRepository) (responses []entity.HeadlineEntity, err error) {
+	responses, err = repo.GetListHeadline(ctx)
+	return
+}
+
+func GetListTag(ctx context.Context, repo interfaces.IBeritaRepository) (responses []entity.TagEntity, err error) {
+	responses, err = repo.GetListTag(ctx)
+	return
+}

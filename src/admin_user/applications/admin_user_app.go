@@ -18,14 +18,7 @@ import (
 	"github.com/valyala/fasthttp"
 )
 
-var (
-	DB *db.ConnectTo
-)
-
-// db init hardcoded temporary for testing
-func init() {
-	DB = db.NewDBConnectionFactory(0)
-}
+var DB *db.ConnectTo
 
 // AdminUserApp ...
 type AdminUserApp struct {
@@ -33,9 +26,11 @@ type AdminUserApp struct {
 }
 
 // NewAdminUserApp ...
-func NewAdminUserApp() *AdminUserApp {
+func NewAdminUserApp(db *db.ConnectTo) *AdminUserApp {
 	// Place where we init infrastructure, repo etc
 	s := AdminUserApp{}
+	DB = db
+
 	return &s
 }
 
@@ -53,20 +48,20 @@ func (s *AdminUserApp) Destroy() {
 
 // Route declaration
 func (s *AdminUserApp) addRoute(r *router.Router) {
-	r.POST("/admin/create", middleware.CheckAdminToken(createAdminUser))
+	r.POST("/admin/create", middleware.CheckAdminToken(DB, createAdminUser))
 
-	r.POST("/admin/check-username", middleware.CheckAdminToken(checkAdminUsername))
+	r.POST("/admin/check-username", middleware.CheckAdminToken(DB, checkAdminUsername))
 
-	r.POST("/admin/list", middleware.CheckAdminToken(findAdminUsers))
-	r.GET("/admin/{id}", middleware.CheckAdminToken(getAdminUser))
-	r.GET("/admin", middleware.CheckAdminToken(getAdminProfile))
+	r.POST("/admin/list", middleware.CheckAdminToken(DB, findAdminUsers))
+	r.GET("/admin/{id}", middleware.CheckAdminToken(DB, getAdminUser))
+	r.GET("/admin", middleware.CheckAdminToken(DB, getAdminProfile))
 
-	r.PUT("/admin", middleware.CheckAdminToken(updateAdminUser))
-	r.PUT("/admin/change-password", middleware.CheckAdminToken(changePassword))
-	r.PUT("/admin/reset-password", middleware.CheckAdminToken(resetPassword))
-	r.PUT("/admin/change-role", middleware.CheckAdminToken(changeRole))
+	r.PUT("/admin", middleware.CheckAdminToken(DB, updateAdminUser))
+	r.PUT("/admin/change-password", middleware.CheckAdminToken(DB, changePassword))
+	r.PUT("/admin/reset-password", middleware.CheckAdminToken(DB, resetPassword))
+	r.PUT("/admin/change-role", middleware.CheckAdminToken(DB, changeRole))
 
-	r.DELETE("/admin/{id}", middleware.CheckAdminToken(deleteAdminUser))
+	r.DELETE("/admin/{id}", middleware.CheckAdminToken(DB, deleteAdminUser))
 }
 
 // ============== Handler for each route start here ============
@@ -189,7 +184,6 @@ func resetPassword(ctx *fasthttp.RequestCtx) {
 	}
 
 	newPassword, err := domain.ResetPassword(ctx, DB, payload.ID)
-
 	if err != nil {
 		ctx.SetStatusCode(fasthttp.StatusUnprocessableEntity)
 		fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))

@@ -18,14 +18,7 @@ import (
 	"github.com/valyala/fasthttp"
 )
 
-var (
-	DB *db.ConnectTo
-)
-
-// db init hardcoded temporary for testing
-func init() {
-	DB = db.NewDBConnectionFactory(0)
-}
+var DB *db.ConnectTo
 
 // TentangKamiApp ...
 type TentangKamiApp struct {
@@ -33,9 +26,10 @@ type TentangKamiApp struct {
 }
 
 // NewTentangKamiApp ...
-func NewTentangKamiApp() *TentangKamiApp {
+func NewTentangKamiApp(db *db.ConnectTo) *TentangKamiApp {
 	// Place where we init infrastructure, repo etc
 	s := TentangKamiApp{}
+	DB = db
 	return &s
 }
 
@@ -53,14 +47,14 @@ func (s *TentangKamiApp) Destroy() {
 
 // Route declaration
 func (s *TentangKamiApp) addRoute(r *router.Router) {
-	r.POST("/tentang-kami/create", middleware.CheckAuthToken(createTentangKami))
+	r.POST("/tentang-kami/create", middleware.CheckAuthToken(DB, createTentangKami))
 
-	r.PUT("/tentang-kami/{id}", middleware.CheckAuthToken(updateTentangKami))
+	r.PUT("/tentang-kami/{id}", middleware.CheckAuthToken(DB, updateTentangKami))
 
-	r.POST("/tentang-kami/list", middleware.CheckAuthToken(findTentangKamis))
-	r.GET("/tentang-kami/{id}", middleware.CheckAuthToken(getTentangKami))
+	r.POST("/tentang-kami/list", middleware.CheckAuthToken(DB, findTentangKamis))
+	r.GET("/tentang-kami/{id}", middleware.CheckAuthToken(DB, getTentangKami))
 
-	r.DELETE("/tentang-kami/{id}", middleware.CheckAuthToken(deleteTentangKami))
+	r.DELETE("/tentang-kami/{id}", middleware.CheckAuthToken(DB, deleteTentangKami))
 }
 
 // ============== Handler for each route start here ============

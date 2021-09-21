@@ -18,14 +18,7 @@ import (
 	"github.com/valyala/fasthttp"
 )
 
-var (
-	DB *db.ConnectTo
-)
-
-// db init hardcoded temporary for testing
-func init() {
-	DB = db.NewDBConnectionFactory(0)
-}
+var DB *db.ConnectTo
 
 // BeneficariesApp ...
 type BeneficariesApp struct {
@@ -33,9 +26,10 @@ type BeneficariesApp struct {
 }
 
 // NewBeneficariesApp ...
-func NewBeneficariesApp() *BeneficariesApp {
+func NewBeneficariesApp(db *db.ConnectTo) *BeneficariesApp {
 	// Place where we init infrastructure, repo etc
 	s := BeneficariesApp{}
+	DB = db
 	return &s
 }
 
@@ -53,16 +47,16 @@ func (s *BeneficariesApp) Destroy() {
 
 // Route declaration
 func (s *BeneficariesApp) addRoute(r *router.Router) {
-	r.POST("/beneficaries/create", middleware.CheckAuthToken(createBeneficaries))
+	r.POST("/beneficaries/create", middleware.CheckAuthToken(DB, createBeneficaries))
 
-	r.PUT("/beneficaries/{id}", middleware.CheckAuthToken(updateBeneficaries))
-	r.PUT("/beneficaries/publish/{id}", middleware.CheckAuthToken(publishBeneficaries))
-	r.PUT("/beneficaries/hide/{id}", middleware.CheckAuthToken(hideBeneficaries))
+	r.PUT("/beneficaries/{id}", middleware.CheckAuthToken(DB, updateBeneficaries))
+	r.PUT("/beneficaries/publish/{id}", middleware.CheckAuthToken(DB, publishBeneficaries))
+	r.PUT("/beneficaries/hide/{id}", middleware.CheckAuthToken(DB, hideBeneficaries))
 
-	r.POST("/beneficaries/list", middleware.CheckAuthToken(findBeneficariess))
-	r.GET("/beneficaries/{id}", middleware.CheckAuthToken(getBeneficaries))
+	r.POST("/beneficaries/list", middleware.CheckAuthToken(DB, findBeneficariess))
+	r.GET("/beneficaries/{id}", middleware.CheckAuthToken(DB, getBeneficaries))
 
-	r.DELETE("/beneficaries/{id}", middleware.CheckAuthToken(deleteBeneficaries))
+	r.DELETE("/beneficaries/{id}", middleware.CheckAuthToken(DB, deleteBeneficaries))
 }
 
 // ============== Handler for each route start here ============

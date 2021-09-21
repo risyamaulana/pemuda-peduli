@@ -18,14 +18,7 @@ import (
 	"github.com/valyala/fasthttp"
 )
 
-var (
-	DB *db.ConnectTo
-)
-
-// db init hardcoded temporary for testing
-func init() {
-	DB = db.NewDBConnectionFactory(0)
-}
+var DB *db.ConnectTo
 
 // ProgramKamiApp ...
 type ProgramKamiApp struct {
@@ -33,9 +26,10 @@ type ProgramKamiApp struct {
 }
 
 // NewProgramKamiApp ...
-func NewProgramKamiApp() *ProgramKamiApp {
+func NewProgramKamiApp(db *db.ConnectTo) *ProgramKamiApp {
 	// Place where we init infrastructure, repo etc
 	s := ProgramKamiApp{}
+	DB = db
 	return &s
 }
 
@@ -53,16 +47,16 @@ func (s *ProgramKamiApp) Destroy() {
 
 // Route declaration
 func (s *ProgramKamiApp) addRoute(r *router.Router) {
-	r.POST("/program-kami/create", middleware.CheckAuthToken(createProgramKami))
+	r.POST("/program-kami/create", middleware.CheckAuthToken(DB, createProgramKami))
 
-	r.PUT("/program-kami/{id}", middleware.CheckAuthToken(updateProgramKami))
-	r.PUT("/program-kami/publish/{id}", middleware.CheckAuthToken(publishProgramKami))
-	r.PUT("/program-kami/hide/{id}", middleware.CheckAuthToken(hideProgramKami))
+	r.PUT("/program-kami/{id}", middleware.CheckAuthToken(DB, updateProgramKami))
+	r.PUT("/program-kami/publish/{id}", middleware.CheckAuthToken(DB, publishProgramKami))
+	r.PUT("/program-kami/hide/{id}", middleware.CheckAuthToken(DB, hideProgramKami))
 
-	r.POST("/program-kami/list", middleware.CheckAuthToken(findProgramKamis))
-	r.GET("/program-kami/{id}", middleware.CheckAuthToken(getProgramKami))
+	r.POST("/program-kami/list", middleware.CheckAuthToken(DB, findProgramKamis))
+	r.GET("/program-kami/{id}", middleware.CheckAuthToken(DB, getProgramKami))
 
-	r.DELETE("/program-kami/{id}", middleware.CheckAuthToken(deleteProgramKami))
+	r.DELETE("/program-kami/{id}", middleware.CheckAuthToken(DB, deleteProgramKami))
 }
 
 // ============== Handler for each route start here ============

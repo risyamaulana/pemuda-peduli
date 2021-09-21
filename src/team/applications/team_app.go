@@ -18,14 +18,7 @@ import (
 	"github.com/valyala/fasthttp"
 )
 
-var (
-	DB *db.ConnectTo
-)
-
-// db init hardcoded temporary for testing
-func init() {
-	DB = db.NewDBConnectionFactory(0)
-}
+var DB *db.ConnectTo
 
 // TeamApp ...
 type TeamApp struct {
@@ -33,9 +26,10 @@ type TeamApp struct {
 }
 
 // NewTeamApp ...
-func NewTeamApp() *TeamApp {
+func NewTeamApp(db *db.ConnectTo) *TeamApp {
 	// Place where we init infrastructure, repo etc
 	s := TeamApp{}
+	DB = db
 	return &s
 }
 
@@ -53,16 +47,16 @@ func (s *TeamApp) Destroy() {
 
 // Route declaration
 func (s *TeamApp) addRoute(r *router.Router) {
-	r.POST("/team/create", middleware.CheckAuthToken(createTeam))
+	r.POST("/team/create", middleware.CheckAuthToken(DB, createTeam))
 
-	r.PUT("/team/{id}", middleware.CheckAuthToken(updateTeam))
-	r.PUT("/team/publish/{id}", middleware.CheckAuthToken(publishTeam))
-	r.PUT("/team/hide/{id}", middleware.CheckAuthToken(hideTeam))
+	r.PUT("/team/{id}", middleware.CheckAuthToken(DB, updateTeam))
+	r.PUT("/team/publish/{id}", middleware.CheckAuthToken(DB, publishTeam))
+	r.PUT("/team/hide/{id}", middleware.CheckAuthToken(DB, hideTeam))
 
-	r.POST("/team/list", middleware.CheckAuthToken(findTeams))
-	r.GET("/team/{id}", middleware.CheckAuthToken(getTeam))
+	r.POST("/team/list", middleware.CheckAuthToken(DB, findTeams))
+	r.GET("/team/{id}", middleware.CheckAuthToken(DB, getTeam))
 
-	r.DELETE("/team/{id}", middleware.CheckAuthToken(deleteTeam))
+	r.DELETE("/team/{id}", middleware.CheckAuthToken(DB, deleteTeam))
 }
 
 // ============== Handler for each route start here ============

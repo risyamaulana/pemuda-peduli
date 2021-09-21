@@ -18,20 +18,16 @@ import (
 
 var DB *db.ConnectTo
 
-// db init hardcoded temporary for testing
-func init() {
-	DB = db.NewDBConnectionFactory(0)
-}
-
 // UserApp ...
 type UserApp struct {
 	interfaces.IApplication
 }
 
 // NewUserApp ...
-func NewUserApp() *UserApp {
+func NewUserApp(db *db.ConnectTo) *UserApp {
 	// Place where we init infrastructure, repo etc
 	s := UserApp{}
+	DB = db
 	return &s
 }
 
@@ -49,17 +45,17 @@ func (s *UserApp) Destroy() {
 
 // Route declaration
 func (s *UserApp) addRoute(r *router.Router) {
-	r.POST("/user/register", middleware.CheckAuthToken(registerUserHandler))
+	r.POST("/user/register", middleware.CheckAuthToken(DB, registerUserHandler))
 
-	r.PUT("/user", middleware.CheckUserToken(updateUserHandler))
-	r.PUT("/user/change-password", middleware.CheckUserToken(changePasswordHandler))
+	r.PUT("/user", middleware.CheckUserToken(DB, updateUserHandler))
+	r.PUT("/user/change-password", middleware.CheckUserToken(DB, changePasswordHandler))
 
-	r.POST("/user/forgot-password", middleware.CheckAuthToken(forgotPasswordHandler))
-	r.PUT("/user/reset-password", middleware.CheckAuthToken(resetPasswordHandler))
+	r.POST("/user/forgot-password", middleware.CheckAuthToken(DB, forgotPasswordHandler))
+	r.PUT("/user/reset-password", middleware.CheckAuthToken(DB, resetPasswordHandler))
 
-	r.DELETE("/user", middleware.CheckUserToken(deleteUser))
+	r.DELETE("/user", middleware.CheckUserToken(DB, deleteUser))
 
-	r.GET("/user", middleware.CheckUserToken(getUserProfile))
+	r.GET("/user", middleware.CheckUserToken(DB, getUserProfile))
 }
 
 // ============== Handler for each route start here ============

@@ -20,20 +20,16 @@ import (
 
 var DB *db.ConnectTo
 
-// db init hardcoded temporary for testing
-func init() {
-	DB = db.NewDBConnectionFactory(0)
-}
-
 // ProgramDonasiRutinApp ...
 type ProgramDonasiRutinApp struct {
 	interfaces.IApplication
 }
 
 // NewProgramDonasiRutinApp ...
-func NewProgramDonasiRutinApp() *ProgramDonasiRutinApp {
+func NewProgramDonasiRutinApp(db *db.ConnectTo) *ProgramDonasiRutinApp {
 	// Place where we init infrastructure, repo etc
 	s := ProgramDonasiRutinApp{}
+	DB = db
 	return &s
 }
 
@@ -51,22 +47,22 @@ func (s *ProgramDonasiRutinApp) Destroy() {
 
 // Route declaration
 func (s *ProgramDonasiRutinApp) addRoute(r *router.Router) {
-	r.POST("/program-donasi-rutin/create", middleware.CheckAuthToken(createProgramDonasiRutin))
+	r.POST("/program-donasi-rutin/create", middleware.CheckAuthToken(DB, createProgramDonasiRutin))
 
-	r.PUT("/program-donasi-rutin/{id}", middleware.CheckAuthToken(updateProgramDonasiRutin))
-	r.PUT("/program-donasi-rutin/publish/{id}", middleware.CheckAuthToken(publishProgramDonasiRutin))
-	r.PUT("/program-donasi-rutin/hide/{id}", middleware.CheckAuthToken(hideProgramDonasiRutin))
+	r.PUT("/program-donasi-rutin/{id}", middleware.CheckAuthToken(DB, updateProgramDonasiRutin))
+	r.PUT("/program-donasi-rutin/publish/{id}", middleware.CheckAuthToken(DB, publishProgramDonasiRutin))
+	r.PUT("/program-donasi-rutin/hide/{id}", middleware.CheckAuthToken(DB, hideProgramDonasiRutin))
 
-	r.POST("/program-donasi-rutin/list", middleware.CheckAuthToken(findProgramDonasiRutins))
-	r.GET("/program-donasi-rutin/{id}", middleware.CheckAuthToken(getProgramDonasiRutin))
+	r.POST("/program-donasi-rutin/list", middleware.CheckAuthToken(DB, findProgramDonasiRutins))
+	r.GET("/program-donasi-rutin/{id}", middleware.CheckAuthToken(DB, getProgramDonasiRutin))
 
-	r.DELETE("/program-donasi-rutin/{id}", middleware.CheckAuthToken(deleteProgramDonasiRutin))
+	r.DELETE("/program-donasi-rutin/{id}", middleware.CheckAuthToken(DB, deleteProgramDonasiRutin))
 
-	r.POST("/program-donasi-rutin/paket/create/{id}", middleware.CheckAuthToken(createProgramDonasiRutinPaket))
-	r.PUT("/program-donasi-rutin/paket/{id}", middleware.CheckAuthToken(updateProgramDonasiRutinPaket))
-	r.DELETE("/program-donasi-rutin/paket/{id}", middleware.CheckAuthToken(deleteProgramDonasiRutinPaket))
-	r.POST("/program-donasi-rutin/paket/list", middleware.CheckAuthToken(findProgramDonasiRutinPaket))
-	r.GET("/program-donasi-rutin/paket/{id}", middleware.CheckAuthToken(getProgramDonasiRutinPaket))
+	r.POST("/program-donasi-rutin/paket/create/{id}", middleware.CheckAuthToken(DB, createProgramDonasiRutinPaket))
+	r.PUT("/program-donasi-rutin/paket/{id}", middleware.CheckAuthToken(DB, updateProgramDonasiRutinPaket))
+	r.DELETE("/program-donasi-rutin/paket/{id}", middleware.CheckAuthToken(DB, deleteProgramDonasiRutinPaket))
+	r.POST("/program-donasi-rutin/paket/list", middleware.CheckAuthToken(DB, findProgramDonasiRutinPaket))
+	r.GET("/program-donasi-rutin/paket/{id}", middleware.CheckAuthToken(DB, getProgramDonasiRutinPaket))
 }
 
 // ============== Handler for each route start here ============

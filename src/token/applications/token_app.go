@@ -16,14 +16,7 @@ import (
 	"github.com/valyala/fasthttp"
 )
 
-var (
-	DB *db.ConnectTo
-)
-
-// db init hardcoded temporary for testing
-func init() {
-	DB = db.NewDBConnectionFactory(0)
-}
+var DB *db.ConnectTo
 
 // TokenApp ...
 type TokenApp struct {
@@ -31,9 +24,10 @@ type TokenApp struct {
 }
 
 // NewTokenApp ...
-func NewTokenApp() *TokenApp {
+func NewTokenApp(db *db.ConnectTo) *TokenApp {
 	// Place where we init infrastructure, repo etc
 	s := TokenApp{}
+	DB = db
 	return &s
 }
 

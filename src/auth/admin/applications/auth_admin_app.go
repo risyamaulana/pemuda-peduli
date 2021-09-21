@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"log"
-
 	"pemuda-peduli/src/common/handler"
 	"pemuda-peduli/src/common/infrastructure/db"
 	"pemuda-peduli/src/common/interfaces"
@@ -22,14 +21,7 @@ import (
 	"github.com/valyala/fasthttp"
 )
 
-var (
-	DB *db.ConnectTo
-)
-
-// db init hardcoded temporary for testing
-func init() {
-	DB = db.NewDBConnectionFactory(0)
-}
+var DB *db.ConnectTo
 
 // AuthAdminApp ...
 type AuthAdminApp struct {
@@ -37,9 +29,10 @@ type AuthAdminApp struct {
 }
 
 // NewAuthAdminApp ...
-func NewAuthAdminApp() *AuthAdminApp {
+func NewAuthAdminApp(db *db.ConnectTo) *AuthAdminApp {
 	// Place where we init infrastructure, repo etc
 	s := AuthAdminApp{}
+	DB = db
 	return &s
 }
 
@@ -57,9 +50,9 @@ func (s *AuthAdminApp) Destroy() {
 
 // Route declaration
 func (s *AuthAdminApp) addRoute(r *router.Router) {
-	r.POST("/auth/admin/login", middleware.CheckAuthToken(login))
+	r.POST("/auth/admin/login", middleware.CheckAuthToken(DB, login))
 
-	r.POST("/auth/admin/logout", middleware.CheckLoginAdminToken(logout))
+	r.POST("/auth/admin/logout", middleware.CheckLoginAdminToken(DB, logout))
 }
 
 // ============== Handler for each route start here ============
