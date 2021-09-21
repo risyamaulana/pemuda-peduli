@@ -35,7 +35,7 @@ func UpdateProgramIncidental(ctx context.Context, repo interfaces.IProgramIncide
 
 	data.IsDeleted = checkData.IsDeleted
 
-	response, err = repo.Update(ctx, checkData, id)
+	response, err = repo.Update(ctx, data, id)
 	return
 }
 
