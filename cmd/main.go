@@ -28,6 +28,7 @@ import (
 	qrisApp "pemuda-peduli/src/qris/applications"
 	roleApp "pemuda-peduli/src/role/applications"
 	teamApp "pemuda-peduli/src/team/applications"
+	teamFlagApp "pemuda-peduli/src/team_flag/applications"
 	tentangKamiApp "pemuda-peduli/src/tentang_kami/applications"
 	testimoniApp "pemuda-peduli/src/testimoni/applications"
 	tokenApp "pemuda-peduli/src/token/applications"
@@ -100,6 +101,7 @@ func initialize(apps map[string]interfaces.IApplication, r *router.Router) {
 	apps["program-kami"] = programKamiApp.NewProgramKamiApp(DB)
 	apps["program-incidental"] = programIncidentalApp.NewProgramIncidentalApp(DB)
 	apps["team"] = teamApp.NewTeamApp(DB)
+	apps["team-flag"] = teamFlagApp.NewTeamFlagApp(DB)
 	apps["tentang-kami"] = tentangKamiApp.NewTentangKamiApp(DB)
 	apps["testimoni"] = testimoniApp.NewTestimoniApp(DB)
 	apps["tujuan-kami"] = tujuanKamiApp.NewTujuanKamiApp(DB)

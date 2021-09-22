@@ -10,6 +10,7 @@ import (
 
 type CreateTeam struct {
 	Name              string `json:"name" valid:"required"`
+	FlagID            int64  `json:"flag_id"`
 	Role              string `json:"role" valid:"required"`
 	ThumbnailPhotoURL string `json:"thumbnail_photo_url" valid:"required,url"`
 	FacebookLink      string `json:"facebook_link" valid:"url"`
@@ -20,6 +21,7 @@ type CreateTeam struct {
 
 type UpdateTeam struct {
 	Name              string `json:"name" valid:"required"`
+	FlagID            int64  `json:"flag_id"`
 	Role              string `json:"role" valid:"required"`
 	ThumbnailPhotoURL string `json:"thumbnail_photo_url" valid:"required,url"`
 	FacebookLink      string `json:"facebook_link" valid:"url"`
@@ -49,6 +51,8 @@ type ReadTeam struct {
 	IDPPCPTeam        string     `json:"id"`
 	Name              string     `json:"name"`
 	Role              string     `json:"role"`
+	FlagID            int64      `json:"flag_id"`
+	FlagName          string     `json:"flag_name"`
 	ThumbnailPhotoURL string     `json:"thumbnail_photo_url"`
 	FacebookLink      string     `json:"facebook_link"`
 	GoogleLink        string     `json:"google_link"`
@@ -110,6 +114,7 @@ func (r CreateTeam) ToEntity() (data entity.TeamEntity) {
 	data = entity.TeamEntity{
 		Name:              r.Name,
 		Role:              r.Role,
+		FlagID:            r.FlagID,
 		ThumbnailPhotoURL: r.ThumbnailPhotoURL,
 		FacebookLink:      r.FacebookLink,
 		GoogleLink:        r.GoogleLink,
@@ -124,6 +129,7 @@ func (r UpdateTeam) ToEntity() (data entity.TeamEntity) {
 	data = entity.TeamEntity{
 		Name:              r.Name,
 		Role:              r.Role,
+		FlagID:            r.FlagID,
 		ThumbnailPhotoURL: r.ThumbnailPhotoURL,
 		FacebookLink:      r.FacebookLink,
 		GoogleLink:        r.GoogleLink,
@@ -161,6 +167,8 @@ func ToPayload(data entity.TeamEntity) (response ReadTeam) {
 		IDPPCPTeam:        data.IDPPCPTeam,
 		Name:              data.Name,
 		Role:              data.Role,
+		FlagID:            data.FlagID,
+		FlagName:          data.FlagName,
 		ThumbnailPhotoURL: data.ThumbnailPhotoURL,
 		FacebookLink:      data.FacebookLink,
 		GoogleLink:        data.GoogleLink,

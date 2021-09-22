@@ -5,6 +5,8 @@ import "time"
 type TeamEntity struct {
 	ID                int64      `db:"id"`
 	IDPPCPTeam        string     `db:"id_pp_cp_team"`
+	FlagID            int64      `db:"flag_id"`
+	FlagName          string     `db:"flag_name"`
 	Name              string     `db:"name"`
 	Role              string     `db:"role"`
 	ThumbnailPhotoURL string     `db:"thumbnail_photo_url"`

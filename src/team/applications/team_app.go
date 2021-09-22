@@ -77,8 +77,7 @@ func createTeam(ctx *fasthttp.RequestCtx) {
 	}
 
 	data := payload.ToEntity()
-	repo := repository.NewTeamRepository(DB)
-	if err := domain.CreateTeam(ctx, &repo, &data); err != nil {
+	if err := domain.CreateTeam(ctx, DB, &data); err != nil {
 		ctx.SetStatusCode(fasthttp.StatusUnprocessableEntity)
 		fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
 		return
@@ -105,8 +104,7 @@ func updateTeam(ctx *fasthttp.RequestCtx) {
 	}
 
 	data := payload.ToEntity()
-	repo := repository.NewTeamRepository(DB)
-	responseData, err := domain.UpdateTeam(ctx, &repo, data, teamID)
+	responseData, err := domain.UpdateTeam(ctx, DB, data, teamID)
 	if err != nil {
 		ctx.SetStatusCode(fasthttp.StatusUnprocessableEntity)
 		fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
