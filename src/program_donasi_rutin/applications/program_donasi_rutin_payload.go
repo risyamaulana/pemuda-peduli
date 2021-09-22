@@ -28,6 +28,7 @@ type CreateProgramDonasiRutin struct {
 }
 
 type CreateProgramDonasiRutinPaket struct {
+	SeoURL        string  `json:"seo_url"`
 	PaketName     string  `json:"paket_name" valid:"required"`
 	Benefit       string  `json:"benefit" valid:"required"`
 	Nominal       float64 `json:"nominal" valid:"required"`
@@ -53,6 +54,7 @@ type UpdateProgramDonasiRutin struct {
 }
 
 type UpdateProgramDonasiRutinPaket struct {
+	SeoURL        string  `json:"seo_url"`
 	PaketName     string  `json:"paket_name" valid:"required"`
 	Benefit       string  `json:"benefit" valid:"required"`
 	Nominal       float64 `json:"nominal" valid:"required"`
@@ -108,6 +110,7 @@ type ReadProgramDonasiRutin struct {
 type ReadProgramDonasiRutinPaket struct {
 	IDPPCPProgramDonasiRutinPaket string     `json:"id"`
 	IDPPCPProgramDonasiRutin      string     `json:"id_pp_cp_program_donasi_rutin"`
+	SeoURL                        string     `json:"seo_url"`
 	PaketName                     string     `json:"paket_name"`
 	Benefit                       string     `json:"benefit"`
 	Nominal                       float64    `json:"nominal"`
@@ -214,6 +217,7 @@ func (r CreateProgramDonasiRutin) ToEntity() (data entity.ProgramDonasiRutinEnti
 func (r CreateProgramDonasiRutinPaket) ToEntity(ctx context.Context) (data entity.ProgramDonasiRutinPaketEntity) {
 	data = entity.ProgramDonasiRutinPaketEntity{
 		IDPPCPProgramDonasiRutin: ctx.Value("id").(string),
+		SeoURL:                   r.SeoURL,
 		PaketName:                r.PaketName,
 		Benefit:                  r.Benefit,
 		Nominal:                  r.Nominal,
@@ -244,6 +248,7 @@ func (r UpdateProgramDonasiRutin) ToEntity() (data entity.ProgramDonasiRutinEnti
 func (r UpdateProgramDonasiRutinPaket) ToEntity() (data entity.ProgramDonasiRutinPaketEntity) {
 	currentTime := time.Now().UTC()
 	data = entity.ProgramDonasiRutinPaketEntity{
+		SeoURL:        r.SeoURL,
 		PaketName:     r.PaketName,
 		Benefit:       r.Benefit,
 		Nominal:       r.Nominal,
@@ -309,6 +314,7 @@ func ToPayloadPaket(data entity.ProgramDonasiRutinPaketEntity) (response ReadPro
 	response = ReadProgramDonasiRutinPaket{
 		IDPPCPProgramDonasiRutinPaket: data.IDPPCPProgramDonasiRutinPaket,
 		IDPPCPProgramDonasiRutin:      data.IDPPCPProgramDonasiRutin,
+		SeoURL:                        data.SeoURL,
 		PaketName:                     data.PaketName,
 		Benefit:                       data.Benefit,
 		Nominal:                       data.Nominal,

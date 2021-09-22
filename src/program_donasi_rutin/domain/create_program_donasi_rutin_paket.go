@@ -7,6 +7,7 @@ import (
 	"pemuda-peduli/src/program_donasi_rutin/domain/entity"
 	"pemuda-peduli/src/program_donasi_rutin/domain/interfaces"
 	"pemuda-peduli/src/program_donasi_rutin/infrastructure/repository"
+	"strings"
 )
 
 func CreateProgramDonasiRutinPaket(ctx context.Context, db *db.ConnectTo, data *entity.ProgramDonasiRutinPaketEntity) (err error) {
@@ -18,6 +19,10 @@ func CreateProgramDonasiRutinPaket(ctx context.Context, db *db.ConnectTo, data *
 	if errCheckData != nil {
 		err = errors.New("Failed, data donasi not found")
 		return
+	}
+	// Check SEO URL
+	if data.SeoURL == "" {
+		data.SeoURL = strings.ToLower(strings.ReplaceAll(data.PaketName, " ", "-"))
 	}
 
 	err = insertProgramDonasiRutinPaket(ctx, &repo, data)

@@ -7,6 +7,7 @@ import (
 	"pemuda-peduli/src/program_donasi_rutin/domain/entity"
 	"pemuda-peduli/src/program_donasi_rutin/domain/interfaces"
 	"pemuda-peduli/src/program_donasi_rutin/infrastructure/repository"
+	"strings"
 	"time"
 )
 
@@ -26,6 +27,11 @@ func EditProgramDonasiRutinPaket(ctx context.Context, db *db.ConnectTo, data ent
 	if errCheckData != nil {
 		err = errors.New("Failed, data donasi not found")
 		return
+	}
+
+	// Check SEO URL
+	if data.SeoURL == "" {
+		data.SeoURL = strings.ToLower(strings.ReplaceAll(data.PaketName, " ", "-"))
 	}
 
 	data.ID = checkData.ID

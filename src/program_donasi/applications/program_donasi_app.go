@@ -54,7 +54,7 @@ func (s *ProgramDonasiApp) addRoute(r *router.Router) {
 	r.PUT("/program-donasi/hide/{id}", middleware.CheckAuthToken(DB, hideProgramDonasi))
 
 	r.POST("/program-donasi/list", middleware.CheckAuthToken(DB, findProgramDonasis))
-	r.GET("/program-donasi/{seo}", middleware.CheckAuthToken(DB, getProgramDonasi))
+	r.GET("/program-donasi/{id}", middleware.CheckAuthToken(DB, getProgramDonasi))
 
 	r.DELETE("/program-donasi/{id}", middleware.CheckAuthToken(DB, deleteProgramDonasi))
 }
@@ -199,8 +199,8 @@ func findProgramDonasis(ctx *fasthttp.RequestCtx) {
 }
 
 func getProgramDonasi(ctx *fasthttp.RequestCtx) {
-	programDonasiID := fmt.Sprintf("%s", ctx.UserValue("seo"))
-	responseData, err := domain.GetProgramDonasiSeo(ctx, DB, programDonasiID)
+	programDonasiID := fmt.Sprintf("%s", ctx.UserValue("id"))
+	responseData, err := domain.GetProgramDonasi(ctx, DB, programDonasiID)
 	if err != nil {
 		ctx.SetStatusCode(fasthttp.StatusUnprocessableEntity)
 		fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
