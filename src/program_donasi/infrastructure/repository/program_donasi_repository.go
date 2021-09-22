@@ -241,6 +241,13 @@ func (c *ProgramDonasiRepository) Get(ctx context.Context, id string) (response 
 	return
 }
 
+func (c *ProgramDonasiRepository) GetBySeo(ctx context.Context, seo string) (response entity.ProgramDonasiEntity, err error) {
+	if err = c.db.DBRead.Get(&response, "SELECT * FROM pp_cp_program_donasi WHERE seo_url = $1", seo); err != nil {
+		return
+	}
+	return
+}
+
 func (c *ProgramDonasiRepository) GetDetail(ctx context.Context, id string) (response entity.ProgramDonasiDetailEntity, err error) {
 	if err = c.db.DBRead.Get(&response, "SELECT * FROM pp_cp_program_donasi_detail WHERE id_pp_cp_program_donasi = $1", id); err != nil {
 		return

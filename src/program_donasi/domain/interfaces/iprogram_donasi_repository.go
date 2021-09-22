@@ -14,5 +14,7 @@ type IProgramDonasiRepository interface {
 
 	Find(ctx context.Context, data *entity.ProgramDonasiQueryEntity) (company []entity.ProgramDonasiEntity, count int, err error)
 	Get(ctx context.Context, id string) (response entity.ProgramDonasiEntity, err error)
+
+	GetBySeo(ctx context.Context, seo string) (response entity.ProgramDonasiEntity, err error)
 	GetDetail(ctx context.Context, id string) (response entity.ProgramDonasiDetailEntity, err error)
 }
