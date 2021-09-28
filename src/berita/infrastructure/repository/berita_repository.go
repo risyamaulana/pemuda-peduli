@@ -163,6 +163,8 @@ func (c *BeritaRepository) Find(ctx context.Context, data *entity.BeritaQueryEnt
 			switch field {
 			case "is_deleted":
 				str.WriteString(field + " = " + fil.Keyword + " AND ")
+			case "is_headline":
+				str.WriteString(field + " = " + fil.Keyword + " AND ")
 			case "status":
 				str.WriteString(field + " = '" + fil.Keyword + "' AND ")
 			default:
@@ -241,15 +243,15 @@ func (c *BeritaRepository) GetDetail(ctx context.Context, id string) (response e
 	return
 }
 
-func (c *BeritaRepository) GetListHeadline(ctx context.Context) (response []entity.HeadlineEntity, err error) {
-	if err = c.db.DBRead.Select(&response, "SELECT headline FROM public.pp_cp_berita GROUP BY headline"); err != nil {
+func (c *BeritaRepository) GetListTag(ctx context.Context) (response []entity.TagEntity, err error) {
+	if err = c.db.DBRead.Select(&response, "SELECT tag FROM public.pp_cp_berita GROUP BY tag"); err != nil {
 		return
 	}
 	return
 }
 
-func (c *BeritaRepository) GetListTag(ctx context.Context) (response []entity.TagEntity, err error) {
-	if err = c.db.DBRead.Select(&response, "SELECT tag FROM public.pp_cp_berita GROUP BY tag"); err != nil {
+func (c *BeritaRepository) GetCountIsHeadline(ctx context.Context) (response int, err error) {
+	if err = c.db.DBRead.Get(&response, "SELECT count(*) FROM public.pp_cp_berita WHERE is_headline = true"); err != nil {
 		return
 	}
 	return

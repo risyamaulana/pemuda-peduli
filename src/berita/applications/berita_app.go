@@ -58,7 +58,6 @@ func (s *BeritaApp) addRoute(r *router.Router) {
 
 	r.DELETE("/berita/{id}", middleware.CheckAuthToken(DB, deleteBerita))
 
-	r.GET("/berita/list-headline", getListHeadline)
 	r.GET("/berita/list-tag", getListTag)
 }
 
@@ -215,19 +214,6 @@ func getBerita(ctx *fasthttp.RequestCtx) {
 		return
 	}
 	response := handler.DefaultResponse(ToPayload(responseData, true), nil)
-	fmt.Fprintf(ctx, utility.PrettyPrint(response))
-}
-
-func getListHeadline(ctx *fasthttp.RequestCtx) {
-	repo := repository.NewBeritaRepository(DB)
-	responseData, err := domain.GetListHeadline(ctx, &repo)
-	if err != nil {
-		ctx.SetStatusCode(fasthttp.StatusUnprocessableEntity)
-		fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
-		log.Println(err)
-		return
-	}
-	response := handler.DefaultResponse(responseData, nil)
 	fmt.Fprintf(ctx, utility.PrettyPrint(response))
 }
 

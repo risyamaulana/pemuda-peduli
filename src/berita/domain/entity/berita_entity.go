@@ -8,7 +8,7 @@ type BeritaEntity struct {
 	Title             string     `db:"title"`
 	SubTitle          string     `db:"sub_title"`
 	Tag               string     `db:"tag"`
-	Headline          *string    `db:"headline"`
+	IsHeadline        bool       `db:"is_headline"`
 	ThumbnailImageURL string     `db:"thumbnail_image_url"`
 	Description       string     `db:"description"`
 	Status            string     `db:"status"`
@@ -21,10 +21,6 @@ type BeritaEntity struct {
 	IsDeleted         bool       `db:"is_deleted"`
 
 	Detail BeritaDetailEntity
-}
-
-type HeadlineEntity struct {
-	Headline string `db:"headline"`
 }
 
 type TagEntity struct {

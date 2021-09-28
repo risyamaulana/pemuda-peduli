@@ -32,12 +32,12 @@ func GetBerita(ctx context.Context, repo interfaces.IBeritaRepository, id string
 	return
 }
 
-func GetListHeadline(ctx context.Context, repo interfaces.IBeritaRepository) (responses []entity.HeadlineEntity, err error) {
-	responses, err = repo.GetListHeadline(ctx)
+func GetListTag(ctx context.Context, repo interfaces.IBeritaRepository) (responses []entity.TagEntity, err error) {
+	responses, err = repo.GetListTag(ctx)
 	return
 }
 
-func GetListTag(ctx context.Context, repo interfaces.IBeritaRepository) (responses []entity.TagEntity, err error) {
-	responses, err = repo.GetListTag(ctx)
+func GetCountIsHeadline(ctx context.Context, repo interfaces.IBeritaRepository) (response int, err error) {
+	response, err = repo.GetCountIsHeadline(ctx)
 	return
 }

@@ -17,7 +17,6 @@ type IBeritaRepository interface {
 	UpdateDetail(ctx context.Context, data entity.BeritaDetailEntity, id string) (response entity.BeritaDetailEntity, err error)
 	GetDetail(ctx context.Context, id string) (response entity.BeritaDetailEntity, err error)
 
-	GetListHeadline(ctx context.Context) (response []entity.HeadlineEntity, err error)
-
 	GetListTag(ctx context.Context) (response []entity.TagEntity, err error)
+	GetCountIsHeadline(ctx context.Context) (response int, err error)
 }

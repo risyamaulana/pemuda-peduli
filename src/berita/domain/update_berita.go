@@ -12,6 +12,22 @@ import (
 
 func UpdateBerita(ctx context.Context, repo interfaces.IBeritaRepository, data entity.BeritaEntity, dataDetail entity.BeritaDetailEntity, id string) (response entity.BeritaEntity, err error) {
 	currentDate := time.Now().UTC()
+
+	// Check berita is_headline
+	if data.IsHeadline {
+		// Check available count headline
+		countResponse, errCountResponse := GetCountIsHeadline(ctx, repo)
+		if errCountResponse != nil {
+			err = errors.New("failed check headline available data")
+			return
+		}
+
+		if countResponse >= 3 {
+			err = errors.New("failed overlimit headline")
+			return
+		}
+	}
+
 	// Check available daata
 	checkData, err := GetBerita(ctx, repo, id)
 	if err != nil {
@@ -25,7 +41,7 @@ func UpdateBerita(ctx context.Context, repo interfaces.IBeritaRepository, data e
 	checkData.Title = data.Title
 	checkData.SubTitle = data.SubTitle
 	checkData.Tag = data.Tag
-	checkData.Headline = data.Headline
+	checkData.IsHeadline = data.IsHeadline
 	checkData.ThumbnailImageURL = data.ThumbnailImageURL
 	checkData.Description = data.Description
 
@@ -61,6 +77,7 @@ func UpdateBerita(ctx context.Context, repo interfaces.IBeritaRepository, data e
 
 func PublishBerita(ctx context.Context, repo interfaces.IBeritaRepository, id string) (response entity.BeritaEntity, err error) {
 	currentDate := time.Now().UTC()
+
 	// Check available daata
 	checkData, err := repo.Get(ctx, id)
 	if err != nil {
