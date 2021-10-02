@@ -21,6 +21,7 @@ func UpdateBanner(ctx context.Context, repo interfaces.IBannerRepository, data e
 		err = errors.New("Can't update this data")
 		return
 	}
+	checkData.Tag = data.Tag
 	checkData.Title = data.Title
 	checkData.SubTitle = data.SubTitle
 	checkData.TitleContent = data.TitleContent

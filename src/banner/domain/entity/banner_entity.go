@@ -5,6 +5,7 @@ import "time"
 type BannerEntity struct {
 	ID                int64      `db:"id"`
 	IDPPCPBanner      string     `db:"id_pp_cp_banner"`
+	Tag               string     `db:"string"`
 	Title             string     `db:"title"`
 	SubTitle          string     `db:"sub_title"`
 	TitleContent      string     `db:"title_content"`

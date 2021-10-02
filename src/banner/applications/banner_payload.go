@@ -9,6 +9,7 @@ import (
 )
 
 type CreateBanner struct {
+	Tag               string  `json:"tag"`
 	Title             string  `json:"title" valid:"required"`
 	SubTitle          string  `json:"sub_title" valid:"required"`
 	TitleContent      string  `json:"title_content"`
@@ -21,6 +22,7 @@ type CreateBanner struct {
 }
 
 type UpdateBanner struct {
+	Tag               string  `json:"tag"`
 	Title             string  `json:"title" valid:"required"`
 	SubTitle          string  `json:"sub_title" valid:"required"`
 	TitleContent      string  `json:"title_content"`
@@ -51,6 +53,7 @@ type BannerFilterQuery struct {
 
 type ReadBanner struct {
 	IDPPCPBanner      string     `json:"id"`
+	Tag               string     `json:"tag"`
 	Title             string     `json:"title"`
 	SubTitle          string     `json:"sub_title"`
 	TitleContent      string     `json:"title_content"`
@@ -114,6 +117,7 @@ func (r BannerQuery) Validate() (err error) {
 
 func (r CreateBanner) ToEntity() (data entity.BannerEntity) {
 	data = entity.BannerEntity{
+		Tag:               r.Tag,
 		Title:             r.Title,
 		SubTitle:          r.SubTitle,
 		TitleContent:      r.TitleContent,
@@ -130,6 +134,7 @@ func (r CreateBanner) ToEntity() (data entity.BannerEntity) {
 
 func (r UpdateBanner) ToEntity() (data entity.BannerEntity) {
 	data = entity.BannerEntity{
+		Tag:               r.Tag,
 		Title:             r.Title,
 		SubTitle:          r.SubTitle,
 		TitleContent:      r.TitleContent,
@@ -169,6 +174,7 @@ func (r BannerQuery) ToEntity() (data entity.BannerQueryEntity) {
 func ToPayload(data entity.BannerEntity) (response ReadBanner) {
 	response = ReadBanner{
 		IDPPCPBanner:      data.IDPPCPBanner,
+		Tag:               data.Tag,
 		Title:             data.Title,
 		SubTitle:          data.SubTitle,
 		TitleContent:      data.TitleContent,
