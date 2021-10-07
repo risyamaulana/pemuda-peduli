@@ -228,14 +228,17 @@ func ToPayload(data entity.ProgramKamiEntity, isDetail bool) (response ReadProgr
 
 	beneficariesUrl := strings.Split(data.BeneficariesImageURL, "|")
 
-	achievementStr := strings.Split(data.Achievements, "|")
 	achievements := []Achievement{}
-	for _, achievement := range achievementStr {
-		achievementData := strings.Split(achievement, "&")
-		achievements = append(achievements, Achievement{
-			Label: achievementData[0],
-			Value: achievementData[1],
-		})
+	if data.Achievements != "" {
+		achievementStr := strings.Split(data.Achievements, "|")
+
+		for _, achievement := range achievementStr {
+			achievementData := strings.Split(achievement, "&")
+			achievements = append(achievements, Achievement{
+				Label: achievementData[0],
+				Value: achievementData[1],
+			})
+		}
 	}
 
 	response = ReadProgramKami{
