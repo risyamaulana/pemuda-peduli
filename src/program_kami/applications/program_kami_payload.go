@@ -11,23 +11,25 @@ import (
 )
 
 type CreateProgramKami struct {
-	Title                string   `json:"title" valid:"required"`
-	SubTitle             string   `json:"sub_title" valid:"required"`
-	Content              string   `json:"content" valid:"required"`
-	Tag                  string   `json:"tag"`
-	ThumbnailImageURL    string   `json:"thumbnail_image_url" valid:"url"`
-	BeneficariesImageURL []string `json:"beneficaries_image_url" valid:"url"`
-	Description          string   `json:"description"`
+	Title                string        `json:"title" valid:"required"`
+	SubTitle             string        `json:"sub_title" valid:"required"`
+	Content              string        `json:"content" valid:"required"`
+	Achievements         []Achievement `json:"achievements"`
+	Tag                  string        `json:"tag"`
+	ThumbnailImageURL    string        `json:"thumbnail_image_url" valid:"url"`
+	BeneficariesImageURL []string      `json:"beneficaries_image_url" valid:"url"`
+	Description          string        `json:"description"`
 }
 
 type UpdateProgramKami struct {
-	Title                string   `json:"title" valid:"required"`
-	SubTitle             string   `json:"sub_title" valid:"required"`
-	Content              string   `json:"content" valid:"required"`
-	Tag                  string   `json:"tag"`
-	ThumbnailImageURL    string   `json:"thumbnail_image_url" valid:"url"`
-	BeneficariesImageURL []string `json:"beneficaries_image_url" valid:"url"`
-	Description          string   `json:"description"`
+	Title                string        `json:"title" valid:"required"`
+	SubTitle             string        `json:"sub_title" valid:"required"`
+	Content              string        `json:"content" valid:"required"`
+	Achievements         []Achievement `json:"achievements"`
+	Tag                  string        `json:"tag"`
+	ThumbnailImageURL    string        `json:"thumbnail_image_url" valid:"url"`
+	BeneficariesImageURL []string      `json:"beneficaries_image_url" valid:"url"`
+	Description          string        `json:"description"`
 }
 
 type ProgramKamiQuery struct {
@@ -48,12 +50,13 @@ type ProgramKamiFilterQuery struct {
 }
 
 type ReadProgramKami struct {
-	IDPPCPProgramKami    string   `json:"id"`
-	Title                string   `json:"title"`
-	SubTitle             string   `json:"sub_title"`
-	Tag                  string   `json:"tag"`
-	ThumbnailImageURL    string   `json:"thumbnail_image_url"`
-	BeneficariesImageURL []string `json:"beneficaries_image_url"`
+	IDPPCPProgramKami    string        `json:"id"`
+	Title                string        `json:"title"`
+	SubTitle             string        `json:"sub_title"`
+	Tag                  string        `json:"tag"`
+	ThumbnailImageURL    string        `json:"thumbnail_image_url"`
+	BeneficariesImageURL []string      `json:"beneficaries_image_url"`
+	Achievements         []Achievement `json:"achievements"`
 	// Detail            *ReadProgramKamiDetail `json:"detail,omitempty"`
 	Content     string     `json:"content,omitempty"`
 	Description string     `json:"description"`
@@ -69,6 +72,11 @@ type ReadProgramKami struct {
 
 type ReadProgramKamiDetail struct {
 	Content string `json:"content"`
+}
+
+type Achievement struct {
+	Label string `json:"label"`
+	Value string `json:"value"`
 }
 
 func GetCreatePayload(body []byte) (payload CreateProgramKami, err error) {
@@ -132,12 +140,19 @@ func (r CreateProgramKami) ToEntity() (data entity.ProgramKamiEntity, dataDetail
 
 	beneficariesURLValue := strings.TrimSuffix(beneficariesURL.String(), "|")
 
+	var achievements strings.Builder
+	for _, achievement := range r.Achievements {
+		achievements.WriteString((achievement.Label + "&" + achievement.Value + "|"))
+	}
+	achievementsValue := strings.TrimSuffix(achievements.String(), "|")
+
 	data = entity.ProgramKamiEntity{
 		Title:                r.Title,
 		SubTitle:             r.SubTitle,
 		Tag:                  r.Tag,
 		ThumbnailImageURL:    r.ThumbnailImageURL,
 		BeneficariesImageURL: beneficariesURLValue,
+		Achievements:         achievementsValue,
 		Description:          r.Description,
 		CreatedAt:            time.Now().UTC(),
 	}
@@ -157,11 +172,18 @@ func (r UpdateProgramKami) ToEntity() (data entity.ProgramKamiEntity, dataDetail
 
 	beneficariesURLValue := strings.TrimSuffix(beneficariesURL.String(), "|")
 
+	var achievements strings.Builder
+	for _, achievement := range r.Achievements {
+		achievements.WriteString((achievement.Label + "&" + achievement.Value + "|"))
+	}
+	achievementsValue := strings.TrimSuffix(achievements.String(), "|")
+
 	data = entity.ProgramKamiEntity{
 		Title:                r.Title,
 		SubTitle:             r.SubTitle,
 		Tag:                  r.Tag,
 		BeneficariesImageURL: beneficariesURLValue,
+		Achievements:         achievementsValue,
 		ThumbnailImageURL:    r.ThumbnailImageURL,
 		Description:          r.Description,
 	}
@@ -206,6 +228,16 @@ func ToPayload(data entity.ProgramKamiEntity, isDetail bool) (response ReadProgr
 
 	beneficariesUrl := strings.Split(data.BeneficariesImageURL, "|")
 
+	achievementStr := strings.Split(data.Achievements, "|")
+	achievements := []Achievement{}
+	for _, achievement := range achievementStr {
+		achievementData := strings.Split(achievement, "&")
+		achievements = append(achievements, Achievement{
+			Label: achievementData[0],
+			Value: achievementData[1],
+		})
+	}
+
 	response = ReadProgramKami{
 		IDPPCPProgramKami:    data.IDPPCPProgramKami,
 		Title:                data.Title,
@@ -214,6 +246,7 @@ func ToPayload(data entity.ProgramKamiEntity, isDetail bool) (response ReadProgr
 		ThumbnailImageURL:    data.ThumbnailImageURL,
 		BeneficariesImageURL: beneficariesUrl,
 		Content:              data.Detail.Content,
+		Achievements:         achievements,
 		// Detail:            detail,
 		Description: data.Description,
 		Status:      data.Status,

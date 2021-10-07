@@ -10,6 +10,7 @@ type ProgramKamiEntity struct {
 	Tag                  string     `db:"tag"`
 	ThumbnailImageURL    string     `db:"thumbnail_image_url"`
 	BeneficariesImageURL string     `db:"beneficaries_image_url"`
+	Achievements         string     `db:"achievements"`
 	Description          string     `db:"description"`
 	Status               string     `db:"status"`
 	CreatedAt            time.Time  `db:"created_at"`
