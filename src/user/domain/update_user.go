@@ -74,7 +74,7 @@ func ForgotPassword(ctx context.Context, repo interfaces.IUserRepository, email 
 func sendMailForgotPassword(data entity.UserEntity) (err error) {
 	currentDate := time.Now()
 	to := []string{data.Email}
-	subject := "Reset Password " + currentDate.Format("02 Januari 2006")
+	subject := "Reset Password " + currentDate.Format("02 January 2006")
 	resetURL := "http://ayokitapeduli.com/reset?token=" + data.TokenReset
 	templateData := struct {
 		Name             string
