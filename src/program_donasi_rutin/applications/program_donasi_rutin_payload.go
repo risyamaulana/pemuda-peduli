@@ -41,6 +41,7 @@ type CreateProgramDonasiRutinNews struct {
 	SubmitAt                 time.Time `json:"submit_at" valid:"required"`
 	DisbursementBalance      float64   `json:"disbursement_balance" valid:"required"`
 	DisbursementAccount      string    `json:"disbursement_account" valid:"required"`
+	DibursementBankName      string    `json:"dibursement_bank_name" valid:"required"`
 	DisbursementName         string    `json:"disbursement_name" valid:"required"`
 	DisbursementDescription  string    `json:"disbursement_description" valid:"required"`
 }
@@ -68,6 +69,7 @@ type UpdateProgramDonasiRutinNews struct {
 	SubmitAt                time.Time `json:"submit_at" valid:"required"`
 	DisbursementBalance     float64   `json:"disbursement_balance" valid:"required"`
 	DisbursementAccount     string    `json:"disbursement_account" valid:"required"`
+	DibursementBankName     string    `json:"dibursement_bank_name" valid:"required"`
 	DisbursementName        string    `json:"disbursement_name" valid:"required"`
 	DisbursementDescription string    `json:"disbursement_description" valid:"required"`
 }
@@ -146,6 +148,7 @@ type ReadProgramDonasiNews struct {
 	SubmitAt                 time.Time  `json:"submit_at"`
 	DisbursementBalance      float64    `json:"disbursement_balance"`
 	DisbursementAccount      string     `json:"disbursement_account"`
+	DibursementBankName      string     `json:"dibursement_bank_name" valid:"required"`
 	DisbursementName         string     `json:"disbursement_name"`
 	DisbursementDescription  string     `json:"disbursement_description"`
 	IsDeleted                bool       `json:"is_deleted"`
@@ -299,6 +302,7 @@ func (r CreateProgramDonasiRutinNews) ToEntity() (data entity.ProgramDonasiRutin
 		SubmitAt:                 r.SubmitAt,
 		DisbursementBalance:      r.DisbursementBalance,
 		DisbursementAccount:      r.DisbursementAccount,
+		DibursementBankName:      r.DibursementBankName,
 		DisbursementName:         r.DisbursementName,
 		DisbursementDescription:  r.DisbursementDescription,
 		IsDeleted:                false,
@@ -345,6 +349,7 @@ func (r UpdateProgramDonasiRutinNews) ToEntity() (data entity.ProgramDonasiRutin
 		SubmitAt:                r.SubmitAt,
 		DisbursementBalance:     r.DisbursementBalance,
 		DisbursementAccount:     r.DisbursementAccount,
+		DibursementBankName:     r.DibursementBankName,
 		DisbursementName:        r.DisbursementName,
 		DisbursementDescription: r.DisbursementDescription,
 	}
@@ -429,6 +434,7 @@ func ToPayloadNews(data entity.ProgramDonasiRutinNewsEntity) (response ReadProgr
 		DisbursementBalance:      data.DisbursementBalance,
 		DisbursementAccount:      data.DisbursementAccount,
 		DisbursementName:         data.DisbursementName,
+		DibursementBankName:      data.DibursementBankName,
 		DisbursementDescription:  data.DisbursementDescription,
 		IsDeleted:                data.IsDeleted,
 		CreatedAt:                data.CreatedAt,

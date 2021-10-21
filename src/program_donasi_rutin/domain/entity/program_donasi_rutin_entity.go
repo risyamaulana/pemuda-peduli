@@ -51,6 +51,7 @@ type ProgramDonasiRutinNewsEntity struct {
 	SubmitAt                 time.Time  `db:"submit_at"`
 	DisbursementBalance      float64    `db:"disbursement_balance"`
 	DisbursementAccount      string     `db:"disbursement_account"`
+	DibursementBankName      string     `db:"dibursement_bank_name"`
 	DisbursementName         string     `db:"disbursement_name"`
 	DisbursementDescription  string     `db:"disbursement_description"`
 	IsDeleted                bool       `db:"is_deleted"`
