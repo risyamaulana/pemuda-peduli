@@ -44,6 +44,22 @@ type ProgramDonasiRutinPaketEntity struct {
 	IsDeleted                     bool       `db:"is_deleted"`
 }
 
+type ProgramDonasiRutinNewsEntity struct {
+	ID                       int64      `db:"id"`
+	IDPPCPProgramDonasiRutin string     `db:"id_pp_cp_program_donasi_rutin"`
+	Title                    string     `db:"title"`
+	SubmitAt                 time.Time  `db:"submit_at"`
+	DisbursementBalance      float64    `db:"disbursement_balance"`
+	DisbursementAccount      string     `db:"disbursement_account"`
+	DisbursementName         string     `db:"disbursement_name"`
+	DisbursementDescription  string     `db:"disbursement_description"`
+	IsDeleted                bool       `db:"is_deleted"`
+	CreatedAt                time.Time  `db:"created_at"`
+	CreatedBy                *string    `db:"created_by"`
+	UpdatedAt                *time.Time `db:"updated_at"`
+	UpdatedBy                *string    `db:"updated_by"`
+}
+
 type ProgramDonasiRutinQueryEntity struct {
 	Limit         string `db:"limit"`
 	Offset        string `db:"offset"`

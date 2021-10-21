@@ -43,3 +43,11 @@ func CreateProgramDonasi(ctx context.Context, db *db.ConnectTo, data *entity.Pro
 
 	return
 }
+
+func CreateProgramDonasiNews(ctx context.Context, db *db.ConnectTo, data *entity.ProgramDonasiNewsEntity) (err error) {
+	// Repo
+	repo := repository.NewProgramDonasiRepository(db)
+
+	err = repo.InsertNews(ctx, data)
+	return
+}

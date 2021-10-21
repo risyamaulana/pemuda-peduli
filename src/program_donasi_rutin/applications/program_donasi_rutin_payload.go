@@ -35,6 +35,16 @@ type CreateProgramDonasiRutinPaket struct {
 	PaketImageURL string  `json:"paket_image_url" valid:"url"`
 }
 
+type CreateProgramDonasiRutinNews struct {
+	IDPPCPProgramDonasiRutin string    `json:"id_pp_cp_program_donasi_rutin" valid:"required"`
+	Title                    string    `json:"title" valid:"required"`
+	SubmitAt                 time.Time `json:"submit_at" valid:"required"`
+	DisbursementBalance      float64   `json:"disbursement_balance" valid:"required"`
+	DisbursementAccount      string    `json:"disbursement_account" valid:"required"`
+	DisbursementName         string    `json:"disbursement_name" valid:"required"`
+	DisbursementDescription  string    `json:"disbursement_description" valid:"required"`
+}
+
 type UpdateProgramDonasiRutin struct {
 	// IDPPCPProgramDonasiKategori string `json:"id_kategori" valid:"required"`
 
@@ -51,6 +61,15 @@ type UpdateProgramDonasiRutin struct {
 	QrisImageURL     string `json:"qris_image_url"`
 
 	Description string `json:"description"`
+}
+
+type UpdateProgramDonasiRutinNews struct {
+	Title                   string    `json:"title" valid:"required"`
+	SubmitAt                time.Time `json:"submit_at" valid:"required"`
+	DisbursementBalance     float64   `json:"disbursement_balance" valid:"required"`
+	DisbursementAccount     string    `json:"disbursement_account" valid:"required"`
+	DisbursementName        string    `json:"disbursement_name" valid:"required"`
+	DisbursementDescription string    `json:"disbursement_description" valid:"required"`
 }
 
 type UpdateProgramDonasiRutinPaket struct {
@@ -120,6 +139,22 @@ type ReadProgramDonasiRutinPaket struct {
 	IsDeleted                     bool       `json:"is_deleted"`
 }
 
+type ReadProgramDonasiNews struct {
+	ID                       int64      `json:"id"`
+	IDPPCPProgramDonasiRutin string     `json:"id_pp_cp_program_donasi_rutin"`
+	Title                    string     `json:"title"`
+	SubmitAt                 time.Time  `json:"submit_at"`
+	DisbursementBalance      float64    `json:"disbursement_balance"`
+	DisbursementAccount      string     `json:"disbursement_account"`
+	DisbursementName         string     `json:"disbursement_name"`
+	DisbursementDescription  string     `json:"disbursement_description"`
+	IsDeleted                bool       `json:"is_deleted"`
+	CreatedAt                time.Time  `json:"created_at"`
+	CreatedBy                *string    `json:"created_by"`
+	UpdatedAt                *time.Time `json:"updated_at"`
+	UpdatedBy                *string    `json:"updated_by"`
+}
+
 func GetCreatePayload(body []byte) (payload CreateProgramDonasiRutin, err error) {
 	err = json.Unmarshal(body, &payload)
 	return
@@ -141,6 +176,16 @@ func GetUpdatePaketPayload(body []byte) (payload UpdateProgramDonasiRutinPaket, 
 }
 
 func GetQueryPayload(body []byte) (payload ProgramDonasiRutinQuery, err error) {
+	err = json.Unmarshal(body, &payload)
+	return
+}
+
+func GetCreateNewsPayload(body []byte) (payload CreateProgramDonasiRutinNews, err error) {
+	err = json.Unmarshal(body, &payload)
+	return
+}
+
+func GetUpdateNewsPayload(body []byte) (payload UpdateProgramDonasiRutinNews, err error) {
 	err = json.Unmarshal(body, &payload)
 	return
 }
@@ -196,6 +241,24 @@ func (r ProgramDonasiRutinQuery) Validate() (err error) {
 	return
 }
 
+func (r CreateProgramDonasiRutinNews) Validate() (err error) {
+	// Validate Payload
+	_, err = govalidator.ValidateStruct(r)
+	if err != nil {
+		return
+	}
+	return
+}
+
+func (r UpdateProgramDonasiRutinNews) Validate() (err error) {
+	// Validate Payload
+	_, err = govalidator.ValidateStruct(r)
+	if err != nil {
+		return
+	}
+	return
+}
+
 func (r CreateProgramDonasiRutin) ToEntity() (data entity.ProgramDonasiRutinEntity) {
 	data = entity.ProgramDonasiRutinEntity{
 		// IDPPCPProgramDonasiKategori: r.IDPPCPProgramDonasiKategori,
@@ -228,6 +291,23 @@ func (r CreateProgramDonasiRutinPaket) ToEntity(ctx context.Context) (data entit
 	return
 }
 
+func (r CreateProgramDonasiRutinNews) ToEntity() (data entity.ProgramDonasiRutinNewsEntity) {
+	data = entity.ProgramDonasiRutinNewsEntity{
+
+		IDPPCPProgramDonasiRutin: r.IDPPCPProgramDonasiRutin,
+		Title:                    r.Title,
+		SubmitAt:                 r.SubmitAt,
+		DisbursementBalance:      r.DisbursementBalance,
+		DisbursementAccount:      r.DisbursementAccount,
+		DisbursementName:         r.DisbursementName,
+		DisbursementDescription:  r.DisbursementDescription,
+		IsDeleted:                false,
+		CreatedAt:                time.Now().UTC(),
+	}
+
+	return
+}
+
 func (r UpdateProgramDonasiRutin) ToEntity() (data entity.ProgramDonasiRutinEntity) {
 	data = entity.ProgramDonasiRutinEntity{
 		// IDPPCPProgramDonasiKategori: r.IDPPCPProgramDonasiKategori,
@@ -256,6 +336,19 @@ func (r UpdateProgramDonasiRutinPaket) ToEntity() (data entity.ProgramDonasiRuti
 		UpdatedAt:     &currentTime,
 		IsDeleted:     false,
 	}
+	return
+}
+
+func (r UpdateProgramDonasiRutinNews) ToEntity() (data entity.ProgramDonasiRutinNewsEntity) {
+	data = entity.ProgramDonasiRutinNewsEntity{
+		Title:                   r.Title,
+		SubmitAt:                r.SubmitAt,
+		DisbursementBalance:     r.DisbursementBalance,
+		DisbursementAccount:     r.DisbursementAccount,
+		DisbursementName:        r.DisbursementName,
+		DisbursementDescription: r.DisbursementDescription,
+	}
+
 	return
 }
 
@@ -324,5 +417,24 @@ func ToPayloadPaket(data entity.ProgramDonasiRutinPaketEntity) (response ReadPro
 		IsDeleted:                     data.IsDeleted,
 	}
 
+	return
+}
+
+func ToPayloadNews(data entity.ProgramDonasiRutinNewsEntity) (response ReadProgramDonasiNews) {
+	response = ReadProgramDonasiNews{
+		ID:                       data.ID,
+		IDPPCPProgramDonasiRutin: data.IDPPCPProgramDonasiRutin,
+		Title:                    data.Title,
+		SubmitAt:                 data.SubmitAt,
+		DisbursementBalance:      data.DisbursementBalance,
+		DisbursementAccount:      data.DisbursementAccount,
+		DisbursementName:         data.DisbursementName,
+		DisbursementDescription:  data.DisbursementDescription,
+		IsDeleted:                data.IsDeleted,
+		CreatedAt:                data.CreatedAt,
+		CreatedBy:                data.CreatedBy,
+		UpdatedAt:                data.UpdatedAt,
+		UpdatedBy:                data.UpdatedBy,
+	}
 	return
 }

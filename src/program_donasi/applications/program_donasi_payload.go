@@ -32,6 +32,16 @@ type CreateProgramDonasi struct {
 	Description          string     `json:"description"`
 }
 
+type CreateProgramDonasiNews struct {
+	IDPPCPProgramDonasi     string    `json:"id_pp_cp_program_donasi" valid:"required"`
+	Title                   string    `json:"title" valid:"required"`
+	SubmitAt                time.Time `json:"submit_at" valid:"required"`
+	DisbursementBalance     float64   `json:"disbursement_balance" valid:"required"`
+	DisbursementAccount     string    `json:"disbursement_account" valid:"required"`
+	DisbursementName        string    `json:"disbursement_name" valid:"required"`
+	DisbursementDescription string    `json:"disbursement_description" valid:"required"`
+}
+
 type UpdateProgramDonasi struct {
 	Title                string     `json:"title" valid:"required"`
 	SubTitle             string     `json:"sub_title" valid:"required"`
@@ -50,6 +60,15 @@ type UpdateProgramDonasi struct {
 	QrisImageURL         string     `json:"qris_image_url"`
 	Description          string     `json:"description"`
 	IsShow               *bool      `json:"is_show"`
+}
+
+type UpdateProgramDonasiNews struct {
+	Title                   string    `json:"title" valid:"required"`
+	SubmitAt                time.Time `json:"submit_at" valid:"required"`
+	DisbursementBalance     float64   `json:"disbursement_balance" valid:"required"`
+	DisbursementAccount     string    `json:"disbursement_account" valid:"required"`
+	DisbursementName        string    `json:"disbursement_name" valid:"required"`
+	DisbursementDescription string    `json:"disbursement_description" valid:"required"`
 }
 
 type ProgramDonasiQuery struct {
@@ -101,6 +120,22 @@ type ReadProgramDonasi struct {
 	PenggalangDana penggalangDanaApp.ReadPenggalangDana `json:"penggalang_dana"`
 }
 
+type ReadProgramDonasiNews struct {
+	ID                      int64      `json:"id"`
+	IDPPCPProgramDonasi     string     `json:"id_pp_cp_program_donasi"`
+	Title                   string     `json:"title"`
+	SubmitAt                time.Time  `json:"submit_at"`
+	DisbursementBalance     float64    `json:"disbursement_balance"`
+	DisbursementAccount     string     `json:"disbursement_account"`
+	DisbursementName        string     `json:"disbursement_name"`
+	DisbursementDescription string     `json:"disbursement_description"`
+	IsDeleted               bool       `json:"is_deleted"`
+	CreatedAt               time.Time  `json:"created_at"`
+	CreatedBy               *string    `json:"created_by"`
+	UpdatedAt               *time.Time `json:"updated_at"`
+	UpdatedBy               *string    `json:"updated_by"`
+}
+
 func GetCreatePayload(body []byte) (payload CreateProgramDonasi, err error) {
 	err = json.Unmarshal(body, &payload)
 	return
@@ -112,6 +147,16 @@ func GetUpdatePayload(body []byte) (payload UpdateProgramDonasi, err error) {
 }
 
 func GetQueryPayload(body []byte) (payload ProgramDonasiQuery, err error) {
+	err = json.Unmarshal(body, &payload)
+	return
+}
+
+func GetCreateNewsPayload(body []byte) (payload CreateProgramDonasiNews, err error) {
+	err = json.Unmarshal(body, &payload)
+	return
+}
+
+func GetUpdateNewsPayload(body []byte) (payload UpdateProgramDonasiNews, err error) {
 	err = json.Unmarshal(body, &payload)
 	return
 }
@@ -164,6 +209,24 @@ func (r ProgramDonasiQuery) Validate() (err error) {
 	return
 }
 
+func (r CreateProgramDonasiNews) Validate() (err error) {
+	// Validate Payload
+	_, err = govalidator.ValidateStruct(r)
+	if err != nil {
+		return
+	}
+	return
+}
+
+func (r UpdateProgramDonasiNews) Validate() (err error) {
+	// Validate Payload
+	_, err = govalidator.ValidateStruct(r)
+	if err != nil {
+		return
+	}
+	return
+}
+
 func (r CreateProgramDonasi) ToEntity() (data entity.ProgramDonasiEntity, dataDetail entity.ProgramDonasiDetailEntity) {
 	validFrom := r.ValidFrom.UTC()
 	validTo := r.ValidTo.UTC()
@@ -201,6 +264,23 @@ func (r CreateProgramDonasi) ToEntity() (data entity.ProgramDonasiEntity, dataDe
 	return
 }
 
+func (r CreateProgramDonasiNews) ToEntity() (data entity.ProgramDonasiNewsEntity) {
+	data = entity.ProgramDonasiNewsEntity{
+
+		IDPPCPProgramDonasi:     r.IDPPCPProgramDonasi,
+		Title:                   r.Title,
+		SubmitAt:                r.SubmitAt,
+		DisbursementBalance:     r.DisbursementBalance,
+		DisbursementAccount:     r.DisbursementAccount,
+		DisbursementName:        r.DisbursementName,
+		DisbursementDescription: r.DisbursementDescription,
+		IsDeleted:               false,
+		CreatedAt:               time.Now().UTC(),
+	}
+
+	return
+}
+
 func (r UpdateProgramDonasi) ToEntity() (data entity.ProgramDonasiEntity, dataDetail entity.ProgramDonasiDetailEntity) {
 	validFrom := r.ValidFrom.UTC()
 	validTo := r.ValidTo.UTC()
@@ -235,6 +315,19 @@ func (r UpdateProgramDonasi) ToEntity() (data entity.ProgramDonasiEntity, dataDe
 		Content: r.Content,
 		Tag:     r.Tag,
 	}
+	return
+}
+
+func (r UpdateProgramDonasiNews) ToEntity() (data entity.ProgramDonasiNewsEntity) {
+	data = entity.ProgramDonasiNewsEntity{
+		Title:                   r.Title,
+		SubmitAt:                r.SubmitAt,
+		DisbursementBalance:     r.DisbursementBalance,
+		DisbursementAccount:     r.DisbursementAccount,
+		DisbursementName:        r.DisbursementName,
+		DisbursementDescription: r.DisbursementDescription,
+	}
+
 	return
 }
 
@@ -300,6 +393,25 @@ func ToPayload(data entity.ProgramDonasiEntity) (response ReadProgramDonasi) {
 		IsShow:               data.IsShow,
 
 		PenggalangDana: penggalangDanaApp.ToPayload(data.PenggalangDana),
+	}
+	return
+}
+
+func ToPayloadNews(data entity.ProgramDonasiNewsEntity) (response ReadProgramDonasiNews) {
+	response = ReadProgramDonasiNews{
+		ID:                      data.ID,
+		IDPPCPProgramDonasi:     data.IDPPCPProgramDonasi,
+		Title:                   data.Title,
+		SubmitAt:                data.SubmitAt,
+		DisbursementBalance:     data.DisbursementBalance,
+		DisbursementAccount:     data.DisbursementAccount,
+		DisbursementName:        data.DisbursementName,
+		DisbursementDescription: data.DisbursementDescription,
+		IsDeleted:               data.IsDeleted,
+		CreatedAt:               data.CreatedAt,
+		CreatedBy:               data.CreatedBy,
+		UpdatedAt:               data.UpdatedAt,
+		UpdatedBy:               data.UpdatedBy,
 	}
 	return
 }

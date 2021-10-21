@@ -17,4 +17,9 @@ type IProgramDonasiRepository interface {
 
 	GetBySeo(ctx context.Context, seo string) (response entity.ProgramDonasiEntity, err error)
 	GetDetail(ctx context.Context, id string) (response entity.ProgramDonasiDetailEntity, err error)
+
+	InsertNews(ctx context.Context, data *entity.ProgramDonasiNewsEntity) (err error)
+	UpdateNews(ctx context.Context, data entity.ProgramDonasiNewsEntity, id int64) (response entity.ProgramDonasiNewsEntity, err error)
+	FindNews(ctx context.Context, data *entity.ProgramDonasiQueryEntity) (response []entity.ProgramDonasiNewsEntity, count int, err error)
+	GetNews(ctx context.Context, id int64) (response entity.ProgramDonasiNewsEntity, err error)
 }

@@ -15,4 +15,9 @@ type IProgramDonasiRutinRepository interface {
 	UpdatePaket(ctx context.Context, data entity.ProgramDonasiRutinPaketEntity, id string) (response entity.ProgramDonasiRutinPaketEntity, err error)
 	FindPaket(ctx context.Context, data *entity.ProgramDonasiRutinQueryEntity) (response []entity.ProgramDonasiRutinPaketEntity, count int, err error)
 	GetPaket(ctx context.Context, id string) (response entity.ProgramDonasiRutinPaketEntity, err error)
+
+	InsertNews(ctx context.Context, data *entity.ProgramDonasiRutinNewsEntity) (err error)
+	UpdateNews(ctx context.Context, data entity.ProgramDonasiRutinNewsEntity, id int64) (response entity.ProgramDonasiRutinNewsEntity, err error)
+	FindNews(ctx context.Context, data *entity.ProgramDonasiRutinQueryEntity) (response []entity.ProgramDonasiRutinNewsEntity, count int, err error)
+	GetNews(ctx context.Context, id int64) (response entity.ProgramDonasiRutinNewsEntity, err error)
 }

@@ -30,6 +30,15 @@ func FindProgramDonasi(ctx context.Context, db *db.ConnectTo, data *entity.Progr
 	return
 }
 
+func FindProgramDonasiNews(ctx context.Context, db *db.ConnectTo, data *entity.ProgramDonasiQueryEntity) (response []entity.ProgramDonasiNewsEntity, count int, err error) {
+	// Repo
+	repo := repository.NewProgramDonasiRepository(db)
+
+	response, count, err = repo.FindNews(ctx, data)
+
+	return
+}
+
 func GetProgramDonasi(ctx context.Context, db *db.ConnectTo, id string) (response entity.ProgramDonasiEntity, err error) {
 	// Repo
 	repo := repository.NewProgramDonasiRepository(db)
@@ -79,5 +88,18 @@ func GetProgramDonasiSeo(ctx context.Context, db *db.ConnectTo, seo string) (res
 	response.PenggalangDana = dataPenggalangDana
 
 	log.Println(utility.PrettyPrint(response.Detail))
+	return
+}
+
+func GetProgramDonasiNews(ctx context.Context, db *db.ConnectTo, id int64) (response entity.ProgramDonasiNewsEntity, err error) {
+	// Repo
+	repo := repository.NewProgramDonasiRepository(db)
+
+	response, err = repo.GetNews(ctx, id)
+	if err != nil {
+		err = errors.New("Data not found")
+		return
+	}
+
 	return
 }

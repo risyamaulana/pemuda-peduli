@@ -102,6 +102,37 @@ func UpdateProgramDonasi(ctx context.Context, db *db.ConnectTo, data entity.Prog
 	return
 }
 
+func UpdateProgramDonasiNews(ctx context.Context, db *db.ConnectTo, data entity.ProgramDonasiNewsEntity, id int64) (response entity.ProgramDonasiNewsEntity, err error) {
+	// Repo
+	repo := repository.NewProgramDonasiRepository(db)
+
+	currentDate := time.Now().UTC()
+
+	// Check available data
+	checkData, err := GetProgramDonasiNews(ctx, db, id)
+	if err != nil {
+		err = errors.New("Data not found")
+		return
+	}
+
+	if checkData.IsDeleted {
+		err = errors.New("Can't update this data")
+		return
+	}
+
+	data.ID = checkData.ID
+	data.IDPPCPProgramDonasi = checkData.IDPPCPProgramDonasi
+
+	data.UpdatedAt = &currentDate
+
+	response, err = repo.UpdateNews(ctx, checkData, id)
+	if err != nil {
+		return
+	}
+
+	return
+}
+
 func PublishProgramDonasi(ctx context.Context, repo interfaces.IProgramDonasiRepository, id string) (response entity.ProgramDonasiEntity, err error) {
 	currentDate := time.Now().UTC()
 	// Check available daata
@@ -173,5 +204,21 @@ func DeleteProgramDonasi(ctx context.Context, repo interfaces.IProgramDonasiRepo
 	checkData.UpdatedAt = &currentDate
 	checkData.IsDeleted = true
 	response, err = repo.Update(ctx, checkData, id)
+	return
+}
+
+func DeleteProgramDonasiNews(ctx context.Context, repo interfaces.IProgramDonasiRepository, id int64) (response entity.ProgramDonasiNewsEntity, err error) {
+	currentDate := time.Now().UTC()
+	// Check available daata
+	data, err := repo.GetNews(ctx, id)
+	if err != nil {
+		err = errors.New("Data not found")
+		return
+	}
+
+	data.IsDeleted = true
+	data.UpdatedAt = &currentDate
+
+	response, err = repo.UpdateNews(ctx, data, id)
 	return
 }
