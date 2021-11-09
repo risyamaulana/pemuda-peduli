@@ -116,7 +116,7 @@ func UpdateProgramDonasiNews(ctx context.Context, db *db.ConnectTo, data entity.
 
 	data.UpdatedAt = &currentDate
 
-	response, err = repo.UpdateNews(ctx, checkData, id)
+	response, err = repo.UpdateNews(ctx, data, id)
 	if err != nil {
 		return
 	}
