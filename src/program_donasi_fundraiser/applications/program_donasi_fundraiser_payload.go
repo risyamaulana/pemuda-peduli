@@ -34,8 +34,7 @@ type ProgramDonasiFundraiserFilterQuery struct {
 }
 
 type ReadProgramDonasiFundraiser struct {
-	ID                            int64  `json:"id"`
-	IDPPCPProgramDonasiFundraiser string `json:"id_pp_cp_program_donasi_fundraiser"`
+	IDPPCPProgramDonasiFundraiser string `json:"id"`
 	IDPPCPPenggalangDana          string `json:"id_pp_cp_penggalang_dana"`
 	IDPPCPProgramDonasi           string `json:"id_pp_cp_program_donasi"`
 
@@ -150,7 +149,6 @@ func (r ProgramDonasiFundraiserQuery) ToEntity() (data entity.ProgramDonasiFundr
 
 func ToPayload(data entity.ProgramDonasiFundraiserEntity) (response ReadProgramDonasiFundraiser) {
 	response = ReadProgramDonasiFundraiser{
-		ID:                            data.ID,
 		IDPPCPProgramDonasiFundraiser: data.IDPPCPProgramDonasiFundraiser,
 		IDPPCPPenggalangDana:          data.IDPPCPPenggalangDana,
 		IDPPCPProgramDonasi:           data.IDPPCPProgramDonasi,
