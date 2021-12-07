@@ -117,6 +117,7 @@ func (r CreateProgramDonasiFundraiser) ToEntity(idDonasi string) (data entity.Pr
 		SubTitle:            r.SubTitle,
 		Description:         r.Description,
 		Target:              r.Target,
+		CreatedAt:           time.Now(),
 		IsDeleted:           false,
 		IsShow:              true,
 		SEOURL:              r.SEOURL,
