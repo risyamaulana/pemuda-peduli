@@ -39,7 +39,7 @@ func CreateProgramDonasiFundraiser(ctx context.Context, db *db.ConnectTo, data *
 	data.IDUser = userData.IDUser
 	data.Username = userData.Username
 	data.Email = userData.Email
-	data.PhoneNumber = userData.Email
+	data.PhoneNumber = userData.PhoneNumber
 	data.NamaLengkap = userData.NamaLengkap
 	data.NamaPanggilan = userData.NamaPanggilan
 	data.Alamat = userData.Alamat
@@ -47,12 +47,10 @@ func CreateProgramDonasiFundraiser(ctx context.Context, db *db.ConnectTo, data *
 	// Applied donasi data
 	data.IDPPCPPenggalangDana = donasiData.PenggalangDana.IDPPCPPenggalangDana
 	data.IDPPCPProgramDonasi = donasiData.IDPPCPProgramDonasi
-	data.SubTitle = donasiData.SubTitle
 	data.DonasiType = donasiData.DonasiType
 	data.Tag = donasiData.Tag
 	data.Content = donasiData.Detail.Content
 	data.ThumbnailImageURL = donasiData.ThumbnailImageURL
-	data.Description = donasiData.Description
 	data.Status = donasiData.Status
 	data.ValidFrom = donasiData.ValidFrom
 	data.ValidTo = donasiData.ValidTo
