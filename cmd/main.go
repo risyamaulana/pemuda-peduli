@@ -21,6 +21,7 @@ import (
 	partnerKamiApp "pemuda-peduli/src/partner_kami/applications"
 	penggalangDanaApp "pemuda-peduli/src/penggalang_dana/applications"
 	programDonasiApp "pemuda-peduli/src/program_donasi/applications"
+	programDonasiFundraiserApp "pemuda-peduli/src/program_donasi_fundraiser/applications"
 	programDonasiKategoriApp "pemuda-peduli/src/program_donasi_kategori/applications"
 	programDonasiRutinApp "pemuda-peduli/src/program_donasi_rutin/applications"
 	programIncidentalApp "pemuda-peduli/src/program_incidental/applications"
@@ -96,6 +97,7 @@ func initialize(apps map[string]interfaces.IApplication, r *router.Router) {
 	apps["hubungi-kami"] = hubungiKamiApp.NewHubungiKamiApp(DB)
 	apps["partner-kami"] = partnerKamiApp.NewPartnerKamiApp(DB)
 	apps["program-donasi"] = programDonasiApp.NewProgramDonasiApp(DB)
+	apps["program-donasi-fundraiser"] = programDonasiFundraiserApp.NewProgramDonasiFundraiserApp(DB)
 	apps["program-donasi-rutin"] = programDonasiRutinApp.NewProgramDonasiRutinApp(DB)
 	apps["program-donasi-kategori"] = programDonasiKategoriApp.NewProgramDonasiKategoriApp(DB)
 	apps["program-kami"] = programKamiApp.NewProgramKamiApp(DB)
