@@ -48,6 +48,7 @@ func (s *ProgramDonasiFundraiserApp) addRoute(r *router.Router) {
 	r.POST("/fundraiser/create/{id}", middleware.CheckUserToken(DB, createProgramDonasiFundraiser))
 	r.POST("/fundraiser/list", middleware.CheckAuthToken(DB, findProgramDonasiFundraiser))
 	r.GET("/fundraiser/{id}", middleware.CheckAuthToken(DB, getProgramDonasiFundraiser))
+	r.GET("/fundraiser/seo/{seo_url}", middleware.CheckAuthToken(DB, getProgramDonasiFundraiserSeo))
 
 }
 
@@ -75,7 +76,6 @@ func createProgramDonasiFundraiser(ctx *fasthttp.RequestCtx) {
 
 	response := handler.DefaultResponse(ToPayload(data), nil)
 	fmt.Fprintf(ctx, utility.PrettyPrint(response))
-
 }
 
 func findProgramDonasiFundraiser(ctx *fasthttp.RequestCtx) {
@@ -116,6 +116,20 @@ func findProgramDonasiFundraiser(ctx *fasthttp.RequestCtx) {
 
 func getProgramDonasiFundraiser(ctx *fasthttp.RequestCtx) {
 	data, err := domain.GetProgramDonasiFundraiser(ctx, DB, ctx.UserValue("id").(string))
+	if err != nil {
+		ctx.SetStatusCode(fasthttp.StatusUnprocessableEntity)
+		fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
+		log.Println(err)
+		return
+	}
+
+	response := handler.DefaultResponse(ToPayload(data), nil)
+	fmt.Fprintf(ctx, utility.PrettyPrint(response))
+}
+
+func getProgramDonasiFundraiserSeo(ctx *fasthttp.RequestCtx) {
+	data, err := domain.GetProgramDonasiFundraiserSeo(ctx, DB, ctx.UserValue("seo_url").(string))
+
 	if err != nil {
 		ctx.SetStatusCode(fasthttp.StatusUnprocessableEntity)
 		fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))

@@ -174,3 +174,10 @@ func (c *ProgramDonasiFundraiserRepository) Get(ctx context.Context, id string) 
 	}
 	return
 }
+
+func (c *ProgramDonasiFundraiserRepository) GetSeo(ctx context.Context, seoURL string) (response entity.ProgramDonasiFundraiserEntity, err error) {
+	if err = c.db.DBRead.Get(&response, "SELECT * FROM pp_cp_program_donasi_fundraiser WHERE seo_url = $1", seoURL); err != nil {
+		return
+	}
+	return
+}

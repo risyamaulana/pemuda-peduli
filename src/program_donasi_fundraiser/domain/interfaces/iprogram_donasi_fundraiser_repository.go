@@ -10,4 +10,5 @@ type IProgramDonasiFundraiserRepository interface {
 	Update(ctx context.Context, data *entity.ProgramDonasiFundraiserEntity) (err error)
 	Find(ctx context.Context, data entity.ProgramDonasiFundraiserQueryEntity) (response []entity.ProgramDonasiFundraiserEntity, count int, err error)
 	Get(ctx context.Context, id string) (response entity.ProgramDonasiFundraiserEntity, err error)
+	GetSeo(ctx context.Context, seoURL string) (response entity.ProgramDonasiFundraiserEntity, err error)
 }
