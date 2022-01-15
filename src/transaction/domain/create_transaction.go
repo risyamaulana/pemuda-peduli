@@ -14,6 +14,7 @@ import (
 	donasiRutinRep "pemuda-peduli/src/program_donasi_rutin/infrastructure/repository"
 
 	donasiDom "pemuda-peduli/src/program_donasi/domain"
+	donasiFundDom "pemuda-peduli/src/program_donasi_fundraiser/domain"
 
 	userDom "pemuda-peduli/src/user/domain"
 	userRep "pemuda-peduli/src/user/infrastructure/repository"
@@ -59,20 +60,38 @@ func CreateTransaction(ctx context.Context, db *db.ConnectTo, data *entity.Trans
 	} else {
 		// Check data donasi one time
 		log.Println("ID : ", data.IDPPCPProgramDonasi)
-		donasiData, errDonasi := donasiDom.GetProgramDonasi(ctx, db, data.IDPPCPProgramDonasi)
-		if errDonasi != nil {
-			err = errors.New("Failed, donasi not found")
-			return
-		}
-		data.DonasiTitle = donasiData.Title
-		// Check QR data
-		if data.PaymentMethod == constants.PaymentQris {
-			if donasiData.QrisImageURL == nil || *donasiData.QrisImageURL == "" {
-				err = errors.New("Failed, transaction can't use QRIS")
+		if data.IsFundraiser {
+			donasiFundraiser, errDonasi := donasiFundDom.GetProgramDonasiFundraiser(ctx, db, data.IDPPCPProgramDonasi)
+			if errDonasi != nil {
+				err = errors.New("Failed, donasi fundraiser not found")
 				return
 			}
-			data.QRPaymentURL = donasiData.QrisImageURL
+			data.DonasiTitle = donasiFundraiser.Title
+			// Check QR data
+			if data.PaymentMethod == constants.PaymentQris {
+				if donasiFundraiser.QrisImageURL == nil || *donasiFundraiser.QrisImageURL == "" {
+					err = errors.New("Failed, transaction can't use QRIS")
+					return
+				}
+				data.QRPaymentURL = donasiFundraiser.QrisImageURL
+			}
+		} else {
+			donasiData, errDonasi := donasiDom.GetProgramDonasi(ctx, db, data.IDPPCPProgramDonasi)
+			if errDonasi != nil {
+				err = errors.New("Failed, donasi not found")
+				return
+			}
+			data.DonasiTitle = donasiData.Title
+			// Check QR data
+			if data.PaymentMethod == constants.PaymentQris {
+				if donasiData.QrisImageURL == nil || *donasiData.QrisImageURL == "" {
+					err = errors.New("Failed, transaction can't use QRIS")
+					return
+				}
+				data.QRPaymentURL = donasiData.QrisImageURL
+			}
 		}
+
 	}
 
 	err = insertTransaction(ctx, &repo, data)

@@ -12,12 +12,13 @@ import (
 )
 
 type CreateTransaction struct {
-	IsRutin                  bool    `json:"is_rutin"`
 	IDPPCPProgramDonasi      string  `json:"id_pp_cp_program_donasi"`
 	IDPPCPProgramDonasiRutin string  `json:"id_pp_cp_program_donasi_rutin"`
 	Amount                   float64 `json:"amount" valid:"required"`
 	PaymentMethod            string  `json:"payment_method" valid:"required"`
 	UcapanDanDoa             string  `json:"ucapan_dan_doa"`
+	IsFundraiser             bool    `json:"is_fundraiser"`
+	IsRutin                  bool    `json:"is_rutin"`
 	IsAnonymous              bool    `json:"is_anonymous"`
 }
 
@@ -120,6 +121,7 @@ func (r CreateTransaction) ToEntity() (data entity.TransactionEntity) {
 	data = entity.TransactionEntity{
 		IDPPTransaction:          utility.GetUUID(),
 		IsRutin:                  r.IsRutin,
+		IsFundraiser:             r.IsFundraiser,
 		IDPPCPProgramDonasi:      r.IDPPCPProgramDonasi,
 		IDPPCPProgramDonasiRutin: r.IDPPCPProgramDonasiRutin,
 		Amount:                   r.Amount,
