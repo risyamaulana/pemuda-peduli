@@ -3,8 +3,8 @@ package domain
 import (
 	"context"
 	"errors"
-
 	"pemuda-peduli/src/common/infrastructure/db"
+	donasiFundDom "pemuda-peduli/src/program_donasi_fundraiser/domain"
 
 	"pemuda-peduli/src/transaction/common/constants"
 	"pemuda-peduli/src/transaction/domain/entity"
@@ -77,11 +77,19 @@ func AppliedPayment(ctx context.Context, db *db.ConnectTo, transactionID string)
 			return
 		}
 	} else {
-		idDonasi := data.IDPPCPProgramDonasi
-		_, errCollect := donasiDom.UpdateDonationCollect(ctx, &donasiRepo, idDonasi, data.Amount)
-		if errCollect != nil {
-			err = errors.New("Failed Applied payment, donation id not found")
-			return
+		if data.IsFundraiser {
+			_, errCollectFundraiser := donasiFundDom.UpdateDonationCollectFundraiser(ctx, db, data.IDPPCPProgramDonasi, data.Amount)
+			if errCollectFundraiser != nil {
+				err = errors.New("Failed Applied payment, donation fundraiser not found")
+				return
+			}
+		} else {
+			idDonasi := data.IDPPCPProgramDonasi
+			_, errCollect := donasiDom.UpdateDonationCollect(ctx, &donasiRepo, idDonasi, data.Amount)
+			if errCollect != nil {
+				err = errors.New("Failed Applied payment, donation id not found")
+				return
+			}
 		}
 	}
 
