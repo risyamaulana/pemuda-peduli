@@ -61,7 +61,7 @@ func (c *ProgramDonasiFundraiserRepository) Update(ctx context.Context, data *en
 	// Update Data delivery order
 	sql := `Update pp_cp_program_donasi_fundraiser SET `
 	var str strings.Builder
-	fields := utility.GetNamedStruct(data)
+	fields := utility.GetNamedStruct(*data)
 	for _, field := range fields {
 		if field == "id" || field == "id_pp_cp_program_donasi_fundraiser" || field == "created_at" {
 			continue
