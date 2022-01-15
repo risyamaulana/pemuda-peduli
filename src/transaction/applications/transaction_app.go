@@ -55,7 +55,7 @@ func (s *TransactionApp) addRoute(r *router.Router) {
 	r.PUT("/transaction/pay", middleware.CheckUserToken(DB, uploadReceiptTransaction))
 	r.PUT("/transaction/cancel/{id}", middleware.CheckUserToken(DB, cancelTransaction))
 
-	r.POST("/transaction/list", middleware.CheckAdminToken(DB, findTransactions))
+	r.POST("/transaction/list", middleware.CheckAuthToken(DB, findTransactions))
 	r.POST("/transaction/my-list", middleware.CheckUserToken(DB, findMyTransactions))
 
 	r.GET("/transaction/{id}", middleware.CheckAuthToken(DB, getTransaction))
