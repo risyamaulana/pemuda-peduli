@@ -227,7 +227,7 @@ func (c *ProgramDonasiRepository) Find(ctx context.Context, data *entity.Program
 			case "donasi_type":
 				str.WriteString(field + " = '" + fil.Keyword + "' AND ")
 			default:
-				str.WriteString(field + " LIKE '%" + fil.Keyword + "%' AND ")
+				str.WriteString("LOWER(" + field + ") LIKE ('%" + fil.Keyword + "%') AND ")
 			}
 
 		}
