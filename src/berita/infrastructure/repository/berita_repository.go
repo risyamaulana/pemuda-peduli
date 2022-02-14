@@ -251,7 +251,7 @@ func (c *BeritaRepository) GetListTag(ctx context.Context) (response []entity.Ta
 }
 
 func (c *BeritaRepository) GetCountIsHeadline(ctx context.Context) (response int, err error) {
-	if err = c.db.DBRead.Get(&response, "SELECT count(*) FROM public.pp_cp_berita WHERE is_headline = true"); err != nil {
+	if err = c.db.DBRead.Get(&response, "SELECT count(*) FROM public.pp_cp_berita WHERE is_headline = true AND status != 'deleted'"); err != nil {
 		return
 	}
 	return

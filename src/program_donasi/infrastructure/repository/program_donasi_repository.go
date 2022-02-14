@@ -302,7 +302,7 @@ func (c *ProgramDonasiRepository) FindNews(ctx context.Context, data *entity.Pro
 			case "is_deleted":
 				str.WriteString(field + " = " + fil.Keyword + " AND ")
 			default:
-				str.WriteString(field + " LIKE '%" + fil.Keyword + "%' AND ")
+				str.WriteString("LOWER(" + field + ") LIKE LOWER('%" + fil.Keyword + "%') AND ")
 			}
 
 		}
