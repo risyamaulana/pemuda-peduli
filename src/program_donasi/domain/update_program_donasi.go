@@ -34,8 +34,8 @@ func UpdateProgramDonasi(ctx context.Context, db *db.ConnectTo, data entity.Prog
 
 	// check kategori
 	if data.KategoriID != "" {
-		kategoriData, err := kategoriProgramDonasiDom.GetKategoriProgramDonasi(ctx, &kategoriProgramDonasiRepo, data.KategoriID)
-		if err != nil {
+		kategoriData, errGetKategoriData := kategoriProgramDonasiDom.GetKategoriProgramDonasi(ctx, &kategoriProgramDonasiRepo, data.KategoriID)
+		if errGetKategoriData != nil {
 			err = errors.New("failed, kategori not found")
 			return
 		}
