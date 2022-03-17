@@ -10,11 +10,26 @@ import (
 	"strings"
 
 	penggalangDanaDom "pemuda-peduli/src/penggalang_dana/domain"
+
+	kategoriProgramDonasiDom "pemuda-peduli/src/kategori_program_donasi/domain"
+	kategoriProgramDonasiRep "pemuda-peduli/src/kategori_program_donasi/infrastructure/repository"
 )
 
 func CreateProgramDonasi(ctx context.Context, db *db.ConnectTo, data *entity.ProgramDonasiEntity, dataDetail *entity.ProgramDonasiDetailEntity) (response entity.ProgramDonasiEntity, err error) {
 	// Repo
 	repo := repository.NewProgramDonasiRepository(db)
+	kategoriProgramDonasiRepo := kategoriProgramDonasiRep.NewKategoriProgramDonasiRepository(db)
+
+	// check kategori
+	if data.KategoriID != "" {
+		kategoriData, err := kategoriProgramDonasiDom.GetKategoriProgramDonasi(ctx, &kategoriProgramDonasiRepo, data.KategoriID)
+		if err != nil {
+			err = errors.New("failed, kategori not found")
+			return
+		}
+		data.KategoriID = kategoriData.IDPPCPKategoriProgramDonasi
+		data.KategoriName = kategoriData.Name
+	}
 
 	// Check Penggalang dana
 	if data.IDPPCPPenggalangDana != "" {

@@ -16,6 +16,7 @@ import (
 	beneficariesApp "pemuda-peduli/src/beneficaries/applications"
 	beritaApp "pemuda-peduli/src/berita/applications"
 	hubungiKamiApp "pemuda-peduli/src/hubungi_kami/applications"
+	kategoriProgramDonasiApp "pemuda-peduli/src/kategori_program_donasi/application"
 	kontakKamiApp "pemuda-peduli/src/kontak_kami/applications"
 	menuExtrasApp "pemuda-peduli/src/menu_extras/applications"
 	partnerKamiApp "pemuda-peduli/src/partner_kami/applications"
@@ -112,6 +113,7 @@ func initialize(apps map[string]interfaces.IApplication, r *router.Router) {
 	apps["transaction"] = transactionApp.NewTransactionApp(DB)
 
 	apps["penggalang_dana"] = penggalangDanaApp.NewPenggalangDanaApp(DB)
+	apps["kategori_program_donasi"] = kategoriProgramDonasiApp.NewKategoriProgramDonasiApp(DB)
 
 	for _, v := range apps {
 		// log.Printf("Initializing app %s", k)

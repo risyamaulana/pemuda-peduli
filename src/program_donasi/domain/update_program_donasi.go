@@ -6,6 +6,8 @@ import (
 	"log"
 	"pemuda-peduli/src/common/infrastructure/db"
 	"pemuda-peduli/src/common/utility"
+	kategoriProgramDonasiDom "pemuda-peduli/src/kategori_program_donasi/domain"
+	kategoriProgramDonasiRep "pemuda-peduli/src/kategori_program_donasi/infrastructure/repository"
 	"pemuda-peduli/src/program_donasi/common/constants"
 	"pemuda-peduli/src/program_donasi/domain/entity"
 	"pemuda-peduli/src/program_donasi/domain/interfaces"
@@ -19,6 +21,7 @@ import (
 func UpdateProgramDonasi(ctx context.Context, db *db.ConnectTo, data entity.ProgramDonasiEntity, dataDetail entity.ProgramDonasiDetailEntity, id string) (response entity.ProgramDonasiEntity, err error) {
 	// Repo
 	repo := repository.NewProgramDonasiRepository(db)
+	kategoriProgramDonasiRepo := kategoriProgramDonasiRep.NewKategoriProgramDonasiRepository(db)
 
 	currentDate := time.Now().UTC()
 
@@ -27,6 +30,17 @@ func UpdateProgramDonasi(ctx context.Context, db *db.ConnectTo, data entity.Prog
 	if err != nil {
 		err = errors.New("Data not found")
 		return
+	}
+
+	// check kategori
+	if data.KategoriID != "" {
+		kategoriData, err := kategoriProgramDonasiDom.GetKategoriProgramDonasi(ctx, &kategoriProgramDonasiRepo, data.KategoriID)
+		if err != nil {
+			err = errors.New("failed, kategori not found")
+			return
+		}
+		data.KategoriID = kategoriData.IDPPCPKategoriProgramDonasi
+		data.KategoriName = kategoriData.Name
 	}
 
 	// Check SEO URL
@@ -48,6 +62,8 @@ func UpdateProgramDonasi(ctx context.Context, db *db.ConnectTo, data entity.Prog
 		return
 	}
 
+	checkData.KategoriID = data.KategoriID
+	checkData.KategoriName = data.KategoriName
 	checkData.Title = data.Title
 	checkData.SubTitle = data.SubTitle
 

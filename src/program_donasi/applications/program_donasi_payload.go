@@ -14,6 +14,7 @@ import (
 )
 
 type CreateProgramDonasi struct {
+	KategoriID           string     `json:"kategori_id"`
 	Title                string     `json:"title" valid:"required"`
 	SubTitle             string     `json:"sub_title" valid:"required"`
 	Content              string     `json:"content" valid:"required"`
@@ -44,6 +45,7 @@ type CreateProgramDonasiNews struct {
 }
 
 type UpdateProgramDonasi struct {
+	KategoriID           string     `json:"kategori_id"`
 	Title                string     `json:"title" valid:"required"`
 	SubTitle             string     `json:"sub_title" valid:"required"`
 	Content              string     `json:"content" valid:"required"`
@@ -92,6 +94,8 @@ type ProgramDonasiFilterQuery struct {
 
 type ReadProgramDonasi struct {
 	IDPPCPProgramDonasi  string     `json:"id"`
+	KategoriID           string     `json:"kategori_id"`
+	KategoriName         string     `json:"kategori_name"`
 	Title                string     `json:"title"`
 	SubTitle             string     `json:"sub_title"`
 	Content              string     `json:"content"`
@@ -242,6 +246,7 @@ func (r CreateProgramDonasi) ToEntity() (data entity.ProgramDonasiEntity, dataDe
 	nominalValue := strings.TrimSuffix(nominalStr.String(), "|")
 
 	data = entity.ProgramDonasiEntity{
+		KategoriID:           r.KategoriID,
 		Title:                r.Title,
 		SubTitle:             r.SubTitle,
 		Tag:                  r.Tag,
@@ -297,6 +302,7 @@ func (r UpdateProgramDonasi) ToEntity() (data entity.ProgramDonasiEntity, dataDe
 	nominalValue := strings.TrimSuffix(nominalStr.String(), "|")
 
 	data = entity.ProgramDonasiEntity{
+		KategoriID:           r.KategoriID,
 		Title:                r.Title,
 		SubTitle:             r.SubTitle,
 		Tag:                  r.Tag,
@@ -370,6 +376,8 @@ func ToPayload(data entity.ProgramDonasiEntity) (response ReadProgramDonasi) {
 
 	response = ReadProgramDonasi{
 		IDPPCPProgramDonasi:  data.IDPPCPProgramDonasi,
+		KategoriID:           data.KategoriID,
+		KategoriName:         data.KategoriName,
 		Title:                data.Title,
 		SubTitle:             data.SubTitle,
 		Content:              data.Detail.Content,
