@@ -33,14 +33,14 @@ func UpdateProgramDonasi(ctx context.Context, db *db.ConnectTo, data entity.Prog
 	}
 
 	// check kategori
-	if data.KategoriID != "" {
-		kategoriData, errGetKategoriData := kategoriProgramDonasiDom.GetKategoriProgramDonasi(ctx, &kategoriProgramDonasiRepo, data.KategoriID)
+	if *data.KategoriID != "" {
+		kategoriData, errGetKategoriData := kategoriProgramDonasiDom.GetKategoriProgramDonasi(ctx, &kategoriProgramDonasiRepo, *data.KategoriID)
 		if errGetKategoriData != nil {
 			err = errors.New("failed, kategori not found")
 			return
 		}
-		data.KategoriID = kategoriData.IDPPCPKategoriProgramDonasi
-		data.KategoriName = kategoriData.Name
+		data.KategoriID = &kategoriData.IDPPCPKategoriProgramDonasi
+		data.KategoriName = &kategoriData.Name
 	}
 
 	// Check SEO URL

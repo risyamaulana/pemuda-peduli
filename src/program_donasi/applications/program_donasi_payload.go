@@ -14,7 +14,7 @@ import (
 )
 
 type CreateProgramDonasi struct {
-	KategoriID           string     `json:"kategori_id"`
+	KategoriID           *string    `json:"kategori_id"`
 	Title                string     `json:"title" valid:"required"`
 	SubTitle             string     `json:"sub_title" valid:"required"`
 	Content              string     `json:"content" valid:"required"`
@@ -45,7 +45,7 @@ type CreateProgramDonasiNews struct {
 }
 
 type UpdateProgramDonasi struct {
-	KategoriID           string     `json:"kategori_id"`
+	KategoriID           *string    `json:"kategori_id"`
 	Title                string     `json:"title" valid:"required"`
 	SubTitle             string     `json:"sub_title" valid:"required"`
 	Content              string     `json:"content" valid:"required"`
@@ -94,8 +94,8 @@ type ProgramDonasiFilterQuery struct {
 
 type ReadProgramDonasi struct {
 	IDPPCPProgramDonasi  string     `json:"id"`
-	KategoriID           string     `json:"kategori_id"`
-	KategoriName         string     `json:"kategori_name"`
+	KategoriID           *string    `json:"kategori_id"`
+	KategoriName         *string    `json:"kategori_name"`
 	Title                string     `json:"title"`
 	SubTitle             string     `json:"sub_title"`
 	Content              string     `json:"content"`

@@ -8,8 +8,8 @@ import (
 type ProgramDonasiEntity struct {
 	ID                   int64      `db:"id"`
 	IDPPCPProgramDonasi  string     `db:"id_pp_cp_program_donasi"`
-	KategoriID           string     `db:"kategori_id"`
-	KategoriName         string     `db:"kategori_name"`
+	KategoriID           *string    `db:"kategori_id"`
+	KategoriName         *string    `db:"kategori_name"`
 	Title                string     `db:"title"`
 	SubTitle             string     `db:"sub_title"`
 	DonasiType           string     `db:"donasi_type"`

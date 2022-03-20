@@ -21,14 +21,14 @@ func CreateProgramDonasi(ctx context.Context, db *db.ConnectTo, data *entity.Pro
 	kategoriProgramDonasiRepo := kategoriProgramDonasiRep.NewKategoriProgramDonasiRepository(db)
 
 	// check kategori
-	if data.KategoriID != "" {
-		kategoriData, errGetKategoriData := kategoriProgramDonasiDom.GetKategoriProgramDonasi(ctx, &kategoriProgramDonasiRepo, data.KategoriID)
+	if *data.KategoriID != "" {
+		kategoriData, errGetKategoriData := kategoriProgramDonasiDom.GetKategoriProgramDonasi(ctx, &kategoriProgramDonasiRepo, *data.KategoriID)
 		if errGetKategoriData != nil {
 			err = errors.New("failed, kategori not found")
 			return
 		}
-		data.KategoriID = kategoriData.IDPPCPKategoriProgramDonasi
-		data.KategoriName = kategoriData.Name
+		data.KategoriID = &kategoriData.IDPPCPKategoriProgramDonasi
+		data.KategoriName = &kategoriData.Name
 	}
 
 	// Check Penggalang dana
