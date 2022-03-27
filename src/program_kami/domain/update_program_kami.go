@@ -27,6 +27,7 @@ func UpdateProgramKami(ctx context.Context, repo interfaces.IProgramKamiReposito
 	checkData.Tag = data.Tag
 	checkData.BeneficariesImageURL = data.BeneficariesImageURL
 	checkData.Achievements = data.Achievements
+	checkData.Document = data.Document
 	checkData.ThumbnailImageURL = data.ThumbnailImageURL
 	checkData.Description = data.Description
 

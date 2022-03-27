@@ -3,6 +3,7 @@ package applications
 import (
 	"encoding/json"
 	"errors"
+	"pemuda-peduli/src/common/utility"
 	"pemuda-peduli/src/program_kami/domain/entity"
 	"strings"
 	"time"
@@ -11,25 +12,32 @@ import (
 )
 
 type CreateProgramKami struct {
-	Title                string        `json:"title" valid:"required"`
-	SubTitle             string        `json:"sub_title" valid:"required"`
-	Content              string        `json:"content" valid:"required"`
-	Achievements         []Achievement `json:"achievements"`
-	Tag                  string        `json:"tag"`
-	ThumbnailImageURL    string        `json:"thumbnail_image_url" valid:"url"`
-	BeneficariesImageURL []string      `json:"beneficaries_image_url" valid:"url"`
-	Description          string        `json:"description"`
+	Title                string                `json:"title" valid:"required"`
+	SubTitle             string                `json:"sub_title" valid:"required"`
+	Content              string                `json:"content" valid:"required"`
+	Achievements         []Achievement         `json:"achievements"`
+	Document             []ProgramKamiDocument `json:"document"`
+	Tag                  string                `json:"tag"`
+	ThumbnailImageURL    string                `json:"thumbnail_image_url" valid:"url"`
+	BeneficariesImageURL []string              `json:"beneficaries_image_url" valid:"url"`
+	Description          string                `json:"description"`
 }
 
 type UpdateProgramKami struct {
-	Title                string        `json:"title" valid:"required"`
-	SubTitle             string        `json:"sub_title" valid:"required"`
-	Content              string        `json:"content" valid:"required"`
-	Achievements         []Achievement `json:"achievements"`
-	Tag                  string        `json:"tag"`
-	ThumbnailImageURL    string        `json:"thumbnail_image_url" valid:"url"`
-	BeneficariesImageURL []string      `json:"beneficaries_image_url" valid:"url"`
-	Description          string        `json:"description"`
+	Title                string                `json:"title" valid:"required"`
+	SubTitle             string                `json:"sub_title" valid:"required"`
+	Content              string                `json:"content" valid:"required"`
+	Achievements         []Achievement         `json:"achievements"`
+	Document             []ProgramKamiDocument `json:"document"`
+	Tag                  string                `json:"tag"`
+	ThumbnailImageURL    string                `json:"thumbnail_image_url" valid:"url"`
+	BeneficariesImageURL []string              `json:"beneficaries_image_url" valid:"url"`
+	Description          string                `json:"description"`
+}
+
+type ProgramKamiDocument struct {
+	Label   string `json:"title"`
+	LinkURL string `json:"link_url"`
 }
 
 type ProgramKamiQuery struct {
@@ -50,13 +58,14 @@ type ProgramKamiFilterQuery struct {
 }
 
 type ReadProgramKami struct {
-	IDPPCPProgramKami    string        `json:"id"`
-	Title                string        `json:"title"`
-	SubTitle             string        `json:"sub_title"`
-	Tag                  string        `json:"tag"`
-	ThumbnailImageURL    string        `json:"thumbnail_image_url"`
-	BeneficariesImageURL []string      `json:"beneficaries_image_url"`
-	Achievements         []Achievement `json:"achievements"`
+	IDPPCPProgramKami    string                `json:"id"`
+	Title                string                `json:"title"`
+	SubTitle             string                `json:"sub_title"`
+	Tag                  string                `json:"tag"`
+	ThumbnailImageURL    string                `json:"thumbnail_image_url"`
+	BeneficariesImageURL []string              `json:"beneficaries_image_url"`
+	Achievements         []Achievement         `json:"achievements"`
+	Document             []ProgramKamiDocument `json:"document"`
 	// Detail            *ReadProgramKamiDetail `json:"detail,omitempty"`
 	Content     string     `json:"content,omitempty"`
 	Description string     `json:"description"`
@@ -146,6 +155,8 @@ func (r CreateProgramKami) ToEntity() (data entity.ProgramKamiEntity, dataDetail
 	}
 	achievementsValue := strings.TrimSuffix(achievements.String(), "|")
 
+	document := utility.PrettyPrint(r.Document)
+
 	data = entity.ProgramKamiEntity{
 		Title:                r.Title,
 		SubTitle:             r.SubTitle,
@@ -153,6 +164,7 @@ func (r CreateProgramKami) ToEntity() (data entity.ProgramKamiEntity, dataDetail
 		ThumbnailImageURL:    r.ThumbnailImageURL,
 		BeneficariesImageURL: beneficariesURLValue,
 		Achievements:         achievementsValue,
+		Document:             &document,
 		Description:          r.Description,
 		CreatedAt:            time.Now().UTC(),
 	}
@@ -178,12 +190,15 @@ func (r UpdateProgramKami) ToEntity() (data entity.ProgramKamiEntity, dataDetail
 	}
 	achievementsValue := strings.TrimSuffix(achievements.String(), "|")
 
+	document := utility.PrettyPrint(r.Document)
+
 	data = entity.ProgramKamiEntity{
 		Title:                r.Title,
 		SubTitle:             r.SubTitle,
 		Tag:                  r.Tag,
 		BeneficariesImageURL: beneficariesURLValue,
 		Achievements:         achievementsValue,
+		Document:             &document,
 		ThumbnailImageURL:    r.ThumbnailImageURL,
 		Description:          r.Description,
 	}
@@ -241,6 +256,13 @@ func ToPayload(data entity.ProgramKamiEntity, isDetail bool) (response ReadProgr
 		}
 	}
 
+	document := []ProgramKamiDocument{}
+	if data.Document != nil {
+		if *data.Document != "" {
+			_ = json.Unmarshal([]byte(*data.Document), &document)
+		}
+	}
+
 	response = ReadProgramKami{
 		IDPPCPProgramKami:    data.IDPPCPProgramKami,
 		Title:                data.Title,
@@ -250,6 +272,7 @@ func ToPayload(data entity.ProgramKamiEntity, isDetail bool) (response ReadProgr
 		BeneficariesImageURL: beneficariesUrl,
 		Content:              data.Detail.Content,
 		Achievements:         achievements,
+		Document:             document,
 		// Detail:            detail,
 		Description: data.Description,
 		Status:      data.Status,
