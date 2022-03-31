@@ -58,6 +58,8 @@ func (s *TransactionApp) addRoute(r *router.Router) {
 	r.POST("/transaction/list", middleware.CheckAuthToken(DB, findTransactions))
 	r.POST("/transaction/my-list", middleware.CheckUserToken(DB, findMyTransactions))
 
+	r.GET("/transaction/notif-rutin", middleware.CheckLoginAdminToken(DB, findRutinTransaction))
+
 	r.GET("/transaction/{id}", middleware.CheckAuthToken(DB, getTransaction))
 }
 
@@ -192,6 +194,29 @@ func findTransactions(ctx *fasthttp.RequestCtx) {
 	}
 
 	fmt.Fprintf(ctx, utility.PrettyPrint(handler.PaginationResponse(response, nil, page, limit, int(pageTotal), count)))
+}
+
+func findRutinTransaction(ctx *fasthttp.RequestCtx) {
+	repo := repository.NewTransactionRepository(DB)
+
+	responseData, err := domain.FindRutinTransaction(ctx, &repo)
+
+	if err != nil {
+		ctx.SetStatusCode(fasthttp.StatusUnprocessableEntity)
+		fmt.Fprintf(ctx, utility.PrettyPrint(handler.DefaultResponse(nil, err)))
+		log.Println(err)
+		return
+	}
+
+	// Return data as json
+	response := []ReadTransaction{}
+	for _, resp := range responseData {
+		response = append(response, ToPayload(resp))
+	}
+
+	resp := handler.DefaultResponse(response, nil)
+
+	fmt.Fprintf(ctx, utility.PrettyPrint(resp))
 }
 
 func findMyTransactions(ctx *fasthttp.RequestCtx) {

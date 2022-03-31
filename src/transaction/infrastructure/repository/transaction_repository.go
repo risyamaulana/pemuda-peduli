@@ -246,6 +246,14 @@ func (c *TransactionRepository) FindMyTransaction(ctx context.Context, data *ent
 	return
 }
 
+func (c *TransactionRepository) FindRutinTransaction(ctx context.Context) (response []entity.TransactionEntity, err error) {
+	if err = c.db.DBRead.Select(&response, "SELECT * FROM pp_transaction where is_rutin = true and status  = 'Paid'"); err != nil {
+		return
+	}
+
+	return
+}
+
 func (c *TransactionRepository) Get(ctx context.Context, id string) (response entity.TransactionEntity, err error) {
 	if err = c.db.DBRead.Get(&response, "SELECT * FROM pp_transaction WHERE id_pp_transaction = $1", id); err != nil {
 		return
