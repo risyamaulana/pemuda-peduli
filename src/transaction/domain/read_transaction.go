@@ -26,9 +26,14 @@ func FindRutinTransaction(ctx context.Context, repo interfaces.ITransactionRepos
 
 	for _, transactionEntity := range responseData {
 		hourDate := int(time.Since(transactionEntity.CreatedAt).Hours())
-		if hourDate%720 == 0 {
-			response = append(response, transactionEntity)
+
+		if hourDate > 0 {
+			dayDate := int(720 / 24)
+			if dayDate%30 == 0 {
+				response = append(response, transactionEntity)
+			}
 		}
+
 	}
 	return
 }
