@@ -3,6 +3,7 @@ package domain
 import (
 	"context"
 	"errors"
+	"fmt"
 	"pemuda-peduli/src/transaction/domain/entity"
 	"pemuda-peduli/src/transaction/domain/interfaces"
 	"time"
@@ -28,7 +29,10 @@ func FindRutinTransaction(ctx context.Context, repo interfaces.ITransactionRepos
 		hourDate := int(time.Since(transactionEntity.CreatedAt).Hours())
 
 		if hourDate > 0 {
-			dayDate := int(720 / 24)
+			fmt.Println(hourDate)
+			dayDate := int(hourDate / 24)
+			fmt.Println(dayDate)
+			fmt.Println("================")
 			if dayDate%30 == 0 {
 				response = append(response, transactionEntity)
 			}
