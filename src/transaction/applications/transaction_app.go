@@ -197,9 +197,7 @@ func findTransactions(ctx *fasthttp.RequestCtx) {
 }
 
 func findRutinTransaction(ctx *fasthttp.RequestCtx) {
-	repo := repository.NewTransactionRepository(DB)
-
-	responseData, err := domain.FindRutinTransaction(ctx, &repo)
+	responseData, err := domain.FindRutinTransaction(ctx, DB)
 
 	if err != nil {
 		ctx.SetStatusCode(fasthttp.StatusUnprocessableEntity)

@@ -4,8 +4,12 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"pemuda-peduli/src/common/infrastructure/db"
 	"pemuda-peduli/src/transaction/domain/entity"
 	"pemuda-peduli/src/transaction/domain/interfaces"
+	"pemuda-peduli/src/transaction/infrastructure/repository"
+	userDom "pemuda-peduli/src/user/domain"
+	userRep "pemuda-peduli/src/user/infrastructure/repository"
 	"time"
 )
 
@@ -19,7 +23,10 @@ func FindMyTransaction(ctx context.Context, repo interfaces.ITransactionReposito
 	return
 }
 
-func FindRutinTransaction(ctx context.Context, repo interfaces.ITransactionRepository) (response []entity.TransactionEntity, err error) {
+func FindRutinTransaction(ctx context.Context, db *db.ConnectTo) (response []entity.TransactionEntity, err error) {
+	repo := repository.NewTransactionRepository(db)
+	userRepo := userRep.NewUserRepository(db)
+
 	responseData, err := repo.FindRutinTransaction(ctx)
 	if err != nil {
 		return
@@ -27,6 +34,12 @@ func FindRutinTransaction(ctx context.Context, repo interfaces.ITransactionRepos
 
 	for _, transactionEntity := range responseData {
 		hourDate := int(time.Since(transactionEntity.CreatedAt).Hours())
+
+		userData, err := userDom.ReadUser(ctx, &userRepo, transactionEntity.UserID)
+		if err != nil {
+			return
+		}
+		transactionEntity.UserMsisdn = userData.PhoneNumber
 
 		if hourDate > 0 {
 			fmt.Println(hourDate)

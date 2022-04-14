@@ -48,6 +48,7 @@ type ReadTransaction struct {
 	IDPPTransaction          string     `json:"id"`
 	UserID                   string     `json:"user_id"`
 	Username                 string     `json:"username"`
+	UserPhoneNumber          string     `json:"user_phone_number,omitempty"`
 	Email                    string     `json:"email"`
 	NamaLengkap              string     `json:"nama_lengkap"`
 	NamaPanggilan            string     `json:"nama_panggilan"`
@@ -162,6 +163,7 @@ func ToPayload(data entity.TransactionEntity) (response ReadTransaction) {
 		IDPPTransaction:          data.IDPPTransaction,
 		UserID:                   data.UserID,
 		Username:                 data.Username,
+		UserPhoneNumber:          data.UserMsisdn,
 		Email:                    data.Email,
 		NamaLengkap:              data.NamaLengkap,
 		NamaPanggilan:            data.NamaPanggilan,

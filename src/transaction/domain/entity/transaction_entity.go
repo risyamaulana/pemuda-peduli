@@ -3,9 +3,10 @@ package entity
 import "time"
 
 type TransactionEntity struct {
-	ID                       int64      `db:"id"`
-	IDPPTransaction          string     `db:"id_pp_transaction"`
-	UserID                   string     `db:"user_id"`
+	ID                       int64  `db:"id"`
+	IDPPTransaction          string `db:"id_pp_transaction"`
+	UserID                   string `db:"user_id"`
+	UserMsisdn               string
 	Username                 string     `db:"username"`
 	Email                    string     `db:"email"`
 	NamaLengkap              string     `db:"nama_lengkap"`
