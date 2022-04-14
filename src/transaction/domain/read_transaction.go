@@ -35,7 +35,7 @@ func FindRutinTransaction(ctx context.Context, db *db.ConnectTo) (response []ent
 	for _, transactionEntity := range responseData {
 		hourDate := int(time.Since(transactionEntity.CreatedAt).Hours())
 
-		userData, errUser := userDom.ReadUser(ctx, &userRepo, transactionEntity.UserID)
+		userData, errUser := userDom.ReadUserByEmail(ctx, &userRepo, transactionEntity.Email)
 		if errUser != nil {
 			err = errUser
 			return
