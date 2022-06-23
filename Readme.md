@@ -145,6 +145,38 @@ Idealnya timeout di set dari sisi echo / grpc server middleware, jadi cukup 1x. 
 
 Jika sudah ada parameter `context.Context` dari fungsi, tidak perlu membuat context baru dengan timeout yang berbeda.
 
+# Deploy
+
+PM2 dapat mengelola beberapa aplikasi kita dan memantaunya dengan baik dengan perintah - perintah yang mempermudah hidup kita. Tidak hanya itu, kita pun dapat menggunakan REST API yang disediakan PM2 untuk mengintegrasikan monitoring ke aplikasi web kita yang lain atau aplikasi mobile yang kita kembangkan untuk mengawasi aplikasi Node.js kita. Beberapa fitur utama yang disediakan PM2 antara lain:
+
+* Konfigurasi tingkah laku (behavior)
+* Kompatibel dengan PaaS
+* Watch dan reload
+* Manajemen log
+* Monitoring
+* Module system
+* Max memory reload
+* Cluster mode
+* Hot reload
+* Integrasi dengan Keymetrics
+* Development dan Deployment workflow
+
+deploy using PM2
+```
+$ npm install express
+$ npm install pm2
+```
+
+build application to pm2
+```
+go build -o application cmd/main.go 
+```
+
+run application to pm2
+```
+pm2 start application
+```
+
 ## Referensi
 
 * https://golang.org/pkg/context/#WithTimeout
